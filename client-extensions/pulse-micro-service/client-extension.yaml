@@ -1,0 +1,25 @@
+assemble:
+  - fromTask: bootJar
+pulse-micro-service-oauth-application-user-agent:
+  .serviceAddress: localhost
+  .serviceScheme: http
+  name: Pulse Microservice OAuth Application User Agent
+  scopes:
+  type: oAuthApplicationUserAgent
+pulse-micro-service-oauth-application-headless-server:
+  .serviceAddress: localhost
+  .serviceScheme: http
+  name: Pulse Microservice OAuth Application Headless Server
+  scopes:
+    - Liferay.Object.Admin.REST.everything
+  type: oAuthApplicationHeadlessServer
+pulse-micro-service-create-campaign-object-action:
+  name: Pulse Microservice Create Campaign Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /campaigns
+  type: objectAction
+pulse-micro-service-token-url-entry-manager:
+  name: Pulse Microservice Token Url Object Entry Manager
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /tokens/proxy
+  type: objectEntryManager

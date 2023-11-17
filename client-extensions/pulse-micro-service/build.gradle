@@ -1,0 +1,61 @@
+buildscript {
+    dependencies {
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "latest.release"
+        classpath group: "org.springframework.boot", name: "spring-boot-gradle-plugin", version: "2.7.17"
+        classpath group: "org.springframework.boot",  name: "spring-boot-starter-data-jpa", version: "2.7.17"
+        classpath group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "2.3.2"
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url new File(rootProject.projectDir, "../../.m2-tmp")
+        }
+
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
+group = 'com.liferay.sales.engineering'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = '17'
+}
+
+apply plugin: "com.liferay.source.formatter"
+apply plugin: "java-library"
+apply plugin: "org.springframework.boot"
+
+dependencies {
+    implementation group: "com.google.guava", name: "guava", version: "32.1.1-jre"
+    implementation group: "com.liferay", name: "com.liferay.client.extension.util.spring.boot", version: "latest.release"
+    implementation group: "com.liferay", name: "org.apache.commons.logging", version: "1.2.LIFERAY-PATCHED-2"
+    implementation group: "org.json", name: "json", version: "20231013"
+    implementation group: "org.springframework.boot",  name: "spring-boot-starter-data-jpa", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-resource-server", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-web", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-webflux", version: "2.7.17"
+    implementation group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "2.3.2"
+    runtimeOnly group: "com.h2database", name: "h2", version: "2.2.224"
+    compileOnly 'com.liferay.portal:release.dxp.api'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url new File(rootProject.projectDir, "../../.m2-tmp")
+    }
+
+    maven {
+        url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+    }
+}
