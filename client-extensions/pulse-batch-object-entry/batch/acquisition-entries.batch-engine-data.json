@@ -1,0 +1,22 @@
+{
+  "configuration": {
+    "className": "com.liferay.object.rest.dto.v1_0.ObjectEntry",
+    "parameters": {
+      "containsHeaders": "true",
+      "createStrategy": "UPSERT",
+      "onErrorFail": "false",
+      "taskItemDelegateName": "C_Acquisition",
+      "updateStrategy": "UPDATE"
+    },
+    "taskItemDelegateName": "C_Acquisition"
+  },
+  "items": [
+    {
+      "externalReferenceCode": "f4a63d75-a5ef-4278-92c5-ba6ca00d11e7",
+      "content": "",
+      "medium": "social",
+      "source": "fb",
+      "term": ""
+    }
+  ]
+}

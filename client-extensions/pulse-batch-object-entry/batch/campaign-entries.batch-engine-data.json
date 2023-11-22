@@ -1,0 +1,20 @@
+{
+  "configuration": {
+    "className": "com.liferay.object.rest.dto.v1_0.ObjectEntry",
+    "parameters": {
+      "containsHeaders": "true",
+      "createStrategy": "UPSERT",
+      "onErrorFail": "false",
+      "taskItemDelegateName": "C_Campaign",
+      "updateStrategy": "UPDATE"
+    },
+    "taskItemDelegateName": "C_Campaign"
+  },
+  "items": [
+    {
+      "externalReferenceCode": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7",
+      "name": "Free trial",
+      "targetUrl": "/redirect"
+    }
+  ]
+}
