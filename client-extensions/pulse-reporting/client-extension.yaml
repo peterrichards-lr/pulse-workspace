@@ -1,0 +1,15 @@
+assemble:
+  - from: build/static
+    into: static
+tasks-data-grid:
+  cssURLs:
+    - css/main.css
+  friendlyURLMapping: pulse-reporting
+  htmlElementName: pulse-reporting
+  instanceable: false
+  name: Pulse Reporting
+  portletCategoryName: category.client-extensions
+  type: customElement
+  urls:
+    - js/main.js
+  useESM: true

@@ -1,0 +1,15 @@
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-block-end: 8px;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  block-size: 100%;
+  padding: 8px;
+  overflow: hidden;
+}

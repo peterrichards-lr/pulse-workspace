@@ -1,0 +1,48 @@
+{
+  "name": "user-journey",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "chart.js": "^4.3.3",
+    "javascript-time-ago": "^2.5.9",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.28",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-data-grid": "^7.0.0-beta.29",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "sass": "^1.62.1",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "build:dev": "dotenv -e .env.development react-scripts build",
+    "build:prod": "dotenv -e .env.production react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build && ./create_custom_element.sh",
+    "test": "react-scripts test --watchAll=false --passWithNoTests",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "rewire": "^6.0.0"
+  }
+}
