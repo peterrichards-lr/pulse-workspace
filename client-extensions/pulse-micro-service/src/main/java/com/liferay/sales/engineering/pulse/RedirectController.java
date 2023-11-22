@@ -32,13 +32,11 @@ public class RedirectController {
     private static final Log _log = LogFactory.getLog(
             RedirectController.class);
     private final UrlTokenRepository tokenRepository;
-    @Value("${pulse.cookie.domain}")
+    @Value("${com.liferay.lxc.dxp.main.domain}")
     private String cookieDomain;
-    @Value("${pulse.liferay.base-endpoint.host}")
+    @Value("${com.liferay.lxc.dxp.main.domain}")
     private String serverHost;
-    @Value("${pulse.liferay.base-endpoint.port}")
-    private String serverPort;
-    @Value("${pulse.liferay.base-endpoint.scheme}")
+    @Value("${com.liferay.lxc.dxp.server.protocol}")
     private String serverScheme;
 
     @Autowired
@@ -72,8 +70,7 @@ public class RedirectController {
         if (campaignUrl.startsWith("/")) {
             _log.info(String.format("Default server scheme : %s", serverScheme));
             _log.info(String.format("Default server serverHost : %s", serverHost));
-            _log.info(String.format("Default server serverPort : %s", serverPort));
-            baseUrl = serverScheme + "://" + serverHost + (StringUtils.isNotBlank(serverPort) ? ":" + serverPort : "") + campaignUrl;
+            baseUrl = serverScheme + "://" + serverHost + campaignUrl;
         } else {
             baseUrl = campaignUrl;
         }
