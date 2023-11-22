@@ -29,6 +29,7 @@ replay_pid*
 # Liferay
 !gradle/wrapper/gradle-wrapper.jar
 bundles
+**/bin
 **/build
 **/dist
 .gradle
