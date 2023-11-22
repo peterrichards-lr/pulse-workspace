@@ -3,8 +3,7 @@ liferay:
     application:
       external:
         reference:
-          codes: pulse-micro-service-oauth-application-user-agent
-          headless-server: pulse-micro-service-oauth-application-headless-server
+          codes: pulse-micro-service-oauth-application-headless-server
     urls:
       excludes: /ready
 logging:
