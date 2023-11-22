@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -26,6 +27,9 @@ public class LiferayUrlTokenServiceImpl implements LiferayUrlTokenService {
     public List<Object> getUrlTokens() {
         Mono<UrlTokensResponse> urlTokensResponse = this.webClient.get().uri(
             _lxcDXPServerProtocol + "://" + _lxcDXPMainDomain + "/o/c/urltokens/")
+                .attributes(
+                    ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId(
+                        "pulse-micro-service-oauth-application-headless-server"))
                 .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
