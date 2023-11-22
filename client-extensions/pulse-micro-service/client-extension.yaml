@@ -1,15 +1,5 @@
 assemble:
   - fromTask: bootJar
-pulse-micro-service-oauth-application-user-agent:
-  .serviceAddress: localhost:58081
-  .serviceScheme: http
-  name: Pulse Microservice OAuth Application User Agent
-  scopes:
-    - C_Acquisition.everything
-    - C_Campaign.everything
-    - C_Interaction.everything
-    - C_UrlToken.everything
-  type: oAuthApplicationUserAgent
 pulse-micro-service-oauth-application-headless-server:
   .serviceAddress: localhost
   .serviceScheme: http
