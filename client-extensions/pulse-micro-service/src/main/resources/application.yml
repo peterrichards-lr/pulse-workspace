@@ -1,14 +1,30 @@
+liferay:
+  oauth:
+    application:
+      external:
+        reference:
+          codes: pulse-micro-service-oauth-application-user-agent
+          headless-server: pulse-micro-service-oauth-application-headless-server
+    urls:
+      excludes: /ready
+logging:
+  level:
+    reactor.netty.http.client: INFO
 pulse:
-  oauth2:
-    client-id: ${PULSE_CLIENT_ID:}
-    client-secret: ${PULSE_CLIENT_SECRET:}
+  cookie:
+    domain: ${PULSE_COOKIE_DOMAIN:localhost}
+  liferay:
+    base-endpoint:
+      scheme: ${LIFERAY_SERVER_SCHEME:http}
+      host: ${LIFERAY_SERVER_HOST:localhost}
+      port: ${LIFERAY_SERVER_PORT:8080}
 server:
-  scheme: ${PULSE_REDIRECT_SERVER_SCHEME:http}
-  host: ${PULSE_REDIRECT_SERVER_HOST:localhost}
-  port: ${PULSE_REDIRECT_SERVER_PORT:8080}
-cookie:
-  domain: ${PULSE_COOKIE_DOMAIN:localhost}
+  port: 58080
 spring:
+  config:
+    import:
+      - optional:configtree:${LIFERAY_ROUTES_CLIENT_EXTENSION}/
+      - optional:configtree:${LIFERAY_ROUTES_DXP}/
   data:
     rest:
       base-path: /api
@@ -19,3 +35,23 @@ spring:
         globally_quoted_identifiers: true
         globally_quoted_identifiers_skip_column_definitions: true
         dialect: org.hibernate.dialect.H2Dialect
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+# Not needed when @Import(ClientExtensionUtilSpringBootComponentScan.class) is added to the PulseApplication class
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          liferay-client:
+#            client-id: ${PULSE_CLIENT_ID}
+#            client-secret: ${PULSE_CLIENT_SECRET}
+#            provider: liferay-provider
+#            client-authentication-method: client_secret_basic
+#            authorization-grant-type: client_credentials
+#        provider:
+#          liferay-provider:
+#            authorization-uri: http://localhost:8080/o/oauth2/authorize
+#            token-uri: http://localhost:8080/o/oauth2/token
+#            user-info-uri: http://localhost:8080/o/oauth2/userinfo
+#            jwk-set-uri: http://localhost:8080/o/oauth2/jwks

@@ -32,13 +32,13 @@ public class RedirectController {
     private static final Log _log = LogFactory.getLog(
             RedirectController.class);
     private final UrlTokenRepository tokenRepository;
-    @Value("${cookie.domain}")
+    @Value("${pulse.cookie.domain}")
     private String cookieDomain;
-    @Value("${server.host}")
+    @Value("${pulse.liferay.base-endpoint.host}")
     private String serverHost;
-    @Value("${server.port}")
+    @Value("${pulse.liferay.base-endpoint.port}")
     private String serverPort;
-    @Value("${server.scheme}")
+    @Value("${pulse.liferay.base-endpoint.scheme}")
     private String serverScheme;
 
     @Autowired

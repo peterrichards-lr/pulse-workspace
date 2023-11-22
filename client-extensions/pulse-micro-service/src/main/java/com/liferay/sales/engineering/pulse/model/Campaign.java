@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 @Entity
 public class Campaign {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

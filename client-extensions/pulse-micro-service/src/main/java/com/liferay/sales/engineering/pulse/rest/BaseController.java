@@ -2,18 +2,11 @@ package com.liferay.sales.engineering.pulse.rest;
 
 import org.apache.commons.logging.Log;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Map;
 
 public abstract class BaseController {
-
-    @Value("${com.liferay.lxc.dxp.mainDomain}")
-    protected String lxcDXPMainDomain;
-    @Value("${com.liferay.lxc.dxp.server.protocol}")
-    protected String lxcDXPServerProtocol;
-
     protected void log(Jwt jwt, Log log) {
         if (log.isInfoEnabled()) {
             log.info("JWT Claims: " + jwt.getClaims());

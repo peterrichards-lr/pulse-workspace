@@ -2,7 +2,7 @@ buildscript {
     dependencies {
         classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "latest.release"
         classpath group: "org.springframework.boot", name: "spring-boot-gradle-plugin", version: "2.7.17"
-        classpath group: "org.springframework.boot",  name: "spring-boot-starter-data-jpa", version: "2.7.17"
+        classpath group: "org.springframework.boot", name: "spring-boot-starter-data-jpa", version: "2.7.17"
         classpath group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "2.3.2"
     }
 
@@ -11,10 +11,6 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        maven {
-            url new File(rootProject.projectDir, "../../.m2-tmp")
-        }
-
         maven {
             url "https://repository-cdn.liferay.com/nexus/content/groups/public"
         }
@@ -37,11 +33,13 @@ dependencies {
     implementation group: "com.liferay", name: "com.liferay.client.extension.util.spring.boot", version: "latest.release"
     implementation group: "com.liferay", name: "org.apache.commons.logging", version: "1.2.LIFERAY-PATCHED-2"
     implementation group: "org.json", name: "json", version: "20231013"
-    implementation group: "org.springframework.boot",  name: "spring-boot-starter-data-jpa", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-data-jpa", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-resource-server", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-client", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-web", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-webflux", version: "2.7.17"
     implementation group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "2.3.2"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-validation", version: "2.7.17"
     runtimeOnly group: "com.h2database", name: "h2", version: "2.2.224"
     compileOnly 'com.liferay.portal:release.dxp.api'
 }
@@ -51,10 +49,6 @@ repositories {
     maven {
         url "https://plugins.gradle.org/m2/"
     }
-    maven {
-        url new File(rootProject.projectDir, "../../.m2-tmp")
-    }
-
     maven {
         url "https://repository-cdn.liferay.com/nexus/content/groups/public"
     }
