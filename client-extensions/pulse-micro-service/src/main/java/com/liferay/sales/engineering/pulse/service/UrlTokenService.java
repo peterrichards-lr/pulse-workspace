@@ -6,4 +6,6 @@ import com.liferay.sales.engineering.pulse.model.UrlToken;
 
 public interface UrlTokenService {
     UrlToken createUrlToken(final Campaign campaign, final Acquisition acquisition);
+
+    UrlToken addUrlToken(final String token, final Campaign campaign, final Acquisition acquisition);
 }

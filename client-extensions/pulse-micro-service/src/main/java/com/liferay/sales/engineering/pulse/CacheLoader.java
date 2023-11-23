@@ -65,7 +65,7 @@ public class CacheLoader implements CommandLineRunner {
 
             final com.liferay.sales.engineering.pulse.model.Campaign campaign = createPulseCampaign(liferayCampaign);
             final com.liferay.sales.engineering.pulse.model.Acquisition acquisition = createPulseAcquisition(liferayAcquisition);
-            final com.liferay.sales.engineering.pulse.model.UrlToken urlToken = createPulseUrlToken(campaign, acquisition);
+            final com.liferay.sales.engineering.pulse.model.UrlToken urlToken = addPulseUrlToken(liferayUrlToken.getToken(), campaign, acquisition);
             _log.debug(String.format("Created url token :%s ", urlToken));
         }
     }
@@ -78,8 +78,8 @@ public class CacheLoader implements CommandLineRunner {
         return acquisitionService.createAcquisition(acquisition.getSource(), acquisition.getMedium(), acquisition.getContent(), acquisition.getTerm());
     }
 
-    private com.liferay.sales.engineering.pulse.model.UrlToken createPulseUrlToken(com.liferay.sales.engineering.pulse.model.Campaign campaign, com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
-        return urlTokenService.createUrlToken(campaign, acquisition);
+    private com.liferay.sales.engineering.pulse.model.UrlToken addPulseUrlToken(String token, com.liferay.sales.engineering.pulse.model.Campaign campaign, com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
+        return urlTokenService.addUrlToken(token, campaign, acquisition);
     }
 
     private List<UrlToken> retrieveUrlTokens() {
