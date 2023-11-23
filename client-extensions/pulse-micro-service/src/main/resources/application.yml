@@ -3,6 +3,7 @@ liferay:
     application:
       external:
         reference:
+          # There's a bug in the library which prevents the use of spaces adjacent to the comma in this property
           codes: pulse-micro-service-oauth-application-user-agent,pulse-micro-service-oauth-application-headless-server
     urls:
       excludes: /ready,/redirect,/c/*
@@ -17,6 +18,9 @@ logging:
         sales:
           engineering:
             pulse: DEBUG
+    org:
+      springframework:
+        security: DEBUG
 pulse:
   cookie:
     domain: ${PULSE_COOKIE_DOMAIN:localhost}
