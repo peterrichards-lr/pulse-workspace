@@ -32,17 +32,22 @@ public class RedirectController {
     private static final Log _log = LogFactory.getLog(
             RedirectController.class);
     private final UrlTokenRepository tokenRepository;
-    @Value("${pulse.cookie.domain}")
-    private String cookieDomain;
-    @Value("${pulse.liferay.base-endpoint.host}")
-    private String serverHost;
-    @Value("${pulse.liferay.base-endpoint.port}")
-    private String serverPort;
-    @Value("${pulse.liferay.base-endpoint.scheme}")
-    private String serverScheme;
+    private final String cookieDomain;
+
+    private final URL baseUrl;
 
     @Autowired
-    public RedirectController(final UrlTokenRepository tokenRepository) {
+    public RedirectController(
+            @Value("${pulse.liferay.base-endpoint.scheme}") final String scheme,
+            @Value("${pulse.liferay.base-endpoint.host}") final String host,
+            @Value("${pulse.liferay.base-endpoint.port}") final Integer port,
+            @Value("${pulse.cookie.domain}") final String cookieDomain,
+            final UrlTokenRepository tokenRepository) throws MalformedURLException {
+        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.scheme", scheme));
+        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.host", host));
+        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.port", port));
+        this.baseUrl = new URL(scheme, host, port, "");
+        this.cookieDomain = cookieDomain;
         this.tokenRepository = tokenRepository;
     }
 
@@ -70,10 +75,7 @@ public class RedirectController {
         final String campaignUrl = campaign.getCampaignUrl();
         final String baseUrl;
         if (campaignUrl.startsWith("/")) {
-            _log.info(String.format("Default server scheme : %s", serverScheme));
-            _log.info(String.format("Default server serverHost : %s", serverHost));
-            _log.info(String.format("Default server serverPort : %s", serverPort));
-            baseUrl = serverScheme + "://" + serverHost + (StringUtils.isNotBlank(serverPort) ? ":" + serverPort : "") + campaignUrl;
+            baseUrl = this.baseUrl + campaignUrl;
         } else {
             baseUrl = campaignUrl;
         }
