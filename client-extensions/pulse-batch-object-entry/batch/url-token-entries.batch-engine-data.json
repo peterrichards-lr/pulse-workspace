@@ -13,7 +13,11 @@
   "items": [
     {
       "externalReferenceCode": "73fd4b80-f23c-4e6e-ad79-6ca1cfbd31c3",
-      "token": "GGkHqgbt"
+      "r_urlTokenAcquisitionRel_c_acquisitionERC": "f4a63d75-a5ef-4278-92c5-ba6ca00d11e7",
+      "r_urlTokenCampaignRel_c_campaignERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7",
+      "token": "GGkHqgbt",
+      "urlTokenAcquisitionRelERC": "f4a63d75-a5ef-4278-92c5-ba6ca00d11e7",
+      "urlTokenCampaignRelERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7"
     }
   ]
 }
