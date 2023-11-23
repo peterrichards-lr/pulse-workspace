@@ -3,8 +3,7 @@ liferay:
     application:
       external:
         reference:
-          codes: pulse-micro-service-oauth-application-user-agent
-          headless-server: pulse-micro-service-oauth-application-headless-server
+          codes: pulse-micro-service-oauth-application-user-agent,pulse-micro-service-oauth-application-headless-server
     urls:
       excludes: /ready
 logging:
@@ -37,21 +36,3 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   main:
     allow-bean-definition-overriding: true
-    web-application-type: reactive
-# Not needed when @Import(ClientExtensionUtilSpringBootComponentScan.class) is added to the PulseApplication class
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          liferay-client:
-#            client-id: ${PULSE_CLIENT_ID}
-#            client-secret: ${PULSE_CLIENT_SECRET}
-#            provider: liferay-provider
-#            client-authentication-method: client_secret_basic
-#            authorization-grant-type: client_credentials
-#        provider:
-#          liferay-provider:
-#            authorization-uri: http://localhost:8080/o/oauth2/authorize
-#            token-uri: http://localhost:8080/o/oauth2/token
-#            user-info-uri: http://localhost:8080/o/oauth2/userinfo
-#            jwk-set-uri: http://localhost:8080/o/oauth2/jwks
