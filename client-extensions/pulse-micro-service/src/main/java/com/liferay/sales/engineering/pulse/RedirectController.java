@@ -162,12 +162,14 @@ public class RedirectController {
     @RequestMapping(value = "/redirect")
     public void redirect(final HttpServletRequest httpServletRequest,
                          final HttpServletResponse httpServletResponse) {
+        _log.info("****** RedirectController:: redirect ******");
         _log.info(httpServletRequest.getQueryString());
         Collections.list(httpServletRequest.getHeaderNames()).forEach((headerName -> _log.info(String.format("%s : %s", headerName, httpServletRequest.getHeader(headerName)))));
         httpServletResponse.setStatus(204);
+        _log.info("*******************************************");
     }
 
-    @RequestMapping(value = {"/{urlToken:[A-z]{8}}"})
+    @RequestMapping(value = {"/c/{urlToken:[A-z]{8}}"})
     public void redirect(@RequestHeader final String host,
                          @PathVariable final String urlToken,
                          final HttpServletRequest httpServletRequest,

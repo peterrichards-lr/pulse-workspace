@@ -5,7 +5,7 @@ liferay:
         reference:
           codes: pulse-micro-service-oauth-application-user-agent,pulse-micro-service-oauth-application-headless-server
     urls:
-      excludes: /ready
+      excludes: /ready,/redirect,/c/*
 logging:
   level:
     reactor:

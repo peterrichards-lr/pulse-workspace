@@ -14,7 +14,11 @@
     {
       "externalReferenceCode": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7",
       "name": "Free trial",
-      "targetUrl": "/redirect"
+      "targetUrl": "/redirect",
+      "campaignStatus": {
+        "key": "active",
+        "name": "Active"
+      }
     }
   ]
 }
