@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
+import com.liferay.sales.engineering.pulse.service.liferay.model.UrlToken;
 import com.liferay.sales.engineering.pulse.service.liferay.model.UrlTokensResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,8 +34,8 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
     }
 
     @Override
-    public List<Object> getUrlTokens() {
-        Mono<UrlTokensResponse> urlTokensResponse = this.webClient.get().uri(this.restEndpoint.toString())
+    public List<UrlToken> getUrlTokens() throws URISyntaxException {
+        Mono<UrlTokensResponse> urlTokensResponse = this.webClient.get().uri(this.restEndpoint.toURI())
                 .attributes(getClientRegistrationId())
                 .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
                 });

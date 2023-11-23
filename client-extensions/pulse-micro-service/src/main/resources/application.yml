@@ -8,7 +8,15 @@ liferay:
       excludes: /ready
 logging:
   level:
-    reactor.netty.http.client: INFO
+    reactor:
+      netty:
+        http:
+          client: INFO
+    com:
+      liferay:
+        sales:
+          engineering:
+            pulse: DEBUG
 pulse:
   cookie:
     domain: ${PULSE_COOKIE_DOMAIN:localhost}

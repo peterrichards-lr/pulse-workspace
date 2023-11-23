@@ -6,15 +6,15 @@ import com.liferay.sales.engineering.pulse.util.StringUtils;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 
 @Entity
 public class UrlToken {
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "acquisition_id")
     private Acquisition acquisition;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "campaign_id", nullable = false)
     @Valid
     private Campaign campaign;

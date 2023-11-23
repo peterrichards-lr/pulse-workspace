@@ -31,10 +31,9 @@ import java.util.regex.Pattern;
 public class RedirectController {
     private static final Log _log = LogFactory.getLog(
             RedirectController.class);
-    private final UrlTokenRepository tokenRepository;
-    private final String cookieDomain;
-
     private final URL baseUrl;
+    private final String cookieDomain;
+    private final UrlTokenRepository tokenRepository;
 
     @Autowired
     public RedirectController(
