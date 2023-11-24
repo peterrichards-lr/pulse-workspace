@@ -1,8 +1,7 @@
 assemble:
   - fromTask: bootJar
 pulse-micro-service-oauth-application-user-agent:
-  # Spring Boot microservice
-  .serviceAddress: localhost:58081
+  .serviceAddress: localhost:58080
   .serviceScheme: http
   name: Pulse Microservice OAuth Application User Agent
   scopes:
@@ -12,8 +11,7 @@ pulse-micro-service-oauth-application-user-agent:
     - C_UrlToken.everything
   type: oAuthApplicationUserAgent
 pulse-micro-service-oauth-application-headless-server:
-  # this IS the Spring Boot microservice (it just doesn't matter)
-  .serviceAddress: localhost:58081
+  .serviceAddress: localhost:58080
   .serviceScheme: http
   name: Pulse Microservice OAuth Application Headless Server
   scopes:

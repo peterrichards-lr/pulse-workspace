@@ -21,11 +21,6 @@ public class UrlTokenServiceImpl implements UrlTokenService {
         this.urlTokenRepository = urlTokenRepository;
     }
 
-    public UrlToken createUrlToken(final Campaign campaign, final Acquisition acquisition) {
-        final String token = generateUniqueToken();
-        return addUrlToken(token, campaign, acquisition);
-    }
-
     @Override
     public UrlToken addUrlToken(final String token, final Campaign campaign, final Acquisition acquisition) {
         UrlToken.UrlTokenBuilder tokenBuilder = new UrlToken.UrlTokenBuilder(token, campaign);
@@ -43,6 +38,11 @@ public class UrlTokenServiceImpl implements UrlTokenService {
         }
 
         return urlToken;
+    }
+
+    public UrlToken createUrlToken(final Campaign campaign, final Acquisition acquisition) {
+        final String token = generateUniqueToken();
+        return addUrlToken(token, campaign, acquisition);
     }
 
     private String generateUniqueToken() {

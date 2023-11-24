@@ -5,12 +5,18 @@ import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.persistence.UrlTokenRepository;
+import com.liferay.sales.engineering.pulse.util.EnvUtils;
 import com.liferay.sales.engineering.pulse.util.HttpRequestResponseUtils;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
+import com.liferay.sales.engineering.pulse.util.UrlUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -33,20 +41,27 @@ public class RedirectController {
             RedirectController.class);
     private final URL baseUrl;
     private final String cookieDomain;
+    private final boolean testRedirect;
+    private final EnvUtils envUtil;
     private final UrlTokenRepository tokenRepository;
 
     @Autowired
     public RedirectController(
-            @Value("${pulse.liferay.base-endpoint.scheme}") final String scheme,
-            @Value("${pulse.liferay.base-endpoint.host}") final String host,
-            @Value("${pulse.liferay.base-endpoint.port}") final Integer port,
-            @Value("${pulse.cookie.domain}") final String cookieDomain,
+            @Value("${com.liferay.lxc.dxp.server.protocol}") final String serverScheme,
+            @Value("${com.liferay.lxc.dxp.main.domain}") final String serverHost,
+            @Value("${pulse.cookie-domain}") final String cookieDomain,
+            @Value("${pulse.test-redirect}") final boolean testRedirect,
+            final EnvUtils envUtil,
             final UrlTokenRepository tokenRepository) throws MalformedURLException {
-        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.scheme", scheme));
-        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.host", host));
-        _log.debug(String.format("%s : %s", "pulse.liferay.base-endpoint.port", port));
-        this.baseUrl = new URL(scheme, host, port, "");
+        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.server.protocol", serverScheme));
+        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", serverHost));
+        this.baseUrl = UrlUtils.buildUrlFromLxcProperties(serverScheme, serverHost);
+        _log.info(String.format("%s : %s", "baseUrl.getHost()", baseUrl.getHost()));
+        _log.info(String.format("%s : %s", "baseUrl.getPort()", baseUrl.getPort()));
+        _log.debug(String.format("%s : %s", "baseUrl", this.baseUrl));
         this.cookieDomain = cookieDomain;
+        this.testRedirect = testRedirect;
+        this.envUtil = envUtil;
         this.tokenRepository = tokenRepository;
     }
 
@@ -70,17 +85,22 @@ public class RedirectController {
     }
 
     private URL buildUrl(final Campaign campaign,
-                         final Acquisition acquisition) throws MalformedURLException {
-        final String campaignUrl = campaign.getCampaignUrl();
-        final String baseUrl;
-        if (campaignUrl.startsWith("/")) {
-            baseUrl = this.baseUrl + campaignUrl;
+                         final Acquisition acquisition) throws MalformedURLException, UnknownHostException {
+        final String targetUrl = campaign.getCampaignUrl();
+        final String campaignUrl;
+        if (targetUrl.matches("^https?://")) {
+            campaignUrl = targetUrl;
+        } else if (this.testRedirect) {
+            campaignUrl =  this.envUtil.getServerUrlPrefix(this.baseUrl.getProtocol()) + targetUrl;
+        } else if (targetUrl.startsWith("/")) {
+            campaignUrl = this.baseUrl + targetUrl;
         } else {
-            baseUrl = campaignUrl;
+            campaignUrl = this.baseUrl + "/" + targetUrl;
         }
-        _log.info(String.format("baseUrl : %s", baseUrl));
 
-        StringBuilder url = new StringBuilder(baseUrl);
+        _log.info(String.format("campaignUrl : %s", campaignUrl));
+
+        StringBuilder url = new StringBuilder(campaignUrl);
         url.append("?");
         if (StringUtils.isNotBlank(campaign.getName())) {
             url.append("utm_campaign=");
@@ -125,7 +145,7 @@ public class RedirectController {
                                       final String urlToken,
                                       final Long interactionId,
                                       final InternetDomainName hostDomainName,
-                                      final HttpServletResponse httpServletResponse) throws MalformedURLException {
+                                      final HttpServletResponse httpServletResponse) throws MalformedURLException, UnknownHostException {
         final String redirectionUrl = buildUrl(campaign, acquisition).toString();
         httpServletResponse.setHeader("Location", redirectionUrl);
 
@@ -160,20 +180,22 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/redirect")
-    public void redirect(final HttpServletRequest httpServletRequest,
-                         final HttpServletResponse httpServletResponse) {
+    public ResponseEntity<String> redirect(final HttpServletRequest httpServletRequest,
+                                          final HttpServletResponse httpServletResponse) {
         _log.info("****** RedirectController:: redirect ******");
         _log.info(httpServletRequest.getQueryString());
         Collections.list(httpServletRequest.getHeaderNames()).forEach((headerName -> _log.info(String.format("%s : %s", headerName, httpServletRequest.getHeader(headerName)))));
-        httpServletResponse.setStatus(204);
         _log.info("*******************************************");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("text", "plain", StandardCharsets.UTF_8));
+        return new ResponseEntity<>("Redirect OK", httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/c/{urlToken:[A-z]{8}}"})
     public void redirect(@RequestHeader final String host,
                          @PathVariable final String urlToken,
                          final HttpServletRequest httpServletRequest,
-                         final HttpServletResponse httpServletResponse) throws MalformedURLException {
+                         final HttpServletResponse httpServletResponse) throws MalformedURLException, UnknownHostException {
         _log.info(String.format("host : %s", host));
         InternetDomainName hostDomainName = null;
         try {

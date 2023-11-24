@@ -24,20 +24,10 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
 
     @Autowired
     public LiferayCampaignServiceImpl(
-            @Value("${pulse.liferay.base-endpoint.scheme}") final String scheme,
-            @Value("${pulse.liferay.base-endpoint.host}") final String host,
-            @Value("${pulse.liferay.base-endpoint.port}") final Integer port,
+            @Value("${com.liferay.lxc.dxp.server.protocol}") final String serverProtocol,
+            @Value("${com.liferay.lxc.dxp.main.domain}") final String mainDomain,
             final WebClient webClient) throws MalformedURLException {
-        super(scheme, host, port, webClient);
-    }
-
-    public List<Campaign> getCampaigns() throws URISyntaxException {
-        Mono<CampaignsResponse> campaignResponse = webClient.get().uri(restEndpoint.toURI())
-                .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
-                });
-
-        return Objects.requireNonNull(campaignResponse.block()).getItems();
+        super(serverProtocol, mainDomain, webClient);
     }
 
     @Override
@@ -48,6 +38,15 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
                 .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
                 });
         return campaign.block();
+    }
+
+    public List<Campaign> getCampaigns() throws URISyntaxException {
+        Mono<CampaignsResponse> campaignResponse = webClient.get().uri(restEndpoint.toURI())
+                .attributes(getClientRegistrationId())
+                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                });
+
+        return Objects.requireNonNull(campaignResponse.block()).getItems();
     }
 
     @Override

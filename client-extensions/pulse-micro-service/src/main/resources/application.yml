@@ -6,6 +6,7 @@ liferay:
           # There's a bug in the library which prevents the use of spaces adjacent to the comma in this property
           codes: pulse-micro-service-oauth-application-user-agent,pulse-micro-service-oauth-application-headless-server
     urls:
+      # The token url has been updated to include a prefix to allow glob matching
       excludes: /ready,/redirect,/c/*
 logging:
   level:
@@ -22,13 +23,14 @@ logging:
       springframework:
         security: DEBUG
 pulse:
-  cookie:
-    domain: ${PULSE_COOKIE_DOMAIN:localhost}
-  liferay:
-    base-endpoint:
-      scheme: ${LIFERAY_SERVER_SCHEME:http}
-      host: ${LIFERAY_SERVER_HOST:localhost}
-      port: ${LIFERAY_SERVER_PORT:8080}
+  # When this is not set, Pulse will set the cookie domain name to the hostname in the HTTP host header.
+  # This needs to be set in LXC SM because the microservice and Liferay service will be accessed over
+  # two different subdomains, which share the same common domain. In this case, this value should be the
+  # common domain
+  cookie-domain: ${PULSE_COOKIE_DOMAIN:localhost}
+  # When this is set to true, Pulse will redirect to its own test endpoint. The content of the request will
+  # be output to the logs
+  test-redirect: ${PULSE_TEST_REDIRECT:false}
 server:
   port: 58080
 spring:

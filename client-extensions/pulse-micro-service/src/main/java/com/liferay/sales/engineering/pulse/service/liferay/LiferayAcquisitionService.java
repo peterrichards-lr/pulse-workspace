@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface LiferayAcquisitionService {
     List<Acquisition> getAcquisitions() throws URISyntaxException;
+
     Acquisition getByErc(String erc) throws URISyntaxException;
 }

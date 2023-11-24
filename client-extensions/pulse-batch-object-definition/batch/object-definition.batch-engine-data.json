@@ -685,6 +685,410 @@
         "label": "approved"
       }
     },
-    {"enableComments":false,"objectRelationships":[{"objectDefinitionSystem2":false,"parameterObjectFieldName":"","parameterObjectFieldId":0,"label":{"en_US":"Campaign"},"reverse":false,"type":"oneToMany","objectDefinitionModifiable2":true,"system":false,"name":"campaignInteractionRel","deletionType":"cascade","objectDefinitionExternalReferenceCode1":"2e60d417-2441-e05e-3913-b319cfa9b101","objectDefinitionExternalReferenceCode2":"24e69ba4-093a-d55c-8ca6-ba8f7c3095e0","objectDefinitionName2":"CampaignInteraction"},{"objectDefinitionSystem2":false,"parameterObjectFieldName":"","parameterObjectFieldId":0,"label":{"en_US":"Navigates To"},"reverse":false,"type":"oneToMany","objectDefinitionModifiable2":true,"system":false,"name":"urlTokenCampaignRel","deletionType":"prevent","objectDefinitionExternalReferenceCode1":"2e60d417-2441-e05e-3913-b319cfa9b101","objectDefinitionExternalReferenceCode2":"8bfeea24-5761-11d7-5394-f05bac9561f9","objectDefinitionName2":"UrlToken"}],"objectFolderExternalReferenceCode":"60ae861c-1940-94b3-480e-56c77d8e47e1","enableCategorization":true,"accountEntryRestrictedObjectFieldName":"","objectActions":[],"enableLocalization":false,"accountEntryRestricted":false,"externalReferenceCode":"2e60d417-2441-e05e-3913-b319cfa9b101","objectFields":[{"indexed":false,"localized":false,"objectFieldSettings":[],"readOnly":"true","DBType":"String","label":{"en_US":"Author"},"type":"String","required":false,"externalReferenceCode":"ee4e445d-5678-15e1-2fec-ea9f9553def3","indexedAsKeyword":false,"system":true,"indexedLanguageId":"","name":"creator","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"indexed":false,"localized":false,"objectFieldSettings":[],"readOnly":"true","DBType":"Date","label":{"en_US":"Create Date"},"type":"Date","required":false,"externalReferenceCode":"62722598-d5cf-dc26-34bc-6ff9950edda8","indexedAsKeyword":false,"system":true,"indexedLanguageId":"","name":"createDate","state":false,"businessType":"Date","readOnlyConditionExpression":""},{"indexed":false,"localized":false,"objectFieldSettings":[],"readOnly":"false","DBType":"String","label":{"en_US":"External Reference Code"},"type":"String","required":false,"externalReferenceCode":"c2a1faa0-0d20-8a9c-fe15-115f718de050","indexedAsKeyword":false,"system":true,"indexedLanguageId":"","name":"externalReferenceCode","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[],"readOnly":"true","DBType":"Long","label":{"en_US":"ID"},"type":"Long","required":false,"externalReferenceCode":"df83d9a4-b428-29b2-201d-dd4effe8a63a","indexedAsKeyword":true,"system":true,"indexedLanguageId":"","name":"id","state":false,"businessType":"LongInteger","readOnlyConditionExpression":""},{"indexed":false,"localized":false,"objectFieldSettings":[],"readOnly":"true","DBType":"Date","label":{"en_US":"Modified Date"},"type":"Date","required":false,"externalReferenceCode":"13bdf034-f6c0-4c57-2ea2-4bd8d6e0141d","indexedAsKeyword":false,"system":true,"indexedLanguageId":"","name":"modifiedDate","state":false,"businessType":"Date","readOnlyConditionExpression":""},{"indexed":false,"localized":false,"objectFieldSettings":[],"readOnly":"true","DBType":"String","label":{"en_US":"Status"},"type":"String","required":false,"externalReferenceCode":"02148bb5-885f-db35-2969-774516bae249","indexedAsKeyword":false,"system":true,"indexedLanguageId":"","name":"status","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[{"name":"timeStorage","value":"convertToUTC"}],"readOnly":"false","DBType":"DateTime","label":{"en_US":"Begin"},"type":"DateTime","required":false,"externalReferenceCode":"51837185-2eb2-8e3a-c5c9-3d6390b70acd","indexedAsKeyword":false,"system":false,"indexedLanguageId":"","name":"begin","state":false,"businessType":"DateTime","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[{"name":"timeStorage","value":"convertToUTC"}],"readOnly":"false","DBType":"DateTime","label":{"en_US":"End"},"type":"DateTime","required":false,"externalReferenceCode":"4ceac5b5-12af-826e-5b0c-58000341bb2b","indexedAsKeyword":false,"system":false,"indexedLanguageId":"","name":"end","state":false,"businessType":"DateTime","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[{"name":"uniqueValues","value":true}],"readOnly":"false","DBType":"String","label":{"en_US":"Name"},"type":"String","required":true,"externalReferenceCode":"f4d69e7c-c2e6-8e15-5872-777131302983","indexedAsKeyword":false,"system":false,"indexedLanguageId":"en_US","name":"name","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[],"readOnly":"false","DBType":"String","label":{"en_US":"Description"},"type":"String","required":false,"externalReferenceCode":"fa7dd7a5-933e-d7dc-566a-755a05918672","indexedAsKeyword":false,"system":false,"indexedLanguageId":"en_US","name":"description","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"indexed":true,"localized":false,"objectFieldSettings":[],"readOnly":"false","DBType":"String","label":{"en_US":"Target Url"},"type":"String","required":true,"externalReferenceCode":"327dfac2-5424-1d65-87d7-e280b6cf1428","indexedAsKeyword":false,"system":false,"indexedLanguageId":"en_US","name":"targetUrl","state":false,"businessType":"Text","readOnlyConditionExpression":""},{"listTypeDefinitionExternalReferenceCode":"89201798-3fc2-6d45-d924-316395794c25","indexed":true,"defaultValue":"draft","localized":false,"objectFieldSettings":[{"name":"stateFlow","value":{"objectStates":[{"objectStateTransitions":[{"key":"active"},{"key":"inactive"}],"key":"draft"},{"objectStateTransitions":[{"key":"complete"},{"key":"inactive"},{"key":"expired"}],"key":"active"},{"objectStateTransitions":[],"key":"complete"},{"objectStateTransitions":[{"key":"active"},{"key":"complete"},{"key":"expired"}],"key":"inactive"},{"objectStateTransitions":[{"key":"complete"}],"key":"expired"}]}},{"name":"defaultValueType","value":"inputAsValue"},{"name":"defaultValue","value":"draft"}],"readOnly":"false","DBType":"String","label":{"en_US":"Campaign Status"},"type":"String","required":true,"externalReferenceCode":"cca01965-1de1-107f-d484-bea50de71a25","indexedAsKeyword":false,"system":false,"indexedLanguageId":"en_US","name":"campaignStatus","state":true,"businessType":"Picklist","readOnlyConditionExpression":""}],"restContextPath":"/o/c/campaigns","scope":"company","portlet":true,"modifiable":true,"parameterRequired":false,"enableObjectEntryHistory":false,"titleObjectFieldName":"name","objectValidationRules":[],"active":true,"defaultLanguageId":"en_US","label":{"en_US":"Campaign"},"panelCategoryKey":"applications_menu.applications.custom.apps","pluralLabel":{"en_US":"Campaigns"},"objectLayouts":[],"system":false,"objectViews":[],"enableObjectEntryDraft":false,"name":"Campaign","actions":{"permissions":{},"get":{},"update":{},"delete":{}},"status":{"label_i18n":"Approved","code":0,"label":"approved"}}
+    {
+      "enableComments": false,
+      "objectRelationships": [
+        {
+          "objectDefinitionSystem2": false,
+          "parameterObjectFieldName": "",
+          "parameterObjectFieldId": 0,
+          "label": {
+            "en_US": "Campaign"
+          },
+          "reverse": false,
+          "type": "oneToMany",
+          "objectDefinitionModifiable2": true,
+          "system": false,
+          "name": "campaignInteractionRel",
+          "deletionType": "cascade",
+          "objectDefinitionExternalReferenceCode1": "2e60d417-2441-e05e-3913-b319cfa9b101",
+          "objectDefinitionExternalReferenceCode2": "24e69ba4-093a-d55c-8ca6-ba8f7c3095e0",
+          "objectDefinitionName2": "CampaignInteraction"
+        },
+        {
+          "objectDefinitionSystem2": false,
+          "parameterObjectFieldName": "",
+          "parameterObjectFieldId": 0,
+          "label": {
+            "en_US": "Navigates To"
+          },
+          "reverse": false,
+          "type": "oneToMany",
+          "objectDefinitionModifiable2": true,
+          "system": false,
+          "name": "urlTokenCampaignRel",
+          "deletionType": "prevent",
+          "objectDefinitionExternalReferenceCode1": "2e60d417-2441-e05e-3913-b319cfa9b101",
+          "objectDefinitionExternalReferenceCode2": "8bfeea24-5761-11d7-5394-f05bac9561f9",
+          "objectDefinitionName2": "UrlToken"
+        }
+      ],
+      "objectFolderExternalReferenceCode": "60ae861c-1940-94b3-480e-56c77d8e47e1",
+      "enableCategorization": true,
+      "accountEntryRestrictedObjectFieldName": "",
+      "objectActions": [],
+      "enableLocalization": false,
+      "accountEntryRestricted": false,
+      "externalReferenceCode": "2e60d417-2441-e05e-3913-b319cfa9b101",
+      "objectFields": [
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Author"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "ee4e445d-5678-15e1-2fec-ea9f9553def3",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "creator",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Create Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "62722598-d5cf-dc26-34bc-6ff9950edda8",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "createDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "External Reference Code"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "c2a1faa0-0d20-8a9c-fe15-115f718de050",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "externalReferenceCode",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Long",
+          "label": {
+            "en_US": "ID"
+          },
+          "type": "Long",
+          "required": false,
+          "externalReferenceCode": "df83d9a4-b428-29b2-201d-dd4effe8a63a",
+          "indexedAsKeyword": true,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "id",
+          "state": false,
+          "businessType": "LongInteger",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Modified Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "13bdf034-f6c0-4c57-2ea2-4bd8d6e0141d",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "modifiedDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Status"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "02148bb5-885f-db35-2969-774516bae249",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "status",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "timeStorage",
+              "value": "convertToUTC"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "DateTime",
+          "label": {
+            "en_US": "Begin"
+          },
+          "type": "DateTime",
+          "required": false,
+          "externalReferenceCode": "51837185-2eb2-8e3a-c5c9-3d6390b70acd",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "",
+          "name": "begin",
+          "state": false,
+          "businessType": "DateTime",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "timeStorage",
+              "value": "convertToUTC"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "DateTime",
+          "label": {
+            "en_US": "End"
+          },
+          "type": "DateTime",
+          "required": false,
+          "externalReferenceCode": "4ceac5b5-12af-826e-5b0c-58000341bb2b",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "",
+          "name": "end",
+          "state": false,
+          "businessType": "DateTime",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "uniqueValues",
+              "value": true
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Name"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "f4d69e7c-c2e6-8e15-5872-777131302983",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "name",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Description"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "fa7dd7a5-933e-d7dc-566a-755a05918672",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "description",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Target Url"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "327dfac2-5424-1d65-87d7-e280b6cf1428",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "targetUrl",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "listTypeDefinitionExternalReferenceCode": "89201798-3fc2-6d45-d924-316395794c25",
+          "indexed": true,
+          "defaultValue": "draft",
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "stateFlow",
+              "value": {
+                "objectStates": [
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "active"
+                      },
+                      {
+                        "key": "inactive"
+                      }
+                    ],
+                    "key": "draft"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "complete"
+                      },
+                      {
+                        "key": "inactive"
+                      },
+                      {
+                        "key": "expired"
+                      }
+                    ],
+                    "key": "active"
+                  },
+                  {
+                    "objectStateTransitions": [],
+                    "key": "complete"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "active"
+                      },
+                      {
+                        "key": "complete"
+                      },
+                      {
+                        "key": "expired"
+                      }
+                    ],
+                    "key": "inactive"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "complete"
+                      }
+                    ],
+                    "key": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "defaultValueType",
+              "value": "inputAsValue"
+            },
+            {
+              "name": "defaultValue",
+              "value": "draft"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Campaign Status"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "cca01965-1de1-107f-d484-bea50de71a25",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "campaignStatus",
+          "state": true,
+          "businessType": "Picklist",
+          "readOnlyConditionExpression": ""
+        }
+      ],
+      "restContextPath": "/o/c/campaigns",
+      "scope": "company",
+      "portlet": true,
+      "modifiable": true,
+      "parameterRequired": false,
+      "enableObjectEntryHistory": false,
+      "titleObjectFieldName": "name",
+      "objectValidationRules": [],
+      "active": true,
+      "defaultLanguageId": "en_US",
+      "label": {
+        "en_US": "Campaign"
+      },
+      "panelCategoryKey": "applications_menu.applications.custom.apps",
+      "pluralLabel": {
+        "en_US": "Campaigns"
+      },
+      "objectLayouts": [],
+      "system": false,
+      "objectViews": [],
+      "enableObjectEntryDraft": false,
+      "name": "Campaign",
+      "actions": {
+        "permissions": {},
+        "get": {},
+        "update": {},
+        "delete": {}
+      },
+      "status": {
+        "label_i18n": "Approved",
+        "code": 0,
+        "label": "approved"
+      }
+    }
   ]
 }

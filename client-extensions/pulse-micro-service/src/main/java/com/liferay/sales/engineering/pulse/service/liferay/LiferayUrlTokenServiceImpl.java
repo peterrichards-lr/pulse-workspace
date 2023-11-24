@@ -21,11 +21,10 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
             LiferayUrlTokenServiceImpl.class);
 
     public LiferayUrlTokenServiceImpl(
-            @Value("${pulse.liferay.base-endpoint.scheme}") final String scheme,
-            @Value("${pulse.liferay.base-endpoint.host}") final String host,
-            @Value("${pulse.liferay.base-endpoint.port}") final Integer port,
+            @Value("${com.liferay.lxc.dxp.server.protocol}") final String serverProtocol,
+            @Value("${com.liferay.lxc.dxp.main.domain}") final String mainDomain,
             final WebClient webClient) throws MalformedURLException {
-        super(scheme, host, port, webClient);
+        super(serverProtocol, mainDomain, webClient);
     }
 
     @Override

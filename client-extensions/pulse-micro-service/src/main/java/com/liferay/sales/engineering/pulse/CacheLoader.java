@@ -30,11 +30,11 @@ public class CacheLoader implements CommandLineRunner {
     private final AcquisitionService acquisitionService;
     private final CampaignService campaignService;
     private final ConfigurableApplicationContext context;
-    private final UrlTokenService urlTokenService;
     private final LiferayAcquisitionService liferayAcquisitionService;
     private final LiferayCampaignService liferayCampaignService;
     private final LiferayUrlTokenService liferayUrlTokenService;
     private final StatusRepository statusRepository;
+    private final UrlTokenService urlTokenService;
 
 
     @Autowired
@@ -50,13 +50,21 @@ public class CacheLoader implements CommandLineRunner {
         this.liferayAcquisitionService = acquisitionService;
     }
 
-    private void populateStatus() {
-        Arrays.asList("Draft", "Active", "Complete", "Inactive", "Expired").forEach((name) -> statusRepository.save(new Status(name)));
+    private com.liferay.sales.engineering.pulse.model.UrlToken addPulseUrlToken(String token, com.liferay.sales.engineering.pulse.model.Campaign campaign, com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
+        return urlTokenService.addUrlToken(token, campaign, acquisition);
+    }
+
+    private com.liferay.sales.engineering.pulse.model.Acquisition createPulseAcquisition(Acquisition acquisition) {
+        return acquisitionService.createAcquisition(acquisition.getSource(), acquisition.getMedium(), acquisition.getContent(), acquisition.getTerm());
+    }
+
+    private com.liferay.sales.engineering.pulse.model.Campaign createPulseCampaign(Campaign campaign) {
+        return campaignService.createCampaign(campaign.getName(), campaign.getTargetUrl(), campaign.getCampaignStatus());
     }
 
     private void loadLiferayData() {
         final List<UrlToken> liferayUrlTokens = retrieveUrlTokens();
-        for(UrlToken liferayUrlToken : liferayUrlTokens) {
+        for (UrlToken liferayUrlToken : liferayUrlTokens) {
             _log.debug(String.format("Url token : %s", liferayUrlToken));
             final Campaign liferayCampaign = retrieveCampaign(liferayUrlToken.getCampaignErc());
             _log.debug(String.format("Campaign : %s", liferayCampaign));
@@ -70,23 +78,15 @@ public class CacheLoader implements CommandLineRunner {
         }
     }
 
-    private com.liferay.sales.engineering.pulse.model.Campaign createPulseCampaign(Campaign campaign) {
-        return campaignService.createCampaign(campaign.getName(), campaign.getTargetUrl(), campaign.getCampaignStatus());
+    private void populateStatus() {
+        Arrays.asList("Draft", "Active", "Complete", "Inactive", "Expired").forEach((name) -> statusRepository.save(new Status(name)));
     }
 
-    private com.liferay.sales.engineering.pulse.model.Acquisition createPulseAcquisition(Acquisition acquisition) {
-        return acquisitionService.createAcquisition(acquisition.getSource(), acquisition.getMedium(), acquisition.getContent(), acquisition.getTerm());
-    }
-
-    private com.liferay.sales.engineering.pulse.model.UrlToken addPulseUrlToken(String token, com.liferay.sales.engineering.pulse.model.Campaign campaign, com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
-        return urlTokenService.addUrlToken(token, campaign, acquisition);
-    }
-
-    private List<UrlToken> retrieveUrlTokens() {
+    private Acquisition retrieveAcquisition(String erc) {
         try {
-            return liferayUrlTokenService.getUrlTokens();
+            return liferayAcquisitionService.getByErc(erc);
         } catch (URISyntaxException e) {
-            throw new CacheLoaderException("Unable to retrieve url token data", e);
+            throw new CacheLoaderException("Unable to retrieve acquisition data", e);
         }
     }
 
@@ -98,11 +98,11 @@ public class CacheLoader implements CommandLineRunner {
         }
     }
 
-    private Acquisition retrieveAcquisition(String erc) {
+    private List<UrlToken> retrieveUrlTokens() {
         try {
-            return liferayAcquisitionService.getByErc(erc);
+            return liferayUrlTokenService.getUrlTokens();
         } catch (URISyntaxException e) {
-            throw new CacheLoaderException("Unable to retrieve acquisition data", e);
+            throw new CacheLoaderException("Unable to retrieve url token data", e);
         }
     }
 

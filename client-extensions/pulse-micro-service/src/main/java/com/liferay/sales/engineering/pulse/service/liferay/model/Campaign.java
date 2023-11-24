@@ -10,10 +10,10 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Campaign extends BaseObject {
     private LocalDateTime begin;
+    private String campaignStatus;
     private String description;
     private LocalDateTime end;
     private String name;
-    private String campaignStatus;
     private String targetUrl;
 
     @Override
@@ -31,6 +31,14 @@ public class Campaign extends BaseObject {
 
     public void setBegin(final LocalDateTime begin) {
         this.begin = begin;
+    }
+
+    public String getCampaignStatus() {
+        return campaignStatus;
+    }
+
+    public void setCampaignStatus(final String campaignStatus) {
+        this.campaignStatus = campaignStatus;
     }
 
     public String getDescription() {
@@ -55,14 +63,6 @@ public class Campaign extends BaseObject {
 
     public void setName(final String name) {
         this.name = name;
-    }
-
-    public String getCampaignStatus() {
-        return campaignStatus;
-    }
-
-    public void setCampaignStatus(final String campaignStatus) {
-        this.campaignStatus = campaignStatus;
     }
 
     public String getTargetUrl() {
@@ -92,7 +92,7 @@ public class Campaign extends BaseObject {
 
     @SuppressWarnings("unchecked")
     @JsonProperty("campaignStatus")
-    private void unpackNested(Map<String,Object> campaignStatus) {
-        this.campaignStatus = (String)campaignStatus.get("key");
+    private void unpackNested(Map<String, Object> campaignStatus) {
+        this.campaignStatus = (String) campaignStatus.get("key");
     }
 }
