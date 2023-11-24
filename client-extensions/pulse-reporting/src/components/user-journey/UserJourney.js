@@ -4,14 +4,15 @@ import CampaignDataGrid from '../campaign-data-grid/CampaignDataGrid';
 import CampaignGraph from '../campaign-graph/CampaignGraph';
 import baseFetch from '../../common/services/liferay/api';
 
-const LIFERAY_HOST =
-    process.env.REACT_APP_LIFERAY_HOST || window.location.origin;
+const LIFERAY_HOST = process.env.REACT_APP_LIFERAY_HOST || window.location.origin;
+const URL_TOKEN_API_PATH = '/o/c/urltokens';
+const ACQUISITION_API_PATH = '/o/c/acquisitions';
 const CAMPAIGN_API_PATH = '/o/c/campaigns/';
 const CAMPAIGN_INTERACTION_API_PATH = '/o/c/campaigninteractions/';
 const HEADER_CONTENT_TYPE_JSON = 'application/json';
 
 const UserJourney = ({clientExternalReferenceCode}) => {
-    const [errorMessage, setErrorMessage] = useState();
+    const [errorMessage, setErrorMessage] = useState("");
     const [rows, setRows] = useState([]);
 
     useEffect(() => {
@@ -21,25 +22,19 @@ const UserJourney = ({clientExternalReferenceCode}) => {
         }
 
         if (!(Liferay.ThemeDisplay.isSignedIn || !clientExternalReferenceCode)) {
-            setErrorMessage(
-                'The external reference code of the OAuth 2 client has not been provided'
-            );
+            setErrorMessage('The external reference code of the OAuth 2 client has not been provided');
             return;
         }
 
         let liferayFetch;
         if (clientExternalReferenceCode) {
-            const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(
-                clientExternalReferenceCode
-            );
+            const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(clientExternalReferenceCode);
             if (!oAuth2Client) {
-                setErrorMessage(
-                    `Unable to find the OAuth2 client for ${clientExternalReferenceCode}`
-                );
+                setErrorMessage(`Unable to find the OAuth2 client for ${clientExternalReferenceCode}`);
                 return;
             }
 
-            var headers = {
+            const headers = {
                 HEADER_CONTENT_TYPE: HEADER_CONTENT_TYPE_JSON,
             };
 
@@ -52,113 +47,97 @@ const UserJourney = ({clientExternalReferenceCode}) => {
             };
         }
 
-        var queryString = 'pageSize=100';
-        liferayFetch(new URL(`${CAMPAIGN_API_PATH}?${queryString}`, LIFERAY_HOST))
-            .then((response) => {
-                const {items, pageSize, totalCount} = response;
-                if (items === undefined || !(items instanceof Array)) {
-                    console.warn('Items is not an array');
+        const paginationResponseHandler = (response) => {
+            const {items, pageSize, totalCount} = response;
+            if (items === undefined || !(items instanceof Array)) {
+                console.warn('Items is not an array');
+                return;
+            }
+            if (pageSize < totalCount) {
+                console.warn(`The returned set of items is not the full set: returned ${pageSize}, set size ${totalCount}`);
+            }
+            if (items.length !== pageSize) {
+                console.debug(`There are fewer items than requested: requested: returned ${items.length}, requested ${pageSize}`);
+            }
+            return items;
+        };
+
+        const queryString = 'pageSize=100';
+        liferayFetch(new URL(`${URL_TOKEN_API_PATH}?${queryString}`, LIFERAY_HOST))
+            .then(paginationResponseHandler)
+            .then((urlTokens) => {
+                if (!urlTokens) {
+                    console.warn('Unable to retrieve URL tokens');
                     return;
                 }
-                if (pageSize < totalCount) {
-                    console.warn(
-                        `The returned set of items is not the full set: returned ${pageSize}, set size ${totalCount}`
-                    );
-                }
-                if (items.length !== pageSize) {
-                    console.debug(
-                        `There are fewer items than requested: requested: returned ${items.length}, requested ${pageSize}`
-                    );
-                }
-                return items;
-            })
-            .then((campaigns) => {
-                if (!campaigns) {
-                    console.warn('Unable to retrieve campaigns');
-                    return;
-                }
-                Promise.all(
-                    campaigns.map((campaign) => {
-                        const filter = `r_interaction_c_campaignId eq '${campaign.id}'`;
-                        return liferayFetch(
-                            new URL(
-                                `${CAMPAIGN_INTERACTION_API_PATH}?${queryString}&filter=${filter}`,
-                                LIFERAY_HOST
-                            )
-                        )
-                            .then((response) => {
-                                const {items, pageSize, totalCount} = response;
-                                if (items === undefined || !(items instanceof Array)) {
-                                    console.warn('Items is not an array');
-                                    return;
-                                }
-                                if (pageSize < totalCount) {
-                                    console.warn(
-                                        `The returned set of items is not the full set: returned ${pageSize}, set size ${totalCount}`
-                                    );
-                                }
-                                if (items.length !== pageSize) {
-                                    console.debug(
-                                        `There are fewer items than requested: requested: returned ${items.length}, requested ${pageSize}`
-                                    );
-                                }
-                                return items;
-                            })
-                            .then((campaignInteractions) => {
-                                console.debug(
-                                    `campaignInteractions for ${campaign.name} [${campaign.id}]`,
-                                    campaignInteractions
-                                );
-                                if (campaignInteractions && campaignInteractions.length > 0) {
-                                    const latestTimestamp = campaignInteractions.reduce(
-                                        (acc, it) => {
-                                            acc[it.event] =
-                                                acc[it.event] === undefined
-                                                    ? it.dateCreated
-                                                    : acc[it.event].dateCreated > it.dateCreated
-                                                        ? acc[it.event]
-                                                        : it.dateCreated;
+                Promise.all(urlTokens.map((urlToken) => {
+                    return [
+                        liferayFetch(new URL(`${CAMPAIGN_API_PATH}/${urlToken.r_urlTokenCampaignRel_c_campaignId}`, LIFERAY_HOST)), liferayFetch(new URL(`${ACQUISITION_API_PATH}/${urlToken.r_urlTokenAcquisitionRel_c_acquisitionId}`, LIFERAY_HOST))]
+                })).then(async (allPromises) => {
+                    const campaigns = [];
+                    for (let i = 0; i < allPromises.length; i++) {
+                        const promise = await allPromises[i];
+                        const campaign = await promise[0];
+                        const acquisition = await promise[1];
+                        campaigns.push({
+                            id: campaign.id,
+                            name: campaign.name,
+                            uTMSource: acquisition.source,
+                            uTMMedium: acquisition.medium
+                        })
+                    }
+                    return campaigns;
+                }).then((campaigns) => {
+                    if (!campaigns) {
+                        console.warn('Unable to retrieve campaigns');
+                        return;
+                    }
+                    Promise.all(
+                        campaigns.map((campaign) => {
+                            console.log('Processing campaign', campaign)
+                            const filter = `r_campaignInteractionRel_c_campaignId eq '${campaign.id}'`;
+                            return liferayFetch(new URL(`${CAMPAIGN_INTERACTION_API_PATH}?${queryString}&filter=${filter}`, LIFERAY_HOST))
+                                .then(paginationResponseHandler)
+                                .then((campaignInteractions) => {
+                                    console.debug(`campaignInteractions for ${campaign.name} [${campaign.id}]`, campaignInteractions);
+                                    if (campaignInteractions && campaignInteractions.length > 0) {
+                                        const latestTimestamp = campaignInteractions.reduce((acc, it) => {
+                                            acc[it.event] = acc[it.event] === undefined ? it.dateCreated : acc[it.event].dateCreated > it.dateCreated ? acc[it.event] : it.dateCreated;
                                             return acc;
-                                        },
-                                        {}
-                                    );
-                                    const eventCount = campaignInteractions.reduce((acc, it) => {
-                                        acc[it.event] =
-                                            acc[it.event] === undefined ? 1 : (acc[it.event] += 1);
-                                        return acc;
-                                    }, {});
-                                    const data = campaignInteractions.map((ci) => {
-                                        return {
-                                            campaign: campaign.name,
-                                            sourceMedium: `${
-                                                campaign.uTMSource ? campaign.uTMSource : 'unknown'
-                                            } / ${
-                                                campaign.uTMMedium ? campaign.uTMMedium : 'unknown'
-                                            }`,
-                                            event: ci.event,
-                                            count: eventCount[ci.event],
-                                            lastUpdated: latestTimestamp[ci.event],
-                                        };
-                                    });
-                                    var dataArr = data.map((item) => {
-                                        return [item.event, item];
-                                    });
-                                    var mapArray = new Map(dataArr);
-                                    return [...mapArray.values()];
-                                } else {
-                                    return [];
-                                }
-                            })
-                            .catch((reason) => console.error(reason));
-                    })
-                )
-                    .then((campaignData) => {
-                        const flattened = campaignData.flat(1);
-                        flattened.forEach((row, i) => (row.key = i));
-                        console.debug('flattened', flattened);
-                        setRows(flattened);
-                    })
-                    .catch((reason) => console.error(reason));
+                                        }, {});
+                                        const eventCount = campaignInteractions.reduce((acc, it) => {
+                                            acc[it.event] = acc[it.event] === undefined ? 1 : (acc[it.event] += 1);
+                                            return acc;
+                                        }, {});
+                                        const data = campaignInteractions.map((ci) => {
+                                            return {
+                                                campaign: campaign.name,
+                                                sourceMedium: `${campaign.uTMSource ? campaign.uTMSource : 'unknown'} / ${campaign.uTMMedium ? campaign.uTMMedium : 'unknown'}`,
+                                                event: ci.event,
+                                                count: eventCount[ci.event],
+                                                lastUpdated: latestTimestamp[ci.event],
+                                            };
+                                        });
+                                        const dataArr = data.map((item) => {
+                                            return [item.event, item];
+                                        });
+                                        const mapArray = new Map(dataArr);
+                                        return [...mapArray.values()];
+                                    } else {
+                                        return [];
+                                    }
+                                })
+                                .catch((reason) => console.error(reason));
+                        }))
+                        .then((campaignData) => {
+                            console.log('campaignData', campaignData);
+                            const flattened = campaignData.flat(1);
+                            flattened.forEach((row, i) => (row.key = i));
+                            console.debug('flattened', flattened);
+                            setRows(flattened);
+                        })
+                        .catch((reason) => console.error(reason));
+                });
             });
     }, [clientExternalReferenceCode]);
 
@@ -166,11 +145,10 @@ const UserJourney = ({clientExternalReferenceCode}) => {
     let reportElement;
 
     if (errorMessage) {
-        errorElement = (
-            <div className="alert alert-warning">
-                <div role="alert" className="alert-autofit-row autofit-row">
-                    <div className="autofit-col">
-                        <div className="autofit-section">
+        errorElement = (<div className="alert alert-warning">
+            <div role="alert" className="alert-autofit-row autofit-row">
+                <div className="autofit-col">
+                    <div className="autofit-section">
               <span className="alert-indicator">
                 <svg
                     className="lexicon-icon lexicon-icon-warning-full"
@@ -183,31 +161,26 @@ const UserJourney = ({clientExternalReferenceCode}) => {
                   ></path>
                 </svg>
               </span>
-                        </div>
                     </div>
-                    <div className="autofit-col autofit-col-expand">
-                        <div className="autofit-section">
-                            <strong className="lead">Warning</strong>
-                            {errorMessage}
-                        </div>
+                </div>
+                <div className="autofit-col autofit-col-expand">
+                    <div className="autofit-section">
+                        <strong className="lead">Warning</strong>
+                        {errorMessage}
                     </div>
                 </div>
             </div>
-        );
+        </div>);
     } else {
-        reportElement = (
-            <>
-                <CampaignGraph data={rows}/>
-                <CampaignDataGrid rows={rows}/>
-            </>
-        );
+        reportElement = (<>
+            <CampaignGraph data={rows}/>
+            <CampaignDataGrid rows={rows}/>
+        </>);
     }
-    return (
-        <>
-            {reportElement}
-            {errorElement}
-        </>
-    );
+    return (<>
+        {reportElement}
+        {errorElement}
+    </>);
 };
 
 export default UserJourney;

@@ -1,0 +1,27 @@
+{
+  "configuration": {
+    "className": "com.liferay.object.rest.dto.v1_0.ObjectEntry",
+    "parameters": {
+      "containsHeaders": "true",
+      "createStrategy": "UPSERT",
+      "onErrorFail": "false",
+      "taskItemDelegateName": "C_CampaignInteraction",
+      "updateStrategy": "UPDATE"
+    },
+    "taskItemDelegateName": "C_CampaignInteraction"
+  },
+  "items": [
+    {
+      "campaignInteractionRelERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7",
+      "event": "click event on A element",
+      "eventProperties": "{eventType=click, eventTarget=A}",
+      "r_campaignInteractionRel_c_campaignERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7"
+    },
+    {
+      "campaignInteractionRelERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7",
+      "event": "This is a test",
+      "eventProperties": "{eventType=click, eventTarget=A}",
+      "r_campaignInteractionRel_c_campaignERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7"
+    }
+  ]
+}

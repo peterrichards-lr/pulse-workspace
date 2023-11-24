@@ -1,15 +1,15 @@
 assemble:
   - from: build/static
     into: static
-tasks-data-grid:
+pulse-reporting:
   cssURLs:
-    - css/main.css
+    - css/main.*.css
   friendlyURLMapping: pulse-reporting
-  htmlElementName: pulse-reporting
+  htmlElementName: user-journey
   instanceable: false
   name: Pulse Reporting
   portletCategoryName: category.client-extensions
   type: customElement
   urls:
-    - js/main.js
+    - js/main.*.js
   useESM: true

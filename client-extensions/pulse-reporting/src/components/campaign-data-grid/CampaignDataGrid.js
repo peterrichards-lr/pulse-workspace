@@ -1,4 +1,4 @@
-import {React, useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {exportToCsv, exportToPdf, exportToXlsx} from './exportUtils';
 
 import 'react-data-grid/lib/styles.css';
