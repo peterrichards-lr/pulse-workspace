@@ -1,13 +1,17 @@
 #!/bin/zsh
 LIFERAY_TAG_DEFAULT=$(curl -s 'https://hub.docker.com/v2/repositories/liferay/dxp/tags?page_size=1024' | jq '.results[] | select(.name|test("^7.4")) | select(.name|test("^([0-9].[0-9].[0-9]+)-(u|sp|dxp-|de-)[0-9]+$")) | .name' | head -n 1 | tr -d '"')
-read "LIFERAY_TAG?Enter Liferay Docker Tag [$LIFERAY_TAG_DEFAULT] :"
+read -r "LIFERAY_TAG?Enter Liferay Docker Tag [$LIFERAY_TAG_DEFAULT] :"
 LIFERAY_TAG="${LIFERAY_TAG:-$LIFERAY_TAG_DEFAULT}"
+
+ADMIN_SCREEN_NAME_DEFAULT=test
+read -r "ADMIN_SCREEN_NAME?Enter Administrator's screen name [ADMIN_SCREEN_NAME_DEFAULT] :"
+ADMIN_SCREEN_NAME="${ADMIN_SCREEN_NAME:-ADMIN_SCREEN_NAME_DEFAULT}"
 
 # Common
 function common {
 cp /Users/peterrichards/dev/docker/7.4-common/activation-key-dxpdevelopment-7.4-developeractivationkeys.xml ./bundles/deploy
-echo "\n" >> ./bundles/portal-ext.properties
-echo "default.admin.screen.name=peter.richards" >> ./bundles/portal-ext.properties
+printf "\n" >> ./bundles/portal-ext.properties
+echo "default.admin.screen.name=${ADMIN_SCREEN_NAME_DEFAULT}" >> ./bundles/portal-ext.properties
 }
 
 # Update 101
