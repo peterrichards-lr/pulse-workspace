@@ -4,9 +4,11 @@ import com.liferay.sales.engineering.pulse.service.liferay.model.UrlToken;
 import com.liferay.sales.engineering.pulse.service.liferay.model.UrlTokensResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -25,6 +27,22 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
             @Value("${com.liferay.lxc.dxp.main.domain}") final String mainDomain,
             final WebClient webClient) throws MalformedURLException {
         super(serverProtocol, mainDomain, webClient);
+    }
+
+    @Override
+    public UrlToken createUrlToken(final String token, final String campaignErc, final String acquisitionErc) throws URISyntaxException {
+        final JSONObject urlTokenJson = new JSONObject();
+        urlTokenJson.put("token", token);
+        urlTokenJson.put("r_urlTokenCampaignRel_c_campaignERC", campaignErc);
+        urlTokenJson.put("r_urlTokenAcquisitionRel_c_acquisitionERC", acquisitionErc);
+        final Mono<UrlToken> urlToken = this.webClient.post().uri(this.restEndpoint.toURI())
+                .attributes(getClientRegistrationId())
+                .body(BodyInserters.fromValue(urlTokenJson))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+
+        return urlToken.block();
     }
 
     @Override

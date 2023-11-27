@@ -3,6 +3,7 @@ package com.liferay.sales.engineering.pulse.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.Objects;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +19,8 @@ public class Campaign {
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime end;
+    @Unique
+    private String externalReferenceCode;
     private @Id
     @GeneratedValue Long id;
     @Column(unique = true)
@@ -37,6 +40,7 @@ public class Campaign {
         this.end = campaignBuilder.end;
         this.campaignUrl = campaignBuilder.campaignUrl;
         this.status = campaignBuilder.status;
+        this.externalReferenceCode = campaignBuilder.erc;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class Campaign {
         if (this == o) return true;
         if (!(o instanceof Campaign)) return false;
         final Campaign campaign = (Campaign) o;
-        return Objects.equal(getId(), campaign.getId()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(campaignUrl, campaign.campaignUrl) && getStatus() == campaign.getStatus();
+        return Objects.equal(externalReferenceCode, campaign.externalReferenceCode) && Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getCampaignUrl(), campaign.getCampaignUrl()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(getId(), campaign.getId()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getStatus(), campaign.getStatus());
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -81,6 +85,14 @@ public class Campaign {
         this.end = end;
     }
 
+    public String getExternalReferenceCode() {
+        return externalReferenceCode;
+    }
+
+    public void setExternalReferenceCode(final String externalReferenceCode) {
+        this.externalReferenceCode = externalReferenceCode;
+    }
+
     public Long getId() {
         return id;
     }
@@ -103,18 +115,19 @@ public class Campaign {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId(), getName(), getDescription(), getBegin(), getEnd(), campaignUrl, getStatus());
+        return Objects.hashCode(externalReferenceCode, getBegin(), getCampaignUrl(), getDescription(), getEnd(), getId(), getName(), getStatus());
     }
 
     @Override
     public String toString() {
         return "Campaign{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                "externalReferenceCode='" + externalReferenceCode + '\'' +
                 ", begin=" + begin +
-                ", end=" + end +
                 ", campaignUrl='" + campaignUrl + '\'' +
+                ", description='" + description + '\'' +
+                ", end=" + end +
+                ", id=" + id +
+                ", name='" + name + '\'' +
                 ", status=" + status +
                 '}';
     }
@@ -124,10 +137,14 @@ public class Campaign {
         String campaignUrl;
         String description;
         LocalDateTime end;
+        String erc;
         String name;
         Status status;
 
-        public CampaignBuilder(String name, Status status, String campaignUrl) {
+        public CampaignBuilder(String erc, String name, Status status, String campaignUrl) {
+            if (StringUtils.isBlank(erc)) {
+                throw new IllegalArgumentException("External reference code must have a value");
+            }
             if (StringUtils.isBlank(name)) {
                 throw new IllegalArgumentException("Name must have a value");
             }
@@ -137,6 +154,7 @@ public class Campaign {
             if (StringUtils.isBlank(campaignUrl)) {
                 throw new IllegalArgumentException("CampaignUrl must have a value");
             }
+            this.erc = erc;
             this.name = name;
             this.status = status;
             this.campaignUrl = campaignUrl;

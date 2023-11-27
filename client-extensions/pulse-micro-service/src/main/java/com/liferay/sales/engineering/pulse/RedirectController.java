@@ -5,6 +5,7 @@ import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.persistence.UrlTokenRepository;
+import com.liferay.sales.engineering.pulse.service.liferay.LiferayCampaignInteractionService;
 import com.liferay.sales.engineering.pulse.util.EnvUtils;
 import com.liferay.sales.engineering.pulse.util.HttpRequestResponseUtils;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
@@ -26,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -41,8 +43,9 @@ public class RedirectController {
             RedirectController.class);
     private final URL baseUrl;
     private final String cookieDomain;
-    private final boolean testRedirect;
     private final EnvUtils envUtil;
+    private final LiferayCampaignInteractionService liferayCampaignInteractionService;
+    private final boolean testRedirect;
     private final UrlTokenRepository tokenRepository;
 
     @Autowired
@@ -52,7 +55,8 @@ public class RedirectController {
             @Value("${pulse.cookie-domain}") final String cookieDomain,
             @Value("${pulse.test-redirect}") final boolean testRedirect,
             final EnvUtils envUtil,
-            final UrlTokenRepository tokenRepository) throws MalformedURLException {
+            final UrlTokenRepository tokenRepository,
+            final LiferayCampaignInteractionService liferayCampaignInteractionService) throws MalformedURLException {
         _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.server.protocol", serverScheme));
         _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", serverHost));
         this.baseUrl = UrlUtils.buildUrlFromLxcProperties(serverScheme, serverHost);
@@ -63,6 +67,7 @@ public class RedirectController {
         this.testRedirect = testRedirect;
         this.envUtil = envUtil;
         this.tokenRepository = tokenRepository;
+        this.liferayCampaignInteractionService = liferayCampaignInteractionService;
     }
 
     private void addCookies(final Map<String, String> cookieMap,
@@ -91,7 +96,7 @@ public class RedirectController {
         if (targetUrl.matches("^https?://")) {
             campaignUrl = targetUrl;
         } else if (this.testRedirect) {
-            campaignUrl =  this.envUtil.getServerUrlPrefix(this.baseUrl.getProtocol()) + targetUrl;
+            campaignUrl = this.envUtil.getServerUrlPrefix(this.baseUrl.getProtocol()) + targetUrl;
         } else if (targetUrl.startsWith("/")) {
             campaignUrl = this.baseUrl + targetUrl;
         } else {
@@ -175,13 +180,17 @@ public class RedirectController {
                                    final HttpServletRequest httpServletRequest) {
         final String userAgent = httpServletRequest.getHeader("User-Agent");
         final String ipAddress = HttpRequestResponseUtils.getClientIpAddressIfServletRequestExist();
-
-        return -1L;
+        try {
+            return liferayCampaignInteractionService.createInteraction(campaign, interactionTime, userAgent, ipAddress);
+        } catch (URISyntaxException e) {
+            _log.error("Unable to record campaign interaction", e);
+            return -1L;
+        }
     }
 
     @RequestMapping(value = "/redirect")
     public ResponseEntity<String> redirect(final HttpServletRequest httpServletRequest,
-                                          final HttpServletResponse httpServletResponse) {
+                                           final HttpServletResponse httpServletResponse) {
         _log.info("****** RedirectController:: redirect ******");
         _log.info(httpServletRequest.getQueryString());
         Collections.list(httpServletRequest.getHeaderNames()).forEach((headerName -> _log.info(String.format("%s : %s", headerName, httpServletRequest.getHeader(headerName)))));

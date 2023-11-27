@@ -2,6 +2,7 @@ package com.liferay.sales.engineering.pulse.model;
 
 import com.google.common.base.Objects;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,6 +19,8 @@ public class UrlToken {
     @JoinColumn(name = "campaign_id", nullable = false)
     @Valid
     private Campaign campaign;
+    @Unique
+    private String externalReferenceCode;
     private @Id String token;
 
     public UrlToken() {
@@ -27,13 +30,15 @@ public class UrlToken {
         this.token = builder.token;
         this.campaign = builder.campaign;
         this.acquisition = builder.acquisition;
+        this.externalReferenceCode = builder.erc;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof final UrlToken urlToken)) return false;
-        return Objects.equal(token, urlToken.token) && Objects.equal(getCampaign(), urlToken.getCampaign()) && Objects.equal(getAcquisition(), urlToken.getAcquisition());
+        if (!(o instanceof UrlToken)) return false;
+        final UrlToken urlToken = (UrlToken) o;
+        return Objects.equal(getAcquisition(), urlToken.getAcquisition()) && Objects.equal(getCampaign(), urlToken.getCampaign()) && Objects.equal(getToken(), urlToken.getToken()) && Objects.equal(externalReferenceCode, urlToken.externalReferenceCode);
     }
 
     public Acquisition getAcquisition() {
@@ -52,6 +57,14 @@ public class UrlToken {
         this.campaign = campaign;
     }
 
+    public String getExternalReferenceCode() {
+        return externalReferenceCode;
+    }
+
+    public void setExternalReferenceCode(final String externalReferenceCode) {
+        this.externalReferenceCode = externalReferenceCode;
+    }
+
     public String getToken() {
         return token;
     }
@@ -62,15 +75,16 @@ public class UrlToken {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(token, getCampaign(), getAcquisition());
+        return Objects.hashCode(getAcquisition(), getCampaign(), getToken(), externalReferenceCode);
     }
 
     @Override
     public String toString() {
         return "UrlToken{" +
-                ", token='" + token + '\'' +
+                "acquisition=" + acquisition +
                 ", campaign=" + campaign +
-                ", acquisition=" + acquisition +
+                ", token='" + token + '\'' +
+                ", externalReferenceCode='" + externalReferenceCode + '\'' +
                 '}';
     }
 
@@ -78,6 +92,7 @@ public class UrlToken {
         private final Campaign campaign;
         private final String token;
         private Acquisition acquisition;
+        private String erc;
 
         public UrlTokenBuilder(String token, Campaign campaign) {
             if (StringUtils.isBlank(token)) {
@@ -99,6 +114,14 @@ public class UrlToken {
                 throw new IllegalArgumentException("Acquisition cannot be null");
             }
             this.acquisition = acquisition;
+            return this;
+        }
+
+        public UrlTokenBuilder withExternalReferenceCode(String erc) {
+            if (erc == null) {
+                throw new IllegalArgumentException("External reference code cannot be null");
+            }
+            this.erc = erc;
             return this;
         }
     }

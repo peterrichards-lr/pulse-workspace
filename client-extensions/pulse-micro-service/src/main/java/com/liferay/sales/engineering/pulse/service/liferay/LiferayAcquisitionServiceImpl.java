@@ -4,9 +4,11 @@ import com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition;
 import com.liferay.sales.engineering.pulse.service.liferay.model.AcquisitionsResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -26,6 +28,23 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
             @Value("${com.liferay.lxc.dxp.main.domain}") final String mainDomain,
             final WebClient webClient) throws MalformedURLException {
         super(serverProtocol, mainDomain, webClient);
+    }
+
+    @Override
+    public Acquisition createAcquisition(final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) throws URISyntaxException {
+        final JSONObject acquisitionJson = new JSONObject();
+        acquisitionJson.put("content", utmContent);
+        acquisitionJson.put("medium", utmMedium);
+        acquisitionJson.put("source", utmSource);
+        acquisitionJson.put("term", utmTerm);
+        final Mono<Acquisition> acquisition = this.webClient.post().uri(this.restEndpoint.toURI())
+                .attributes(getClientRegistrationId())
+                .body(BodyInserters.fromValue(acquisitionJson))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+
+        return acquisition.block();
     }
 
     public List<Acquisition> getAcquisitions() throws URISyntaxException {

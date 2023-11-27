@@ -4,10 +4,12 @@ import com.liferay.sales.engineering.pulse.service.liferay.model.Campaign;
 import com.liferay.sales.engineering.pulse.service.liferay.model.CampaignsResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -28,6 +30,22 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
             @Value("${com.liferay.lxc.dxp.main.domain}") final String mainDomain,
             final WebClient webClient) throws MalformedURLException {
         super(serverProtocol, mainDomain, webClient);
+    }
+
+    @Override
+    public Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException {
+        final JSONObject campaignJson = new JSONObject();
+        campaignJson.put("name", name);
+        campaignJson.put("targetUrl", targetUrl);
+        campaignJson.put("status", status);
+        final Mono<Campaign> campaign = this.webClient.post().uri(this.restEndpoint.toURI())
+                .attributes(getClientRegistrationId())
+                .body(BodyInserters.fromValue(campaignJson))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+
+        return campaign.block();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.liferay.sales.engineering.pulse.model;
 
 import com.google.common.base.Objects;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 @Entity
 public class Acquisition {
     private String content;
+    @Unique
+    private String externalReferenceCode;
     private @Id
     @GeneratedValue Long id;
     private String medium;
@@ -24,6 +27,7 @@ public class Acquisition {
         this.medium = builder.medium;
         this.source = builder.source;
         this.term = builder.term;
+        this.externalReferenceCode = builder.erc;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class Acquisition {
         if (this == o) return true;
         if (!(o instanceof Acquisition)) return false;
         final Acquisition that = (Acquisition) o;
-        return Objects.equal(getId(), that.getId()) && Objects.equal(getContent(), that.getContent()) && Objects.equal(getMedium(), that.getMedium()) && Objects.equal(getSource(), that.getSource()) && Objects.equal(getTerm(), that.getTerm());
+        return Objects.equal(externalReferenceCode, that.externalReferenceCode) && Objects.equal(getContent(), that.getContent()) && Objects.equal(getId(), that.getId()) && Objects.equal(getMedium(), that.getMedium()) && Objects.equal(getSource(), that.getSource()) && Objects.equal(getTerm(), that.getTerm());
     }
 
     public String getContent() {
@@ -40,6 +44,14 @@ public class Acquisition {
 
     public void setContent(final String content) {
         this.content = content;
+    }
+
+    public String getExternalReferenceCode() {
+        return externalReferenceCode;
+    }
+
+    public void setExternalReferenceCode(final String externalReferenceCode) {
+        this.externalReferenceCode = externalReferenceCode;
     }
 
     public Long getId() {
@@ -72,14 +84,15 @@ public class Acquisition {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId(), getContent(), getMedium(), getSource(), getTerm());
+        return Objects.hashCode(externalReferenceCode, getContent(), getId(), getMedium(), getSource(), getTerm());
     }
 
     @Override
     public String toString() {
         return "Acquisition{" +
-                "id=" + id +
+                "externalReferenceCode='" + externalReferenceCode + '\'' +
                 ", content='" + content + '\'' +
+                ", id=" + id +
                 ", medium='" + medium + '\'' +
                 ", source='" + source + '\'' +
                 ", term='" + term + '\'' +
@@ -87,14 +100,20 @@ public class Acquisition {
     }
 
     public static class AcquisitionBuilder {
+        private final String erc;
         private String content;
         private String medium;
         private String source;
         private String term;
 
+        public AcquisitionBuilder(String erc) {
+            this.erc = erc;
+        }
+
         public Acquisition build() {
 
-            if (StringUtils.isBlank(content) &&
+            if (StringUtils.isBlank(erc) &&
+                    StringUtils.isBlank(content) &&
                     StringUtils.isBlank(medium) &&
                     StringUtils.isBlank(source) &&
                     StringUtils.isBlank(term)) {

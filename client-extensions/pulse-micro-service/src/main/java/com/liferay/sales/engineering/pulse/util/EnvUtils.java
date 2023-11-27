@@ -9,20 +9,11 @@ import java.net.UnknownHostException;
 @Component
 public class EnvUtils {
     private final Environment environment;
-    private String port;
     private String hostname;
+    private String port;
 
     public EnvUtils(final Environment environment) {
         this.environment = environment;
-    }
-
-    public String getPort() {
-        if (port == null) port = environment.getProperty("local.server.port");
-        return port;
-    }
-
-    public Integer getPortAsInt() {
-        return Integer.valueOf(getPort());
     }
 
     public String getHostname() throws UnknownHostException {
@@ -36,7 +27,16 @@ public class EnvUtils {
         return hostname;
     }
 
+    public String getPort() {
+        if (port == null) port = environment.getProperty("local.server.port");
+        return port;
+    }
+
+    public Integer getPortAsInt() {
+        return Integer.valueOf(getPort());
+    }
+
     public String getServerUrlPrefix(String scheme) throws UnknownHostException {
-        return String.format("%s://%s:%s", scheme,getHostname(),getPort());
+        return String.format("%s://%s:%s", scheme, getHostname(), getPort());
     }
 }

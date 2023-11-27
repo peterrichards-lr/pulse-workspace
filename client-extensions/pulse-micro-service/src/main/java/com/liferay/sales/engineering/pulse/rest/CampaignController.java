@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URISyntaxException;
 
 @RequestMapping("/api/campaigns")
 @RestController
@@ -47,10 +48,15 @@ public class CampaignController extends BaseController {
             throw new DuplicateCampaignNameException(campaignDto.getName());
         }
 
-        final Campaign campaign = campaignService.createCampaign(campaignDto.getName(), campaignDto.getCampaignUrl(), campaignDto.getStatus());
-        final Acquisition acquisition = acquisitionService.createAcquisition(campaignDto.getUtmSource(), campaignDto.getUtmMedium(), campaignDto.getUtmContent(), campaignDto.getUtmTerm());
-        final UrlToken urlToken = urlTokenService.createUrlToken(campaign, acquisition);
+        try {
+            final Campaign campaign = campaignService.createCampaign(campaignDto.getName(), campaignDto.getCampaignUrl(), campaignDto.getStatus());
+            final Acquisition acquisition = acquisitionService.createAcquisition(campaignDto.getUtmSource(), campaignDto.getUtmMedium(), campaignDto.getUtmContent(), campaignDto.getUtmTerm());
+            final UrlToken urlToken = urlTokenService.createUrlToken(campaign, acquisition);
 
-        return new ResponseEntity<>(urlToken, HttpStatus.OK);
+            return new ResponseEntity<>(urlToken, HttpStatus.OK);
+        } catch (URISyntaxException e) {
+            _log.error("Unable to create campaign", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
