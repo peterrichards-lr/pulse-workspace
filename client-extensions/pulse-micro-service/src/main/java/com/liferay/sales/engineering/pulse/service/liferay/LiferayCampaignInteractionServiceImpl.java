@@ -1,18 +1,21 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
-import com.liferay.sales.engineering.pulse.model.Campaign;
+import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Interaction;
+import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
@@ -28,34 +31,31 @@ public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService im
         super(serverProtocol, mainDomain, webClient);
     }
 
-    private Interaction buildInteraction(final Campaign campaign, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) {
-        final Interaction interaction = new Interaction(campaign);
-        interaction.setEvent("Link navigation");
+    private String buildEventProperties(final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) {
         final JSONObject eventProperties = new JSONObject();
+        eventProperties.put("token", urlToken.getToken());
         eventProperties.put("interactionTime", interactionTime);
         eventProperties.put("ipAddress", ipAddress);
         eventProperties.put("userAgent", userAgent);
-        interaction.setEventProperties(eventProperties.toString());
-        return interaction;
+        return eventProperties.toString();
     }
 
     @Override
-    public Long createInteraction(final Campaign campaign, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) throws URISyntaxException {
-        final Interaction interaction = buildInteraction(campaign, interactionTime, userAgent, ipAddress);
-
-        _log.info(String.format("%s : %s", "Interaction (before)", interaction));
-
-        final Mono<Interaction> interactionMono = this.webClient.post().uri(restEndpoint.toURI())
+    public Interaction createInteraction(final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) throws URISyntaxException {
+        final Interaction interaction = new Interaction();
+        interaction.setEvent("Link navigation");
+        interaction.setEventProperties(buildEventProperties(urlToken, interactionTime, userAgent, ipAddress));
+        _log.info(String.format("urlToken : %s", StringUtils.toJson(interaction)));
+        final URI endpoint = restEndpoint.toURI();
+        final Mono<Interaction> interactionMono = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(interaction))
                 .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
-        final Interaction afterInteraction = interactionMono.block();
-        _log.info(String.format("%s : %s", "Interaction (after)", afterInteraction));
-
-        return afterInteraction.getId();
+        return interactionMono.block();
     }
 
     @Override

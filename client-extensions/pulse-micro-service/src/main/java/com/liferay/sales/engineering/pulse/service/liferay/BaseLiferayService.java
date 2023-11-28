@@ -1,10 +1,13 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
+import com.liferay.sales.engineering.pulse.service.liferay.model.LiferayErrorResponse;
 import com.liferay.sales.engineering.pulse.util.UrlUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +31,11 @@ public abstract class BaseLiferayService {
         _log.info(String.format("%s : %s", "restEndpoint.getPort()", restEndpoint.getPort()));
         _log.debug(String.format("%s : %s", "restEndpoint", this.restEndpoint));
         this.webClient = webClient;
+    }
+
+    protected static Mono<LiferayErrorResponseException> handleLiferayError(final ClientResponse clientResponse) {
+        return clientResponse.bodyToMono(LiferayErrorResponse.class)
+                .flatMap(error -> Mono.error(new LiferayErrorResponseException(error)));
     }
 
     protected Consumer<Map<String, Object>> getClientRegistrationId() {

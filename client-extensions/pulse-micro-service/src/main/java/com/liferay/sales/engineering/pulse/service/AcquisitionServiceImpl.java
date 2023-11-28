@@ -3,11 +3,13 @@ package com.liferay.sales.engineering.pulse.service;
 import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.persistence.AcquisitionRepository;
 import com.liferay.sales.engineering.pulse.service.liferay.LiferayAcquisitionService;
+import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
+import java.security.InvalidParameterException;
 
 @Service
 public class AcquisitionServiceImpl implements AcquisitionService {
@@ -43,6 +45,12 @@ public class AcquisitionServiceImpl implements AcquisitionService {
 
     @Override
     public Acquisition createAcquisition(final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) throws URISyntaxException {
+        if (StringUtils.isBlank(utmSource) &&
+                StringUtils.isBlank(utmMedium) &&
+                StringUtils.isBlank(utmContent) &&
+                StringUtils.isBlank(utmTerm)) {
+            throw new InvalidParameterException("At least one acquisition parameter must have value");
+        }
         final com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition acquisition = liferayAcquisitionService.createAcquisition(utmSource, utmMedium, utmContent, utmTerm);
         return addAcquisition(acquisition);
     }

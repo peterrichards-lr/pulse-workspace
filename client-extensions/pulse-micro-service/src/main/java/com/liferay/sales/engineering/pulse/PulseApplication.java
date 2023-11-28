@@ -11,9 +11,7 @@ import static org.springframework.boot.SpringApplication.run;
 @SpringBootApplication
 @EnableWebFluxSecurity
 public class PulseApplication {
-
     public static void main(String[] args) {
         run(PulseApplication.class, args);
     }
-
 }

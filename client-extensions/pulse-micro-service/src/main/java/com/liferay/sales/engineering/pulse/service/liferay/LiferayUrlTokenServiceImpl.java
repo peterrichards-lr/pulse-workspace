@@ -2,17 +2,19 @@ package com.liferay.sales.engineering.pulse.service.liferay;
 
 import com.liferay.sales.engineering.pulse.service.liferay.model.UrlToken;
 import com.liferay.sales.engineering.pulse.service.liferay.model.UrlTokensResponse;
+import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
@@ -31,18 +33,22 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
 
     @Override
     public UrlToken createUrlToken(final String token, final String campaignErc, final String acquisitionErc) throws URISyntaxException {
-        final JSONObject urlTokenJson = new JSONObject();
-        urlTokenJson.put("token", token);
-        urlTokenJson.put("r_urlTokenCampaignRel_c_campaignERC", campaignErc);
-        urlTokenJson.put("r_urlTokenAcquisitionRel_c_acquisitionERC", acquisitionErc);
-        final Mono<UrlToken> urlToken = this.webClient.post().uri(this.restEndpoint.toURI())
+        final UrlToken urlToken = new UrlToken();
+        urlToken.setToken(token);
+        urlToken.setCampaignErc(campaignErc);
+        if (StringUtils.isNotBlank(acquisitionErc))
+            urlToken.setAcquisitionErc(acquisitionErc);
+        _log.info(String.format("urlToken : %s", StringUtils.toJson(urlToken)));
+        final URI endpoint = this.restEndpoint.toURI();
+        final Mono<UrlToken> urlTokenMono = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .body(BodyInserters.fromValue(urlTokenJson))
+                .body(BodyInserters.fromValue(urlToken))
                 .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
-        return urlToken.block();
+        return urlTokenMono.block();
     }
 
     @Override
@@ -52,9 +58,12 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
 
     @Override
     public List<UrlToken> getUrlTokens() throws URISyntaxException {
-        Mono<UrlTokensResponse> urlTokensResponse = this.webClient.get().uri(this.restEndpoint.toURI())
+        final URI endpoint = this.restEndpoint.toURI();
+        final Mono<UrlTokensResponse> urlTokensResponse = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
         return Objects.requireNonNull(urlTokensResponse.block()).getItems();

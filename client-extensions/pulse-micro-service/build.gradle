@@ -29,6 +29,7 @@ dependencies {
     implementation group: "com.liferay", name: "com.liferay.client.extension.util.spring.boot", version: "latest.release"
     implementation group: "com.liferay", name: "org.apache.commons.logging", version: "1.2.LIFERAY-PATCHED-2"
     implementation group: "org.json", name: "json", version: "20231013"
+    implementation group: "com.fasterxml.jackson.datatype", name: "jackson-datatype-jsr310", version: "2.6.0"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-data-jpa", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-resource-server", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-client", version: "2.7.17"

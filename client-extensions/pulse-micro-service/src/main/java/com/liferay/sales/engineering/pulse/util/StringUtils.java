@@ -1,5 +1,8 @@
 package com.liferay.sales.engineering.pulse.util;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class StringUtils {
     public static String convertToTitleCaseIteratingChars(String text) {
         if (text == null || text.isEmpty()) {
@@ -51,5 +54,14 @@ public class StringUtils {
 
     public static boolean isNotBlank(final String string) {
         return !isBlank(string);
+    }
+
+    public static <T> String toJson(final T obj) {
+        try {
+            JSONObject jsonObject = new JSONObject(obj);
+            return jsonObject.toString(4);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 }

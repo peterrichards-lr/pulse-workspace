@@ -1,16 +1,14 @@
 package com.liferay.sales.engineering.pulse.service.liferay.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Campaign extends BaseObject {
     private LocalDateTime begin;
-    private String campaignStatus;
+    private CampaignStatus campaignStatus;
     private String description;
     private LocalDateTime end;
     private String name;
@@ -22,7 +20,7 @@ public class Campaign extends BaseObject {
         if (!(o instanceof Campaign)) return false;
         if (!super.equals(o)) return false;
         final Campaign campaign = (Campaign) o;
-        return Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getCampaignStatus(), campaign.getCampaignStatus()) && Objects.equal(getTargetUrl(), campaign.getTargetUrl());
+        return Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getCampaignStatus(), campaign.getCampaignStatus()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getTargetUrl(), campaign.getTargetUrl());
     }
 
     public LocalDateTime getBegin() {
@@ -33,11 +31,11 @@ public class Campaign extends BaseObject {
         this.begin = begin;
     }
 
-    public String getCampaignStatus() {
+    public CampaignStatus getCampaignStatus() {
         return campaignStatus;
     }
 
-    public void setCampaignStatus(final String campaignStatus) {
+    public void setCampaignStatus(final CampaignStatus campaignStatus) {
         this.campaignStatus = campaignStatus;
     }
 
@@ -75,24 +73,18 @@ public class Campaign extends BaseObject {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), getBegin(), getDescription(), getEnd(), getName(), getCampaignStatus(), getTargetUrl());
+        return Objects.hashCode(super.hashCode(), getBegin(), getCampaignStatus(), getDescription(), getEnd(), getName(), getTargetUrl());
     }
 
     @Override
     public String toString() {
         return "Campaign{" +
                 "begin=" + begin +
+                ", campaignStatus=" + campaignStatus +
                 ", description='" + description + '\'' +
                 ", end=" + end +
                 ", name='" + name + '\'' +
-                ", campaignStatus='" + campaignStatus + '\'' +
                 ", targetUrl='" + targetUrl + '\'' +
                 "} " + super.toString();
-    }
-
-    @SuppressWarnings("unchecked")
-    @JsonProperty("campaignStatus")
-    private void unpackNested(Map<String, Object> campaignStatus) {
-        this.campaignStatus = (String) campaignStatus.get("key");
     }
 }

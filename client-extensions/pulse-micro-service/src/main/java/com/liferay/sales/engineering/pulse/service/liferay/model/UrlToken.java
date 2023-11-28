@@ -6,9 +6,9 @@ import com.google.common.base.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UrlToken extends BaseObject {
-    @JsonProperty("urlTokenAcquisitionRelERC")
+    @JsonProperty("r_urlTokenAcquisitionRel_c_acquisitionERC")
     private String acquisitionErc;
-    @JsonProperty("urlTokenCampaignRelERC")
+    @JsonProperty("r_urlTokenCampaignRel_c_campaignERC")
     private String campaignErc;
     private String token;
 

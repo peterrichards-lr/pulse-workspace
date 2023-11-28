@@ -39,5 +39,4 @@ public abstract class BaseController {
             log.info("JWT Subject: " + jwt.getSubject());
         }
     }
-
 }

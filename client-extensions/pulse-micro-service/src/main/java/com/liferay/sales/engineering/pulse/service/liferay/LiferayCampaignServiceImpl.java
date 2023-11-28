@@ -1,13 +1,16 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
+import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Campaign;
+import com.liferay.sales.engineering.pulse.service.liferay.model.CampaignStatus;
 import com.liferay.sales.engineering.pulse.service.liferay.model.CampaignsResponse;
+import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,34 +37,53 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
 
     @Override
     public Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException {
-        final JSONObject campaignJson = new JSONObject();
-        campaignJson.put("name", name);
-        campaignJson.put("targetUrl", targetUrl);
-        campaignJson.put("status", status);
-        final Mono<Campaign> campaign = this.webClient.post().uri(this.restEndpoint.toURI())
-                .attributes(getClientRegistrationId())
-                .body(BodyInserters.fromValue(campaignJson))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+        try {
+            final Campaign campaign = new Campaign();
+            campaign.setName(name);
+            campaign.setTargetUrl(targetUrl);
+            final CampaignStatus campaignStatus = new CampaignStatus();
+            campaignStatus.setKey(status);
+            campaign.setCampaignStatus(campaignStatus);
+            _log.info(String.format("campaign : %s", StringUtils.toJson(campaign)));
+            final URI endpoint = this.restEndpoint.toURI();
+            final Mono<Campaign> campaignMono = this.webClient.post().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .body(BodyInserters.fromValue(campaign))
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
 
-        return campaign.block();
+            return campaignMono.block();
+        } catch (LiferayErrorResponseException e) {
+            if (e.getStatus() == HttpStatus.BAD_REQUEST &&
+                    e.getTitle().contains("already in use")) {
+                throw new DuplicateCampaignNameException(name);
+            }
+            throw e;
+        }
     }
+
 
     @Override
     public Campaign getByErc(final String erc) throws URISyntaxException {
-        final URI endpoint = new URI(this.restEndpoint.toString() + "/by-external-reference-code/" + erc);
+        final URI endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
         final Mono<Campaign> campaign = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
         return campaign.block();
     }
 
     public List<Campaign> getCampaigns() throws URISyntaxException {
-        Mono<CampaignsResponse> campaignResponse = webClient.get().uri(restEndpoint.toURI())
+        final URI endpoint = restEndpoint.toURI();
+        final Mono<CampaignsResponse> campaignResponse = webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
         return Objects.requireNonNull(campaignResponse.block()).getItems();

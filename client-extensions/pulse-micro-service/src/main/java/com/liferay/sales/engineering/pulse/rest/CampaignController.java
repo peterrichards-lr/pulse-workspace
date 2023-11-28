@@ -1,5 +1,9 @@
 package com.liferay.sales.engineering.pulse.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
 import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
+import java.security.InvalidParameterException;
 
 @RequestMapping("/api/campaigns")
 @RestController
@@ -42,7 +47,14 @@ public class CampaignController extends BaseController {
     public ResponseEntity<UrlToken> create(
             @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CampaignDto campaignDto) {
 
-        log(jwt, _log, campaignDto.toString());
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            final String json = mapper.writeValueAsString(campaignDto);
+            log(jwt, _log, json);
+        } catch (JsonProcessingException e) {
+            _log.error("Unable to serialise object ot JSON", e);
+        }
 
         if (campaignService.existsByName(campaignDto.getName())) {
             throw new DuplicateCampaignNameException(campaignDto.getName());
@@ -50,7 +62,12 @@ public class CampaignController extends BaseController {
 
         try {
             final Campaign campaign = campaignService.createCampaign(campaignDto.getName(), campaignDto.getCampaignUrl(), campaignDto.getStatus());
-            final Acquisition acquisition = acquisitionService.createAcquisition(campaignDto.getUtmSource(), campaignDto.getUtmMedium(), campaignDto.getUtmContent(), campaignDto.getUtmTerm());
+            Acquisition acquisition = null;
+            try {
+                acquisition = acquisitionService.createAcquisition(campaignDto.getUtmSource(), campaignDto.getUtmMedium(), campaignDto.getUtmContent(), campaignDto.getUtmTerm());
+            } catch (InvalidParameterException e) {
+                _log.debug("Campaign does not have an acquisition");
+            }
             final UrlToken urlToken = urlTokenService.createUrlToken(campaign, acquisition);
 
             return new ResponseEntity<>(urlToken, HttpStatus.OK);

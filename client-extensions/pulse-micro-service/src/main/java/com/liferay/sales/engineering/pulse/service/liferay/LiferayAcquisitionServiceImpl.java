@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -37,10 +38,12 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
         acquisitionJson.put("medium", utmMedium);
         acquisitionJson.put("source", utmSource);
         acquisitionJson.put("term", utmTerm);
-        final Mono<Acquisition> acquisition = this.webClient.post().uri(this.restEndpoint.toURI())
+        final URI endpoint = this.restEndpoint.toURI();
+        final Mono<Acquisition> acquisition = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(acquisitionJson))
                 .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
@@ -48,9 +51,12 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
     }
 
     public List<Acquisition> getAcquisitions() throws URISyntaxException {
-        final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(restEndpoint.toURI())
+        final URI endpoint = restEndpoint.toURI();
+        final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
         return Objects.requireNonNull(campaignResponse.block()).getItems();
@@ -58,10 +64,12 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
 
     @Override
     public Acquisition getByErc(final String erc) throws URISyntaxException {
-        final URI endpoint = new URI(this.restEndpoint.toString() + "/by-external-reference-code/" + erc);
+        final URI endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
         final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
         return acquisition.block();
     }

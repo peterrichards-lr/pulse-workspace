@@ -6,6 +6,7 @@ import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.persistence.UrlTokenRepository;
 import com.liferay.sales.engineering.pulse.service.liferay.LiferayCampaignInteractionService;
+import com.liferay.sales.engineering.pulse.service.liferay.model.Interaction;
 import com.liferay.sales.engineering.pulse.util.EnvUtils;
 import com.liferay.sales.engineering.pulse.util.HttpRequestResponseUtils;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
@@ -175,13 +176,17 @@ public class RedirectController {
         return status.equals("Draft");
     }
 
-    private Long recordInteraction(final Campaign campaign,
+    private Long recordInteraction(final UrlToken urlToken,
                                    final LocalDateTime interactionTime,
                                    final HttpServletRequest httpServletRequest) {
         final String userAgent = httpServletRequest.getHeader("User-Agent");
         final String ipAddress = HttpRequestResponseUtils.getClientIpAddressIfServletRequestExist();
         try {
-            return liferayCampaignInteractionService.createInteraction(campaign, interactionTime, userAgent, ipAddress);
+            final Interaction interaction = liferayCampaignInteractionService.createInteraction(urlToken, interactionTime, userAgent, ipAddress);
+            if (interaction == null)
+                return -1L;
+
+            return interaction.getId();
         } catch (URISyntaxException e) {
             _log.error("Unable to record campaign interaction", e);
             return -1L;
@@ -241,7 +246,7 @@ public class RedirectController {
             return;
         }
 
-        final Long interactionId = recordInteraction(campaign, interactionTime, httpServletRequest);
+        final Long interactionId = recordInteraction(token, interactionTime, httpServletRequest);
         final Acquisition acquisition = token.getAcquisition();
 
         configureRedirection(campaign, acquisition, urlToken, interactionId, hostDomainName, httpServletResponse);

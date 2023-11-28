@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.service;
 
+import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.Status;
 import com.liferay.sales.engineering.pulse.persistence.CampaignRepository;
@@ -27,7 +28,7 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     private Campaign addCampaign(com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign) {
-        return addCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getTargetUrl(), campaign.getCampaignStatus());
+        return addCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getTargetUrl(), campaign.getCampaignStatus().getKey());
     }
 
     @Override
@@ -47,6 +48,9 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException {
+        if (existsByName(name)) {
+            throw new DuplicateCampaignNameException(name);
+        }
         final com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign = liferayCampaignService.createCampaign(name, targetUrl, status);
         return addCampaign(campaign);
     }
