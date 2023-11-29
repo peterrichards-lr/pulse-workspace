@@ -1,5 +1,4 @@
 group = "com.liferay.sales.engineering"
-version = "1.0.0"
 
 buildscript {
     dependencies {
