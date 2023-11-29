@@ -182,7 +182,7 @@ public class RedirectController {
         final String userAgent = httpServletRequest.getHeader("User-Agent");
         final String ipAddress = HttpRequestResponseUtils.getClientIpAddressIfServletRequestExist();
         try {
-            final Interaction interaction = liferayCampaignInteractionService.createInteraction(urlToken, interactionTime, userAgent, ipAddress);
+            final Interaction interaction = liferayCampaignInteractionService.createInteraction("Pulse redirect", urlToken, interactionTime, userAgent, ipAddress);
             if (interaction == null)
                 return -1L;
 
@@ -205,7 +205,7 @@ public class RedirectController {
         return new ResponseEntity<>("Redirect OK", httpHeaders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/c/{urlToken:[A-z]{8}}"})
+    @RequestMapping(value = {"/c/{urlToken:[A-z0-9]{8}}"})
     public void redirect(@RequestHeader final String host,
                          @PathVariable final String urlToken,
                          final HttpServletRequest httpServletRequest,

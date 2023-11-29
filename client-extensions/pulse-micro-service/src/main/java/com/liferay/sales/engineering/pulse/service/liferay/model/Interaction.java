@@ -3,24 +3,13 @@ package com.liferay.sales.engineering.pulse.service.liferay.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import com.liferay.sales.engineering.pulse.model.Campaign;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Interaction extends BaseObject {
-
     @JsonProperty("r_campaignInteractionRel_c_campaignERC")
     private String campaignErc;
     private String event;
     private String eventProperties;
-    private long id;
-
-    public Interaction() {
-
-    }
-
-    public Interaction(Campaign campaign) {
-        this.campaignErc = campaign.getExternalReferenceCode();
-    }
 
     @Override
     public boolean equals(final Object o) {
@@ -28,11 +17,15 @@ public class Interaction extends BaseObject {
         if (!(o instanceof Interaction)) return false;
         if (!super.equals(o)) return false;
         final Interaction that = (Interaction) o;
-        return getId() == that.getId() && Objects.equal(getCampaignErc(), that.getCampaignErc()) && Objects.equal(getEvent(), that.getEvent()) && Objects.equal(getEventProperties(), that.getEventProperties());
+        return Objects.equal(campaignErc, that.campaignErc) && Objects.equal(event, that.event) && Objects.equal(eventProperties, that.eventProperties);
     }
 
     public String getCampaignErc() {
         return campaignErc;
+    }
+
+    public void setCampaignErc(final String campaignErc) {
+        this.campaignErc = campaignErc;
     }
 
     public String getEvent() {
@@ -52,20 +45,14 @@ public class Interaction extends BaseObject {
     }
 
     @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), getId(), getCampaignErc(), getEvent(), getEventProperties());
+        return Objects.hashCode(super.hashCode(), campaignErc, event, eventProperties);
     }
 
     @Override
     public String toString() {
         return "Interaction{" +
-                "id=" + id +
-                ", campaignErc='" + campaignErc + '\'' +
+                "campaignErc='" + campaignErc + '\'' +
                 ", event='" + event + '\'' +
                 ", eventProperties='" + eventProperties + '\'' +
                 "} " + super.toString();

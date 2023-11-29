@@ -7,5 +7,5 @@ import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 public interface LiferayCampaignInteractionService {
-    Interaction createInteraction(UrlToken urlToken, LocalDateTime interactionTime, String userAgent, String ipAddress) throws URISyntaxException;
+    Interaction createInteraction(String event, UrlToken urlToken, LocalDateTime interactionTime, String userAgent, String ipAddress) throws URISyntaxException;
 }

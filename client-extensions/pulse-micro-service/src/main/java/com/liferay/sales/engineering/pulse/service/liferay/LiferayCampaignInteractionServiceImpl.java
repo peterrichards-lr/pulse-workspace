@@ -41,11 +41,12 @@ public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService im
     }
 
     @Override
-    public Interaction createInteraction(final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) throws URISyntaxException {
+    public Interaction createInteraction(final String event, final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) throws URISyntaxException {
         final Interaction interaction = new Interaction();
-        interaction.setEvent("Link navigation");
+        interaction.setCampaignErc(urlToken.getCampaign().getExternalReferenceCode());
+        interaction.setEvent(event);
         interaction.setEventProperties(buildEventProperties(urlToken, interactionTime, userAgent, ipAddress));
-        _log.info(String.format("urlToken : %s", StringUtils.toJson(interaction)));
+        _log.info(String.format("interaction : %s", StringUtils.toJson(interaction)));
         final URI endpoint = restEndpoint.toURI();
         final Mono<Interaction> interactionMono = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
