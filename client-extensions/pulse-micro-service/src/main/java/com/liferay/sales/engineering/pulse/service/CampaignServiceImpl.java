@@ -9,7 +9,10 @@ import com.liferay.sales.engineering.pulse.service.liferay.LiferayCampaignServic
 import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 
@@ -60,8 +63,22 @@ public class CampaignServiceImpl implements CampaignService {
         return campaignRepository.existsByName(name);
     }
 
+    @Override
+    public Page<Campaign> findAll(final Pageable paging) {
+        return campaignRepository.findAll(paging);
+    }
+
     private Status getStatus(String value) {
         final String name = StringUtils.convertToTitleCaseIteratingChars(value);
         return statusRepository.findByName(name);
+    }
+
+    @Override
+    @Transactional
+    public void removeCampaign(final String erc) {
+        if (campaignRepository.existsByExternalReferenceCode(erc)) {
+            campaignRepository.deleteByExternalReferenceCode(erc);
+            _log.info(String.format("Deleted campaign %s", erc));
+        }
     }
 }

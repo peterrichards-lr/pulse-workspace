@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Map;
 
-public abstract class BaseController {
+public abstract class BaseRestController {
     protected void log(Jwt jwt, Log log) {
         if (log.isInfoEnabled()) {
             log.info("JWT Claims: " + jwt.getClaims());

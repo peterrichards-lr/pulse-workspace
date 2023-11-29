@@ -1,4 +1,4 @@
-package com.liferay.sales.engineering.pulse.rest;
+package com.liferay.sales.engineering.pulse.rest.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,37 +7,39 @@ import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
 import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
-import com.liferay.sales.engineering.pulse.rest.model.CampaignDto;
+import com.liferay.sales.engineering.pulse.rest.BaseRestController;
+import com.liferay.sales.engineering.pulse.rest.api.model.CampaignDto;
 import com.liferay.sales.engineering.pulse.service.AcquisitionService;
 import com.liferay.sales.engineering.pulse.service.CampaignService;
 import com.liferay.sales.engineering.pulse.service.UrlTokenService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.InvalidParameterException;
 
-@RequestMapping("/api/campaigns")
 @RestController
-public class CampaignController extends BaseController {
+@RequestMapping("/api/campaigns")
+public class CampaignApiController extends BaseRestController {
     private static final Log _log = LogFactory.getLog(
-            CampaignController.class);
+            CampaignApiController.class);
     private final AcquisitionService acquisitionService;
     private final CampaignService campaignService;
     private final UrlTokenService urlTokenService;
 
     @Autowired
-    public CampaignController(final CampaignService campaignService, final AcquisitionService acquisitionService, final UrlTokenService urlTokenService) {
+    public CampaignApiController(final CampaignService campaignService, final AcquisitionService acquisitionService, final UrlTokenService urlTokenService) {
         this.campaignService = campaignService;
         this.acquisitionService = acquisitionService;
         this.urlTokenService = urlTokenService;
@@ -75,5 +77,18 @@ public class CampaignController extends BaseController {
             _log.error("Unable to create campaign", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping
+    Page<Campaign> getCampaigns(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int pageSize,
+            @RequestParam(defaultValue = "name") String sortBy) {
+
+        log(jwt, _log);
+
+        final Pageable paging = PageRequest.of(page, pageSize, Sort.by(sortBy));
+        return campaignService.findAll(paging);
     }
 }

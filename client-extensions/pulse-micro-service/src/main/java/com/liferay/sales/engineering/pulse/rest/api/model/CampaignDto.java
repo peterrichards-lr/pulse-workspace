@@ -1,4 +1,4 @@
-package com.liferay.sales.engineering.pulse.rest.model;
+package com.liferay.sales.engineering.pulse.rest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

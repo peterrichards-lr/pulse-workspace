@@ -1,7 +1,7 @@
 package com.liferay.sales.engineering.pulse.rest;
 
 import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
-import com.liferay.sales.engineering.pulse.rest.model.ApiError;
+import com.liferay.sales.engineering.pulse.rest.api.model.ApiError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

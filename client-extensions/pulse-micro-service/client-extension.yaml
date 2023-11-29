@@ -20,3 +20,18 @@ pulse-micro-service-oauth-application-headless-server:
     - C_CampaignInteraction.everything
     - C_UrlToken.everything
   type: oAuthApplicationHeadlessServer
+pulse-micro-service-object-action-url-token:
+  name: Pulse Microservice URL Token Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/url-tokens
+  type: objectAction
+pulse-micro-service-object-action-campaign:
+  name: Pulse Microservice Campaign Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/campaigns
+  type: objectAction
+pulse-micro-service-object-action-acquisition:
+  name: Pulse Microservice Acquisition Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/acquisitions
+  type: objectAction

@@ -1,8 +1,9 @@
-package com.liferay.sales.engineering.pulse.rest;
+package com.liferay.sales.engineering.pulse.rest.api;
 
 
 import com.liferay.sales.engineering.pulse.model.UrlToken;
-import com.liferay.sales.engineering.pulse.persistence.UrlTokenRepository;
+import com.liferay.sales.engineering.pulse.rest.BaseRestController;
+import com.liferay.sales.engineering.pulse.service.UrlTokenService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/url-tokens")
-public class UrlTokenController extends BaseController {
+public class UrlTokenApiController extends BaseRestController {
     private static final Log _log = LogFactory.getLog(
-            UrlTokenController.class);
-    private final UrlTokenRepository urlTokenRepository;
+            UrlTokenApiController.class);
+    private final UrlTokenService urlTokenService;
 
-    UrlTokenController(final UrlTokenRepository urlTokenRepository) {
-        this.urlTokenRepository = urlTokenRepository;
+    UrlTokenApiController(final UrlTokenService urlTokenService) {
+        this.urlTokenService = urlTokenService;
     }
 
     @GetMapping
@@ -37,6 +38,6 @@ public class UrlTokenController extends BaseController {
         log(jwt, _log);
 
         final Pageable paging = PageRequest.of(page, pageSize, Sort.by(sortBy));
-        return urlTokenRepository.findAll(paging);
+        return urlTokenService.findAll(paging);
     }
 }

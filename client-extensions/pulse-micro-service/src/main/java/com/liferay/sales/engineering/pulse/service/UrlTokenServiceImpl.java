@@ -8,7 +8,10 @@ import com.liferay.sales.engineering.pulse.service.liferay.LiferayUrlTokenServic
 import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -57,6 +60,11 @@ public class UrlTokenServiceImpl implements UrlTokenService {
         return addUrlToken(urlToken, campaign, acquisition);
     }
 
+    @Override
+    public Page<UrlToken> findAll(final Pageable paging) {
+        return urlTokenRepository.findAll(paging);
+    }
+
     private String generateUniqueToken() {
         String token = StringUtils.generateToken(8);
         Optional<UrlToken> urlToken = urlTokenRepository.findById(token);
@@ -66,5 +74,14 @@ public class UrlTokenServiceImpl implements UrlTokenService {
             urlToken = urlTokenRepository.findById(token);
         }
         return token;
+    }
+
+    @Override
+    @Transactional
+    public void removeUrlToken(final String erc) {
+        if (urlTokenRepository.existsByExternalReferenceCode(erc)) {
+            urlTokenRepository.deleteByExternalReferenceCode(erc);
+            _log.info(String.format("Deleted urlToken %s", erc));
+        }
     }
 }

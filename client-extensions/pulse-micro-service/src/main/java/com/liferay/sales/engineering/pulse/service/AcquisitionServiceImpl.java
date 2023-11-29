@@ -6,7 +6,10 @@ import com.liferay.sales.engineering.pulse.service.liferay.LiferayAcquisitionSer
 import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 import java.security.InvalidParameterException;
@@ -53,5 +56,19 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         }
         final com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition acquisition = liferayAcquisitionService.createAcquisition(utmSource, utmMedium, utmContent, utmTerm);
         return addAcquisition(acquisition);
+    }
+
+    @Override
+    public Page<Acquisition> findAll(final Pageable paging) {
+        return acquisitionRepository.findAll(paging);
+    }
+
+    @Override
+    @Transactional
+    public void removeAcquisition(final String erc) {
+        if (acquisitionRepository.existsByExternalReferenceCode(erc)) {
+            acquisitionRepository.deleteByExternalReferenceCode(erc);
+            _log.info(String.format("Deleted acquisition %s", erc));
+        }
     }
 }
