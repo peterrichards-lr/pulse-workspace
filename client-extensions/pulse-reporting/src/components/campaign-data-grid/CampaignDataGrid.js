@@ -1,3 +1,4 @@
+import ClayButton from '@clayui/button';
 import {useEffect, useMemo, useState} from 'react';
 import {exportToCsv, exportToPdf, exportToXlsx} from './exportUtils';
 
@@ -107,7 +108,8 @@ const CampaignDataGrid = ({rows}) => {
 function ExportButton({onExport, children}) {
     const [exporting, setExporting] = useState(false);
     return (
-        <button
+        <ClayButton
+            displayType="secondary"
             disabled={exporting}
             onClick={async () => {
                 setExporting(true);
@@ -116,7 +118,7 @@ function ExportButton({onExport, children}) {
             }}
         >
             {exporting ? 'Exporting' : children}
-        </button>
+        </ClayButton>
     );
 }
 

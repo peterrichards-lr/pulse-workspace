@@ -1,8 +1,12 @@
 {
-  "name": "user-journey",
+  "name": "pulse-reporting",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@clayui/button": "^3.107.0",
+    "@clayui/date-picker": "^3.107.1",
+    "@clayui/form": "^3.107.0",
+    "@clayui/icon": "^3.106.1",
     "chart.js": "^4.3.3",
     "javascript-time-ago": "^2.5.9",
     "jspdf": "^2.5.1",
@@ -12,7 +16,7 @@
     "react-data-grid": "^7.0.0-beta.29",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "sass": "^1.62.1",
+    "sass": "^1.66.1",
     "xlsx": "^0.18.5"
   },
   "scripts": {

@@ -5,10 +5,10 @@ import UserJourney from './components/user-journey/UserJourney';
 
 import './common/styles/index.scss';
 
-const App = ({clientExternalReferenceCode}) => {
+const App = () => {
     return (
         <div>
-            <UserJourney clientExternalReferenceCode={clientExternalReferenceCode}/>
+            <UserJourney/>
         </div>
     );
 };
@@ -21,16 +21,12 @@ class WebComponent extends HTMLElement {
 
     connectedCallback() {
         this.root.render(
-            <App
-                clientExternalReferenceCode={this.getAttribute(
-                    'clientexternalreferencecode'
-                )}
-            />
+            <App />
         );
     }
 }
 
-const ELEMENT_ID = 'user-journey';
+const ELEMENT_ID = 'pulse-user-journey';
 
 if (!customElements.get(ELEMENT_ID)) {
     customElements.define(ELEMENT_ID, WebComponent);

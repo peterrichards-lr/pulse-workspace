@@ -9,9 +9,8 @@ const URL_TOKEN_API_PATH = '/o/c/urltokens';
 const ACQUISITION_API_PATH = '/o/c/acquisitions';
 const CAMPAIGN_API_PATH = '/o/c/campaigns/';
 const CAMPAIGN_INTERACTION_API_PATH = '/o/c/campaigninteractions/';
-const HEADER_CONTENT_TYPE_JSON = 'application/json';
 
-const UserJourney = ({clientExternalReferenceCode}) => {
+const UserJourney = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [rows, setRows] = useState([]);
 
@@ -21,31 +20,9 @@ const UserJourney = ({clientExternalReferenceCode}) => {
             return;
         }
 
-        if (!(Liferay.ThemeDisplay.isSignedIn || !clientExternalReferenceCode)) {
-            setErrorMessage('The external reference code of the OAuth 2 client has not been provided');
-            return;
-        }
-
-        let liferayFetch;
-        if (clientExternalReferenceCode) {
-            const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(clientExternalReferenceCode);
-            if (!oAuth2Client) {
-                setErrorMessage(`Unable to find the OAuth2 client for ${clientExternalReferenceCode}`);
-                return;
-            }
-
-            const headers = {
-                HEADER_CONTENT_TYPE: HEADER_CONTENT_TYPE_JSON,
-            };
-
-            liferayFetch = (url) => {
-                return oAuth2Client.fetch(url, headers);
-            };
-        } else {
-            liferayFetch = (url) => {
-                return baseFetch(url);
-            };
-        }
+        const liferayFetch = (url) => {
+            return baseFetch(url);
+        };
 
         const paginationResponseHandler = (response) => {
             const {items, pageSize, totalCount} = response;
@@ -139,7 +116,7 @@ const UserJourney = ({clientExternalReferenceCode}) => {
                         .catch((reason) => console.error(reason));
                 });
             });
-    }, [clientExternalReferenceCode]);
+    }, []);
 
     let errorElement;
     let reportElement;

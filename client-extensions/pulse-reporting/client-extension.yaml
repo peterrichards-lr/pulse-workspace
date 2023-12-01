@@ -5,11 +5,12 @@ pulse-reporting:
   cssURLs:
     - css/main.*.css
   friendlyURLMapping: pulse-reporting
-  htmlElementName: user-journey
+  htmlElementName: pulse-user-journey
   instanceable: false
   name: Pulse Reporting
   portletCategoryName: category.client-extensions
   type: customElement
   urls:
     - js/main.*.js
+    - js/*.chunk.js
   useESM: true
