@@ -3,13 +3,13 @@ assemble:
     into: static
 pulse-user-interface:
   cssURLs:
-    - css/main.css
+    - css/main.*.css
   friendlyURLMapping: pulse-user-interface
-  htmlElementName: pulse-user-interface
+  htmlElementName: pulse-create-campaign
   instanceable: false
   name: Pulse UI
   portletCategoryName: category.client-extensions
   type: customElement
   urls:
-    - js/main.js
+    - js/main.*.js
   useESM: true
