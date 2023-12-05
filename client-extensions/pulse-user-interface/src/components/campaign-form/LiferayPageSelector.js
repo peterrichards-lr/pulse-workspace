@@ -13,7 +13,7 @@ const LiferayPageSelector = ({
                                  control,
                                  defaultValue,
                              }) => {
-    const controlName = "targetPage"
+    const controlName = "targetUrl"
     const [options, setOptions] = useState([]);
 
     useEffect(async () => {
@@ -60,7 +60,7 @@ const LiferayPageSelector = ({
         <ClayForm.Group>
             <ClaySelectController
                 name={controlName}
-                label={Liferay.Language.get('target-page')}
+                label={Liferay.Language.get('target-url')}
                 control={control}
                 required={true}
             >
