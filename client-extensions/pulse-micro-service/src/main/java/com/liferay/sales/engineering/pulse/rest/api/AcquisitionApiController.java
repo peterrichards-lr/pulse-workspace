@@ -1,7 +1,6 @@
 package com.liferay.sales.engineering.pulse.rest.api;
 
 import com.liferay.sales.engineering.pulse.model.Acquisition;
-import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.rest.BaseRestController;
 import com.liferay.sales.engineering.pulse.service.AcquisitionService;
 import org.apache.commons.logging.Log;

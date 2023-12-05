@@ -1,22 +1,24 @@
 package com.liferay.sales.engineering.pulse.rest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CampaignDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime begin = LocalDateTime.now(ZoneId.of("UTC"));
-    @NotBlank(message = "The campaign must have a target URL")
-    private String campaignUrl;
+    private String campaignStatus = "draft";
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime end;
     @NotBlank(message = "The campaign must have a name")
     private String name;
-    private String status = "draft";
+    @NotBlank(message = "The campaign must have a target URL")
+    private String targetUrl;
     private String utmContent;
     private String utmMedium;
     private String utmSource;
@@ -30,12 +32,12 @@ public class CampaignDto {
         this.begin = begin;
     }
 
-    public String getCampaignUrl() {
-        return campaignUrl;
+    public String getCampaignStatus() {
+        return campaignStatus;
     }
 
-    public void setCampaignUrl(final String campaignUrl) {
-        this.campaignUrl = campaignUrl;
+    public void setCampaignStatus(final String campaignStatus) {
+        this.campaignStatus = campaignStatus;
     }
 
     public String getDescription() {
@@ -62,12 +64,12 @@ public class CampaignDto {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTargetUrl() {
+        return targetUrl;
     }
 
-    public void setStatus(final String status) {
-        this.status = status;
+    public void setTargetUrl(final String targetUrl) {
+        this.targetUrl = targetUrl;
     }
 
     public String getUtmContent() {
@@ -108,9 +110,9 @@ public class CampaignDto {
                 "begin=" + begin +
                 ", end=" + end +
                 ", name='" + name + '\'' +
-                ", campaignUrl='" + campaignUrl + '\'' +
+                ", targetUrl='" + targetUrl + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                ", campaignStatus='" + campaignStatus + '\'' +
                 ", utmMedium='" + utmMedium + '\'' +
                 ", utmSource='" + utmSource + '\'' +
                 ", utmTerm='" + utmTerm + '\'' +

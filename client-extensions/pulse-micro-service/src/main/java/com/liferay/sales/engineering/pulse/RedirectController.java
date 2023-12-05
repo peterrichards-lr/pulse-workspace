@@ -51,17 +51,18 @@ public class RedirectController {
 
     @Autowired
     public RedirectController(
-            @Value("${com.liferay.lxc.dxp.server.protocol}") final String serverScheme,
-            @Value("${com.liferay.lxc.dxp.main.domain}") final String serverHost,
-            @Value("${pulse.cookie-domain}") final String cookieDomain,
-            @Value("${pulse.test-redirect}") final boolean testRedirect,
+            @Value("${com.liferay.lxc.dxp.server.protocol}") final String lxcServerProtocol,
+            @Value("${com.liferay.lxc.dxp.main.domain}") final String lxcMainDomain,
+            @Value("${pulse.cookie_domain}") final String cookieDomain,
+            @Value("${pulse.test_redirect}") final boolean testRedirect,
             final EnvUtils envUtil,
             final UrlTokenRepository tokenRepository,
             final LiferayCampaignInteractionService liferayCampaignInteractionService) throws MalformedURLException {
-        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.server.protocol", serverScheme));
-        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", serverHost));
-        this.baseUrl = UrlUtils.buildUrlFromLxcProperties(serverScheme, serverHost);
-        _log.info(String.format("%s : %s", "baseUrl.getHost()", baseUrl.getHost()));
+        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.server.protocol", lxcServerProtocol));
+        _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", lxcMainDomain));
+        this.baseUrl = UrlUtils.buildUrlFromLiferayProperties(lxcServerProtocol, lxcMainDomain);
+
+       _log.info(String.format("%s : %s", "baseUrl.getHost()", baseUrl.getHost()));
         _log.info(String.format("%s : %s", "baseUrl.getPort()", baseUrl.getPort()));
         _log.debug(String.format("%s : %s", "baseUrl", this.baseUrl));
         this.cookieDomain = cookieDomain;
@@ -194,8 +195,7 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/redirect")
-    public ResponseEntity<String> redirect(final HttpServletRequest httpServletRequest,
-                                           final HttpServletResponse httpServletResponse) {
+    public ResponseEntity<String> redirect(final HttpServletRequest httpServletRequest) {
         _log.info("****** RedirectController:: redirect ******");
         _log.info(httpServletRequest.getQueryString());
         Collections.list(httpServletRequest.getHeaderNames()).forEach((headerName -> _log.info(String.format("%s : %s", headerName, httpServletRequest.getHeader(headerName)))));
@@ -205,7 +205,7 @@ public class RedirectController {
         return new ResponseEntity<>("Redirect OK", httpHeaders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/c/{urlToken:[A-z0-9]{8}}"})
+    @RequestMapping(value = {"/c/{urlToken:[A-z\\d]{8}}"})
     public void redirect(@RequestHeader final String host,
                          @PathVariable final String urlToken,
                          final HttpServletRequest httpServletRequest,

@@ -4,6 +4,7 @@ import com.liferay.sales.engineering.pulse.service.liferay.model.LiferayErrorRes
 import com.liferay.sales.engineering.pulse.util.UrlUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,7 +27,7 @@ public abstract class BaseLiferayService {
             final WebClient webClient) throws MalformedURLException {
         _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.server.protocol", serverProtocol));
         _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", mainDomain));
-        this.restEndpoint = UrlUtils.buildUrlFromLxcProperties(serverProtocol, mainDomain, String.format("/o/c/%s/", getObjectType()));
+        this.restEndpoint = UrlUtils.buildUrlFromLiferayProperties(serverProtocol, mainDomain, String.format("/o/c/%s/", getObjectType()));
         _log.info(String.format("%s : %s", "restEndpoint.getHost()", restEndpoint.getHost()));
         _log.info(String.format("%s : %s", "restEndpoint.getPort()", restEndpoint.getPort()));
         _log.debug(String.format("%s : %s", "restEndpoint", this.restEndpoint));
@@ -34,6 +35,13 @@ public abstract class BaseLiferayService {
     }
 
     protected static Mono<LiferayErrorResponseException> handleLiferayError(final ClientResponse clientResponse) {
+        if (clientResponse.statusCode() == HttpStatus.FORBIDDEN) {
+            final LiferayErrorResponse errorResponse = new LiferayErrorResponse();
+            errorResponse.setStatus(clientResponse.statusCode());
+            errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
+            return Mono.error(new LiferayErrorResponseException(errorResponse));
+        }
+
         return clientResponse.bodyToMono(LiferayErrorResponse.class)
                 .flatMap(error -> Mono.error(new LiferayErrorResponseException(error)));
     }

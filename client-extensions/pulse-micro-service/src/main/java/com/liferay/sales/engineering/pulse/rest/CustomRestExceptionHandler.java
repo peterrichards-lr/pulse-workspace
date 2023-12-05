@@ -2,6 +2,8 @@ package com.liferay.sales.engineering.pulse.rest;
 
 import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
 import com.liferay.sales.engineering.pulse.rest.api.model.ApiError;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ import java.util.List;
 
 @ControllerAdvice
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Log _log = LogFactory.getLog(
+            CustomRestExceptionHandler.class);
+
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
@@ -29,6 +34,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         final ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        _log.warn(apiError);
         return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -41,6 +47,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         final ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        _log.warn(apiError);
         return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -53,6 +60,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         final ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        _log.warn(apiError);
         return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }

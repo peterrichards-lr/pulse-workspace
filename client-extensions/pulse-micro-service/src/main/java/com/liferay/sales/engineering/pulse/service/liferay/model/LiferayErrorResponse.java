@@ -20,6 +20,10 @@ public class LiferayErrorResponse {
         return status;
     }
 
+    public void setStatus(final HttpStatus status) {
+        this.status = status;
+    }
+
     public void setStatus(final String status) {
         this.status = HttpStatus.valueOf(status);
     }

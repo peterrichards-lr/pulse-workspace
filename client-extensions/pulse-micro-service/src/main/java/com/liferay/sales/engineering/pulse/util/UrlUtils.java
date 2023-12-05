@@ -5,11 +5,11 @@ import java.net.URL;
 
 public final class UrlUtils {
 
-    public static URL buildUrlFromLxcProperties(String serverProtocol, String mainDomain) throws MalformedURLException {
-        return buildUrlFromLxcProperties(serverProtocol, mainDomain, "");
+    public static URL buildUrlFromLiferayProperties(String serverProtocol, String mainDomain) throws MalformedURLException {
+        return buildUrlFromLiferayProperties(serverProtocol, mainDomain, "");
     }
 
-    public static URL buildUrlFromLxcProperties(String serverProtocol, String mainDomain, String path) throws MalformedURLException {
+    public static URL buildUrlFromLiferayProperties(String serverProtocol, String mainDomain, String path) throws MalformedURLException {
         final String[] domain = mainDomain.split(":");
         if (domain.length == 1) {
             return new URL(serverProtocol, domain[0], path);

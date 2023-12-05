@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.rest.api.model;
 
+import com.google.common.base.Objects;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -25,6 +26,14 @@ public class ApiError {
         errors = Arrays.asList(error);
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ApiError)) return false;
+        final ApiError apiError = (ApiError) o;
+        return Objects.equal(errors, apiError.errors) && Objects.equal(message, apiError.message) && status == apiError.status;
+    }
+
     public List<String> getErrors() {
         return errors;
     }
@@ -35,6 +44,20 @@ public class ApiError {
 
     public HttpStatus getStatus() {
         return status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(errors, message, status);
+    }
+
+    @Override
+    public String toString() {
+        return "ApiError{" +
+                "errors=" + errors +
+                ", message='" + message + '\'' +
+                ", status=" + status +
+                '}';
     }
 }
 

@@ -27,10 +27,10 @@ pulse:
   # This needs to be set in LXC SM because the microservice and Liferay service will be accessed over
   # two different subdomains, which share the same common domain. In this case, this value should be the
   # common domain
-  cookie-domain: ${PULSE_COOKIE_DOMAIN:localhost}
+  cookie_domain: ${PULSE_COOKIE_DOMAIN:localhost}
   # When this is set to true, Pulse will redirect to its own test endpoint. The content of the request will
   # be output to the logs
-  test-redirect: ${PULSE_TEST_REDIRECT:false}
+  test_redirect: ${PULSE_TEST_REDIRECT:false}
 server:
   port: 58080
 spring:

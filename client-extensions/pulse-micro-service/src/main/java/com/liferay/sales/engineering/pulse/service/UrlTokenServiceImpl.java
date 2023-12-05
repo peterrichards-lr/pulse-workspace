@@ -57,6 +57,8 @@ public class UrlTokenServiceImpl implements UrlTokenService {
     public UrlToken createUrlToken(final Campaign campaign, final Acquisition acquisition) throws URISyntaxException {
         final String token = generateUniqueToken();
         final com.liferay.sales.engineering.pulse.service.liferay.model.UrlToken urlToken = this.liferayUrlTokenService.createUrlToken(token, campaign.getExternalReferenceCode(), acquisition == null ? null : acquisition.getExternalReferenceCode());
+        _log.info("urlToken : " + urlToken);
+
         return addUrlToken(urlToken, campaign, acquisition);
     }
 

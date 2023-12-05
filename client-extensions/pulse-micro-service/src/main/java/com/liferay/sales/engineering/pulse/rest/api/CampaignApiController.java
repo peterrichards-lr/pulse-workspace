@@ -63,7 +63,7 @@ public class CampaignApiController extends BaseRestController {
         }
 
         try {
-            final Campaign campaign = campaignService.createCampaign(campaignDto.getName(), campaignDto.getCampaignUrl(), campaignDto.getStatus());
+            final Campaign campaign = campaignService.createCampaign(campaignDto.getName(), campaignDto.getTargetUrl(), campaignDto.getCampaignStatus());
             Acquisition acquisition = null;
             try {
                 acquisition = acquisitionService.createAcquisition(campaignDto.getUtmSource(), campaignDto.getUtmMedium(), campaignDto.getUtmContent(), campaignDto.getUtmTerm());
