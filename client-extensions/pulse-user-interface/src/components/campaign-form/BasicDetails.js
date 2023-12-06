@@ -10,7 +10,9 @@ const BasicDetails = ({
                           control,
                           setValue,
                           defaultCampaignStatus,
-                          campaignStatusListTypeErc
+                          campaignStatusListTypeErc,
+                          errors,
+                          spriteMap
                       }) => {
     return (
         <ClayPanel
@@ -20,7 +22,7 @@ const BasicDetails = ({
             displayType="unstyled"
         >
             <ClayPanel.Body>
-                <ClayForm.Group>
+                <ClayForm.Group className={`${errors.name ? "has-error" : ""}`}>
                     <label htmlFor="name">{Liferay.Language.get('name')}
                         <RequiredMask/>
                     </label>
@@ -28,6 +30,13 @@ const BasicDetails = ({
                         type="text"
                         {...register("name", {required: true})}
                     />
+                    {errors.name && <ClayForm.FeedbackItem>
+                        <ClayForm.FeedbackIndicator
+                            spritemap={spriteMap}
+                            symbol="exclamation-full"
+                        />
+                        {"The name is required."}
+                    </ClayForm.FeedbackItem>}
                 </ClayForm.Group>
                 <ClayForm.Group>
                     <label htmlFor="description">{Liferay.Language.get('description')}</label>
@@ -40,6 +49,8 @@ const BasicDetails = ({
                 <LiferayPageSelector
                     control={control}
                     setValue={setValue}
+                    spritemap={spriteMap}
+                    errors={errors}
                 />
 
                 <CampaignStatusSelector
@@ -47,6 +58,8 @@ const BasicDetails = ({
                     setValue={setValue}
                     campaignStatusListTypeErc={campaignStatusListTypeErc}
                     defaultValue={defaultCampaignStatus}
+                    spritemap={spriteMap}
+                    errors={errors}
                 />
             </ClayPanel.Body>
         </ClayPanel>

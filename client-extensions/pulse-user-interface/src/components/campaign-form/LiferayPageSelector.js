@@ -12,36 +12,41 @@ const LiferayPageSelector = ({
                                  setValue,
                                  control,
                                  defaultValue,
+                                 errors,
+                                 spriteMap
                              }) => {
     const controlName = "targetUrl"
     const [options, setOptions] = useState([]);
 
-    useEffect(async () => {
-        const liferayPages = buildGraphQlQuery(
-            'sitePages',
-            'items { title, friendlyUrlPath }',
-            {
-                siteKey: `"${Liferay.ThemeDisplay.getSiteGroupId()}"`
-            }
-        );
-
-        await baseFetch(GRAPHQL_PATH, {
-            method: 'POST',
-            body: liferayPages
-        }).then(
-            (liferayPagesResponse) => {
-                const {items} = parseGraphQlQueryResponse(
-                    'sitePages',
-                    liferayPagesResponse
-                );
-                if (items === undefined || !(items instanceof Array)) {
-                    console.warn('items is not an array');
-                    return;
+    useEffect(() => {
+        const fetchData = async () => {
+            const liferayPages = buildGraphQlQuery(
+                'sitePages',
+                'items { title, friendlyUrlPath }',
+                {
+                    siteKey: `"${Liferay.ThemeDisplay.getSiteGroupId()}"`
                 }
-                console.debug(`Found ${items.length} option(s)`);
-                setOptions(items);
-            }
-        ).catch((reason) => console.error(reason));
+            );
+
+            await baseFetch(GRAPHQL_PATH, {
+                method: 'POST',
+                body: liferayPages
+            }).then(
+                (liferayPagesResponse) => {
+                    const {items} = parseGraphQlQueryResponse(
+                        'sitePages',
+                        liferayPagesResponse
+                    );
+                    if (items === undefined || !(items instanceof Array)) {
+                        console.warn('items is not an array');
+                        return;
+                    }
+                    console.debug(`Found ${items.length} option(s)`);
+                    setOptions(items);
+                }
+            ).catch((reason) => console.error(reason));
+        }
+        fetchData().then(r => console.log('r', r))
     }, []);
 
     useEffect(() => {
@@ -51,13 +56,13 @@ const LiferayPageSelector = ({
                 return
             }
             const value = options.at(0)?.friendlyUrlPath
-            console.log(`${Liferay.Language.get('campaign-status')} default`, value)
+            console.log(`${Liferay.Language.get('target-url')} default`, value)
             setValue(controlName, value)
         }
-    }, [options])
+    }, [options, defaultValue, setValue])
 
     return (
-        <ClayForm.Group>
+        <ClayForm.Group className={`${errors[controlName] ? "has-error" : ""}`}>
             <ClaySelectController
                 name={controlName}
                 label={Liferay.Language.get('target-url')}
@@ -72,6 +77,13 @@ const LiferayPageSelector = ({
                     />
                 ))}
             </ClaySelectController>
+            {errors[controlName] && <ClayForm.FeedbackItem>
+                <ClayForm.FeedbackIndicator
+                    spritemap={spriteMap}
+                    symbol="exclamation-full"
+                />
+                {`The ${controlName} is invalid.`}
+            </ClayForm.FeedbackItem>}
         </ClayForm.Group>
     );
 };

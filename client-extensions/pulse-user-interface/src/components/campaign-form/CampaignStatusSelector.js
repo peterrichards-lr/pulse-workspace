@@ -1,49 +1,55 @@
-import ClayForm, {ClaySelect} from '@clayui/form';
-import {buildGraphQlQuery, parseGraphQlQueryResponse} from "../../common/utility";
-import {useEffect, useState} from "react";
-import baseFetch from "../../common/services/liferay/api";
-import {Liferay} from "../../common/services/liferay/liferay";
-import ClaySelectController from "../react-hook-form/ClaySelectController";
+import ClayForm, {ClaySelect} from '@clayui/form'
+import {buildGraphQlQuery, parseGraphQlQueryResponse} from "../../common/utility"
+import {useEffect, useState} from "react"
+import baseFetch from "../../common/services/liferay/api"
+import {Liferay} from "../../common/services/liferay/liferay"
+import ClaySelectController from "../react-hook-form/ClaySelectController"
 
-const GRAPHQL_PATH = '/o/graphql';
+const GRAPHQL_PATH = '/o/graphql'
 
 const CampaignStatusSelector = ({
                                     campaignStatusListTypeErc,
                                     setValue,
                                     control,
                                     defaultValue,
+                                    errors,
+                                    spriteMap
                                 }) => {
 
     const controlName = "campaignStatus"
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState([])
 
-    useEffect(async () => {
-        const campaignStatuses = buildGraphQlQuery(
-            'listTypeDefinitionByExternalReferenceCode',
-            'listTypeEntries { name, key }',
-            {
-                externalReferenceCode: `"${campaignStatusListTypeErc}"`
-            }
-        );
-
-        await baseFetch(GRAPHQL_PATH, {
-            method: 'POST',
-            body: campaignStatuses
-        }).then(
-            (campaignStatusesResponse) => {
-                const {listTypeEntries} = parseGraphQlQueryResponse(
-                    'listTypeDefinitionByExternalReferenceCode',
-                    campaignStatusesResponse
-                );
-                if (listTypeEntries === undefined || !(listTypeEntries instanceof Array)) {
-                    console.warn('listTypeEntries is not an array');
-                    return;
+    useEffect(() => {
+        const fetchData = async () => {
+            const campaignStatuses = buildGraphQlQuery(
+                'listTypeDefinitionByExternalReferenceCode',
+                'listTypeEntries { name, key }',
+                {
+                    externalReferenceCode: `"${campaignStatusListTypeErc}"`
                 }
-                console.debug(`Found ${listTypeEntries.length} option(s)`);
-                setOptions(listTypeEntries);
-            }
-        ).catch((reason) => console.error(reason));
-    }, []);
+            )
+
+            await baseFetch(GRAPHQL_PATH, {
+                method: 'POST',
+                body: campaignStatuses
+            }).then(
+                (campaignStatusesResponse) => {
+                    const {listTypeEntries} = parseGraphQlQueryResponse(
+                        'listTypeDefinitionByExternalReferenceCode',
+                        campaignStatusesResponse
+                    )
+                    if (listTypeEntries === undefined || !(listTypeEntries instanceof Array)) {
+                        console.warn('listTypeEntries is not an array')
+                        return
+                    }
+                    console.debug(`Found ${listTypeEntries.length} option(s)`)
+                    const filteredListTypeEntries = listTypeEntries.filter((status) => status.key !== 'complete' && status.key !== 'expired')
+                    setOptions(filteredListTypeEntries)
+                }
+            ).catch((reason) => console.error(reason))
+        }
+        fetchData().then(r => console.log('r', r))
+    }, [campaignStatusListTypeErc]);
 
     useEffect(() => {
         if (options.length > 0) {
@@ -51,14 +57,14 @@ const CampaignStatusSelector = ({
                 setValue(controlName, defaultValue)
                 return
             }
-            const value = options.at(0)?.friendlyUrlPath
+            const value = options.at(0)?.key
             console.log(`${Liferay.Language.get('campaign-status')} default`, value)
             setValue(controlName, value)
         }
-    }, [options])
+    }, [options, defaultValue, setValue])
 
     return (
-        <ClayForm.Group>
+        <ClayForm.Group className={`${errors[controlName] ? "has-error" : ""}`}>
             <ClaySelectController
                 name={controlName}
                 label={Liferay.Language.get('campaign-status')}
@@ -73,6 +79,13 @@ const CampaignStatusSelector = ({
                     />
                 ))}
             </ClaySelectController>
+            {errors[controlName] && <ClayForm.FeedbackItem>
+                <ClayForm.FeedbackIndicator
+                    spritemap={spriteMap}
+                    symbol="exclamation-full"
+                />
+                {`The ${controlName} is invalid.`}
+            </ClayForm.FeedbackItem>}
         </ClayForm.Group>
     );
 };

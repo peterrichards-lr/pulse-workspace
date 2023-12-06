@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@clayui/button": "^3.107.0",
+    "@clayui/date-picker": "^3.107.1",
+    "@clayui/form": "^3.107.0",
     "@clayui/panel": "^3.107.0",
+    "core-js": "^3.34.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
@@ -34,5 +37,8 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

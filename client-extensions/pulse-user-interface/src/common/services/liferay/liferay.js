@@ -41,4 +41,8 @@ export const Liferay = window.Liferay || {
         },
     },
     authToken: '',
+    Util: {
+        openToast: () => {
+        }
+    }
 }

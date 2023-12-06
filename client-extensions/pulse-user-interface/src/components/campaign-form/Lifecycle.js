@@ -1,10 +1,12 @@
 import ClayPanel from "@clayui/panel"
 import {Liferay} from "../../common/services/liferay/liferay"
 import ClayDatePickerController from "../react-hook-form/ClayDatePickerController"
+import ClayForm from "@clayui/form";
 
 const Lifecycle = ({
                        control,
                        spriteMap,
+                       errors,
                        startYear = new Date().getFullYear(),
                        numberOfSelectableYears = 5
                    }) => {
@@ -28,21 +30,39 @@ const Lifecycle = ({
             spritemap={spriteMap}
         >
             <ClayPanel.Body>
-                <ClayDatePickerController
-                    name="startDate"
-                    label={Liferay.Language.get('start-date')}
-                    control={control}
-                    years={years}
-                    spritemap={spriteMap}
-                    placeholder={placeholder}/>
+                <ClayForm.Group className={`${errors.startDate ? "has-error" : ""}`}>
+                    <ClayDatePickerController
+                        name="startDate"
+                        label={Liferay.Language.get('start-date')}
+                        control={control}
+                        years={years}
+                        spritemap={spriteMap}
+                        placeholder={placeholder}/>
+                    {errors.startDate && <ClayForm.FeedbackItem>
+                        <ClayForm.FeedbackIndicator
+                            spritemap={spriteMap}
+                            symbol="exclamation-full"
+                        />
+                        {"The start date is invalid."}
+                    </ClayForm.FeedbackItem>}
+                </ClayForm.Group>
 
-                <ClayDatePickerController
-                    name="endDate"
-                    label={Liferay.Language.get('end-date')}
-                    control={control}
-                    years={years}
-                    spritemap={spriteMap}
-                    placeholder={placeholder}/>
+                <ClayForm.Group className={`${errors.endDate ? "has-error" : ""}`}>
+                    <ClayDatePickerController
+                        name="endDate"
+                        label={Liferay.Language.get('end-date')}
+                        control={control}
+                        years={years}
+                        spritemap={spriteMap}
+                        placeholder={placeholder}/>
+                    {errors.endDate && <ClayForm.FeedbackItem>
+                        <ClayForm.FeedbackIndicator
+                            spritemap={spriteMap}
+                            symbol="exclamation-full"
+                        />
+                        {"The end date is invalid."}
+                    </ClayForm.FeedbackItem>}
+                </ClayForm.Group>
             </ClayPanel.Body>
         </ClayPanel>
     )
