@@ -62,7 +62,7 @@ public class RedirectController {
         _log.debug(String.format("%s : %s", "com.liferay.lxc.dxp.main.domain", lxcMainDomain));
         this.baseUrl = UrlUtils.buildUrlFromLiferayProperties(lxcServerProtocol, lxcMainDomain);
 
-       _log.info(String.format("%s : %s", "baseUrl.getHost()", baseUrl.getHost()));
+        _log.info(String.format("%s : %s", "baseUrl.getHost()", baseUrl.getHost()));
         _log.info(String.format("%s : %s", "baseUrl.getPort()", baseUrl.getPort()));
         _log.debug(String.format("%s : %s", "baseUrl", this.baseUrl));
         this.cookieDomain = cookieDomain;

@@ -46,7 +46,7 @@
             "objectActions": [
                 {
                     "conditionExpression": "",
-                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-acquisition",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-acquisition",
                     "errorMessage": {},
                     "active": true,
                     "description": "",
@@ -57,6 +57,26 @@
                     "system": false,
                     "objectActionTriggerKey": "onAfterDelete",
                     "name": "removeFromPulse",
+                    "parameters": {},
+                    "status": {
+                        "label_i18n": "Never Ran",
+                        "code": 0,
+                        "label": "never-ran"
+                    }
+                },
+                {
+                    "conditionExpression": "",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-acquisition",
+                    "errorMessage": {},
+                    "active": true,
+                    "description": "",
+                    "label": {
+                        "en_US": "Update in Pulse"
+                    },
+                    "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab32f1",
+                    "system": false,
+                    "objectActionTriggerKey": "onAfterUpdate",
+                    "name": "updateInPulse",
                     "parameters": {},
                     "status": {
                         "label_i18n": "Never Ran",
@@ -313,7 +333,7 @@
             "objectActions": [
                 {
                     "conditionExpression": "",
-                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-url-token",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-url-token",
                     "errorMessage": {},
                     "active": true,
                     "description": "",
@@ -324,6 +344,26 @@
                     "system": false,
                     "objectActionTriggerKey": "onAfterDelete",
                     "name": "removeFromPulse",
+                    "parameters": {},
+                    "status": {
+                        "label_i18n": "Never Ran",
+                        "code": 0,
+                        "label": "never-ran"
+                    }
+                },
+                {
+                    "conditionExpression": "",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-url-token",
+                    "errorMessage": {},
+                    "active": true,
+                    "description": "",
+                    "label": {
+                        "en_US": "Update in Pulse"
+                    },
+                    "externalReferenceCode": "16e31a68-20f5-fa4f-9df3-8e3c688686a4",
+                    "system": false,
+                    "objectActionTriggerKey": "onAfterUpdate",
+                    "name": "updateInPulse",
                     "parameters": {},
                     "status": {
                         "label_i18n": "Never Ran",
@@ -771,7 +811,7 @@
             "objectActions": [
                 {
                     "conditionExpression": "",
-                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-campaign",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-campaign",
                     "errorMessage": {},
                     "active": true,
                     "description": "",
@@ -782,6 +822,26 @@
                     "system": false,
                     "objectActionTriggerKey": "onAfterDelete",
                     "name": "removeFromPulse",
+                    "parameters": {},
+                    "status": {
+                        "label_i18n": "Never Ran",
+                        "code": 0,
+                        "label": "never-ran"
+                    }
+                },
+                {
+                    "conditionExpression": "",
+                    "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-campaign",
+                    "errorMessage": {},
+                    "active": true,
+                    "description": "",
+                    "label": {
+                        "en_US": "Update in Pulse"
+                    },
+                    "externalReferenceCode": "13c74813-1b7e-a06c-a395-fa9599ca23f2",
+                    "system": false,
+                    "objectActionTriggerKey": "onAfterUpdate",
+                    "name": "updateInPulse",
                     "parameters": {},
                     "status": {
                         "label_i18n": "Never Ran",

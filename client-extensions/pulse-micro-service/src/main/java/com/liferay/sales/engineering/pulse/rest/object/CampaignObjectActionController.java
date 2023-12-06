@@ -26,8 +26,8 @@ public class CampaignObjectActionController extends BaseRestController {
         this.campaignService = campaignService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> post(
+    @PostMapping("/delete")
+    public ResponseEntity<String> delete(
             @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
         log(jwt, _log, json);
 
@@ -48,6 +48,14 @@ public class CampaignObjectActionController extends BaseRestController {
 
             campaignService.removeCampaign(erc);
         }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> update(
+            @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
+        log(jwt, _log, json);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

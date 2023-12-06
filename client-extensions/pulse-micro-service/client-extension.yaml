@@ -20,18 +20,33 @@ pulse-micro-service-oauth-application-headless-server:
     - C_CampaignInteraction.everything
     - C_UrlToken.everything
   type: oAuthApplicationHeadlessServer
-pulse-micro-service-object-action-url-token:
-  name: Pulse Microservice URL Token Object Action
+pulse-micro-service-object-action-delete-url-token:
+  name: Pulse Microservice Delete URL Token Object Action
   oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
-  resourcePath: /object/url-tokens
+  resourcePath: /object/url-tokens/delete
   type: objectAction
-pulse-micro-service-object-action-campaign:
-  name: Pulse Microservice Campaign Object Action
+pulse-micro-service-object-action-update-url-token:
+  name: Pulse Microservice Update URL Token Object Action
   oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
-  resourcePath: /object/campaigns
+  resourcePath: /object/url-tokens/update
   type: objectAction
-pulse-micro-service-object-action-acquisition:
-  name: Pulse Microservice Acquisition Object Action
+pulse-micro-service-object-action-delete-campaign:
+  name: Pulse Microservice Delete Campaign Object Action
   oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
-  resourcePath: /object/acquisitions
+  resourcePath: /object/campaigns/delete
+  type: objectAction
+pulse-micro-service-object-action-update-campaign:
+  name: Pulse Microservice Update Campaign Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/campaigns/update
+  type: objectAction
+pulse-micro-service-object-action-delete-acquisition:
+  name: Pulse Microservice Delete Acquisition Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/acquisitions/delete
+  type: objectAction
+pulse-micro-service-object-action-update-acquisition:
+  name: Pulse Microservice Update Acquisition Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/acquisitions/update
   type: objectAction
