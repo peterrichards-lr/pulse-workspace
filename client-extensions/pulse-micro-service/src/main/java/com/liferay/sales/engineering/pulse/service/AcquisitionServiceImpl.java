@@ -71,4 +71,23 @@ public class AcquisitionServiceImpl implements AcquisitionService {
             _log.info(String.format("Deleted acquisition %s", erc));
         }
     }
+
+    @Override
+    public Acquisition retrieveAcquisition(final String erc) {
+        return acquisitionRepository.findByExternalReferenceCode(erc);
+    }
+
+    @Override
+    public Acquisition updateAcquisition(final String erc, final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) {
+        Acquisition acquisition = retrieveAcquisition(erc);
+        acquisition.setSource(utmSource);
+        acquisition.setMedium(utmMedium);
+        acquisition.setContent(utmContent);
+        acquisition.setTerm(utmTerm);
+
+        _log.debug(String.format("acquisition : %s", acquisition));
+
+        acquisitionRepository.save(acquisition);
+        return acquisition;
+    }
 }

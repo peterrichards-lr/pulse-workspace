@@ -57,6 +57,28 @@ public class AcquisitionObjectActionController extends BaseRestController {
             @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
         log(jwt, _log, json);
 
+        final JSONObject jsonObject = new JSONObject(json);
+
+        final JSONObject objectEntry = jsonObject.getJSONObject("objectEntryDTOAcquisition");
+
+        final String trigger = jsonObject.getString("objectActionTriggerKey");
+        _log.info("objectActionTriggerKey: " + trigger);
+
+        if (trigger.contains("Update")) {
+            final String erc = objectEntry.getString("externalReferenceCode");
+            final JSONObject properties = objectEntry.getJSONObject("properties");
+
+            if (_log.isInfoEnabled()) {
+                _log.info("Properties: " + properties.toString(4));
+            }
+
+            final String utmSource = properties.getString("source");
+            final String utmMedium = properties.getString("medium");
+            final String utmContent = properties.getString("content");
+            final String utmTerm = properties.getString("term");
+            acquisitionService.updateAcquisition(erc, utmSource, utmMedium, utmContent, utmTerm);
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

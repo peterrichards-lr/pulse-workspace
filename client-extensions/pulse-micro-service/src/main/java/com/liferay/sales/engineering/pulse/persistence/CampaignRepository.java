@@ -9,4 +9,6 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     boolean existsByExternalReferenceCode(String externalReferenceCode);
 
     boolean existsByName(String name);
+
+    Campaign findByExternalReferenceCode(String externalReferenceCode);
 }

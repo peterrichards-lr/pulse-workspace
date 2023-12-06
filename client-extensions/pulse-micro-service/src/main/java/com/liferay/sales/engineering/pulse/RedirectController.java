@@ -93,7 +93,7 @@ public class RedirectController {
 
     private URL buildUrl(final Campaign campaign,
                          final Acquisition acquisition) throws MalformedURLException, UnknownHostException {
-        final String targetUrl = campaign.getCampaignUrl();
+        final String targetUrl = campaign.getTargetUrl();
         final String campaignUrl;
         if (targetUrl.matches("^https?://")) {
             campaignUrl = targetUrl;

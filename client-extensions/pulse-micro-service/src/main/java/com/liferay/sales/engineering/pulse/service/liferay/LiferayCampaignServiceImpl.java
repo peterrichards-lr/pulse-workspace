@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,10 +38,22 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
 
     @Override
     public Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException {
+        return createCampaign(name, null, targetUrl, status, null, null);
+    }
+
+    @Override
+    public Campaign createCampaign(final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) throws URISyntaxException {
         try {
             final Campaign campaign = new Campaign();
             campaign.setName(name);
             campaign.setTargetUrl(targetUrl);
+            if (StringUtils.isNotBlank(description))
+                campaign.setDescription(description);
+            if (startDate != null)
+                campaign.setBegin(startDate);
+            if (endDate != null)
+                campaign.setEnd(endDate);
+
             final CampaignStatus campaignStatus = new CampaignStatus();
             campaignStatus.setKey(status);
             campaign.setCampaignStatus(campaignStatus);

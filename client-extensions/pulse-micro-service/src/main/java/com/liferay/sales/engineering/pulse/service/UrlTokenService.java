@@ -16,4 +16,8 @@ public interface UrlTokenService {
     Page<UrlToken> findAll(Pageable paging);
 
     void removeUrlToken(final String erc);
+
+    UrlToken retrieveUrlToken(final String erc);
+
+    UrlToken updateUrlToken(final String erc, final String token, final Campaign campaign, final Acquisition acquisition);
 }

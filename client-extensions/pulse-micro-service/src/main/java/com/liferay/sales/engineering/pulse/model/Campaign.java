@@ -14,8 +14,6 @@ import java.time.ZoneId;
 public class Campaign {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime begin;
-    @NotBlank
-    private String campaignUrl;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime end;
@@ -29,6 +27,8 @@ public class Campaign {
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
+    @NotBlank
+    private String targetUrl;
 
     public Campaign() {
     }
@@ -38,7 +38,7 @@ public class Campaign {
         this.description = campaignBuilder.description;
         this.begin = campaignBuilder.begin;
         this.end = campaignBuilder.end;
-        this.campaignUrl = campaignBuilder.campaignUrl;
+        this.targetUrl = campaignBuilder.campaignUrl;
         this.status = campaignBuilder.status;
         this.externalReferenceCode = campaignBuilder.erc;
     }
@@ -48,7 +48,7 @@ public class Campaign {
         if (this == o) return true;
         if (!(o instanceof Campaign)) return false;
         final Campaign campaign = (Campaign) o;
-        return Objects.equal(externalReferenceCode, campaign.externalReferenceCode) && Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getCampaignUrl(), campaign.getCampaignUrl()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(getId(), campaign.getId()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getStatus(), campaign.getStatus());
+        return Objects.equal(externalReferenceCode, campaign.externalReferenceCode) && Objects.equal(getBegin(), campaign.getBegin()) && Objects.equal(getTargetUrl(), campaign.getTargetUrl()) && Objects.equal(getDescription(), campaign.getDescription()) && Objects.equal(getEnd(), campaign.getEnd()) && Objects.equal(getId(), campaign.getId()) && Objects.equal(getName(), campaign.getName()) && Objects.equal(getStatus(), campaign.getStatus());
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -58,14 +58,6 @@ public class Campaign {
 
     public void setBegin(final LocalDateTime begin) {
         this.begin = begin;
-    }
-
-    public String getCampaignUrl() {
-        return campaignUrl;
-    }
-
-    public void setCampaignUrl(final String campaignUrl) {
-        this.campaignUrl = campaignUrl;
     }
 
     public String getDescription() {
@@ -113,9 +105,17 @@ public class Campaign {
         this.status = status;
     }
 
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public void setTargetUrl(final String campaignUrl) {
+        this.targetUrl = campaignUrl;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hashCode(externalReferenceCode, getBegin(), getCampaignUrl(), getDescription(), getEnd(), getId(), getName(), getStatus());
+        return Objects.hashCode(externalReferenceCode, getBegin(), getTargetUrl(), getDescription(), getEnd(), getId(), getName(), getStatus());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Campaign {
         return "Campaign{" +
                 "externalReferenceCode='" + externalReferenceCode + '\'' +
                 ", begin=" + begin +
-                ", campaignUrl='" + campaignUrl + '\'' +
+                ", campaignUrl='" + targetUrl + '\'' +
                 ", description='" + description + '\'' +
                 ", end=" + end +
                 ", id=" + id +

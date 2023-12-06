@@ -9,4 +9,5 @@ public interface AcquisitionRepository extends JpaRepository<Acquisition, Long> 
 
     boolean existsByExternalReferenceCode(String externalReferenceCode);
 
+    Acquisition findByExternalReferenceCode(String externalReferenceCode);
 }

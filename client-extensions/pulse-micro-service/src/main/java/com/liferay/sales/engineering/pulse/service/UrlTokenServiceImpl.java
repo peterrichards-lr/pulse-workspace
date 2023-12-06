@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -70,7 +71,7 @@ public class UrlTokenServiceImpl implements UrlTokenService {
     private String generateUniqueToken() {
         String token = StringUtils.generateToken(8);
         Optional<UrlToken> urlToken = urlTokenRepository.findById(token);
-        while (!urlToken.isEmpty()) {
+        while (urlToken.isPresent()) {
             _log.info("Duplicate token. Generating a new one");
             token = StringUtils.generateToken(8);
             urlToken = urlTokenRepository.findById(token);
@@ -85,5 +86,32 @@ public class UrlTokenServiceImpl implements UrlTokenService {
             urlTokenRepository.deleteByExternalReferenceCode(erc);
             _log.info(String.format("Deleted urlToken %s", erc));
         }
+    }
+
+    @Override
+    public UrlToken retrieveUrlToken(final String erc) {
+        return urlTokenRepository.findByExternalReferenceCode(erc);
+    }
+
+    @Override
+    @Transactional
+    public UrlToken updateUrlToken(final String erc, final String token, final Campaign campaign, final Acquisition acquisition) {
+        UrlToken urlToken = retrieveUrlToken(erc);
+
+        if (!Objects.equals(urlToken.getToken(), token)) {
+            urlTokenRepository.deleteByExternalReferenceCode(erc);
+
+            urlToken = new UrlToken();
+            urlToken.setExternalReferenceCode(erc);
+            urlToken.setToken(token);
+        }
+        urlToken.setToken(token);
+        urlToken.setCampaign(campaign);
+        urlToken.setAcquisition(acquisition);
+
+        _log.debug(String.format("urlToken : %s", urlToken));
+
+        urlTokenRepository.save(urlToken);
+        return urlToken;
     }
 }

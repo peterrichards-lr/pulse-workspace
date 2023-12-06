@@ -7,4 +7,6 @@ public interface UrlTokenRepository extends JpaRepository<UrlToken, String> {
     void deleteByExternalReferenceCode(String externalReferenceCode);
 
     boolean existsByExternalReferenceCode(String externalReferenceCode);
+
+    UrlToken findByExternalReferenceCode(String externalReferenceCode);
 }

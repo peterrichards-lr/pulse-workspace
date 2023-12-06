@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -36,9 +37,20 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public Campaign addCampaign(final String erc, final String name, final String targetUrl, final String status) {
+        return addCampaign(erc, name, null, targetUrl, status, null, null);
+    }
+
+    @Override
+    public Campaign addCampaign(final String erc, final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) {
         final Status statusObj = getStatus(status);
 
         Campaign.CampaignBuilder campaignBuilder = new Campaign.CampaignBuilder(erc, name, statusObj, targetUrl);
+        if (StringUtils.isNotBlank(description))
+            campaignBuilder.withDescription(description);
+        if (startDate != null)
+            campaignBuilder = campaignBuilder.withBegin(startDate);
+        if (endDate != null)
+            campaignBuilder = campaignBuilder.withEnd(endDate);
         final Campaign campaign = campaignBuilder.build();
 
         if (campaign != null) {
@@ -51,10 +63,15 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException {
+        return createCampaign(name, null, targetUrl, status, null, null);
+    }
+
+    @Override
+    public Campaign createCampaign(final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) throws URISyntaxException {
         if (existsByName(name)) {
             throw new DuplicateCampaignNameException(name);
         }
-        final com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign = liferayCampaignService.createCampaign(name, targetUrl, status);
+        final com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign = liferayCampaignService.createCampaign(name, description, targetUrl, status, startDate, endDate);
         return addCampaign(campaign);
     }
 
@@ -80,5 +97,27 @@ public class CampaignServiceImpl implements CampaignService {
             campaignRepository.deleteByExternalReferenceCode(erc);
             _log.info(String.format("Deleted campaign %s", erc));
         }
+    }
+
+    @Override
+    public Campaign retrieveCampaign(final String erc) {
+        return campaignRepository.findByExternalReferenceCode(erc);
+    }
+
+    @Override
+    public Campaign updateCampaign(String erc, String name, String description, String targetUrl, String status, LocalDateTime startDate, LocalDateTime endDate) {
+        Campaign campaign = campaignRepository.findByExternalReferenceCode(erc);
+        campaign.setName(name);
+        campaign.setName(description);
+        campaign.setTargetUrl(targetUrl);
+        campaign.setBegin(startDate);
+        campaign.setEnd(endDate);
+        Status campaignStatus = statusRepository.findByNameIgnoreCase(status);
+        campaign.setStatus(campaignStatus);
+
+        _log.debug(String.format("campaign : %s", campaign));
+
+        campaignRepository.save(campaign);
+        return campaign;
     }
 }

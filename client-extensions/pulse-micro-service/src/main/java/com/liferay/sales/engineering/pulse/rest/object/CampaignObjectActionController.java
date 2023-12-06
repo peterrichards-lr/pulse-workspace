@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 @RequestMapping("/object/campaigns")
 public class CampaignObjectActionController extends BaseRestController {
@@ -56,6 +59,34 @@ public class CampaignObjectActionController extends BaseRestController {
     public ResponseEntity<String> update(
             @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
         log(jwt, _log, json);
+
+        final JSONObject jsonObject = new JSONObject(json);
+
+        final JSONObject objectEntry = jsonObject.getJSONObject("objectEntryDTOCampaign");
+
+        final String trigger = jsonObject.getString("objectActionTriggerKey");
+        _log.info("objectActionTriggerKey: " + trigger);
+
+        if (trigger.contains("Update")) {
+            final String erc = objectEntry.getString("externalReferenceCode");
+            final JSONObject properties = objectEntry.getJSONObject("properties");
+
+            if (_log.isInfoEnabled()) {
+                _log.info("Properties: " + properties.toString(4));
+            }
+
+            final String name = properties.getString("name");
+            final String description = properties.getString("description");
+            final String targetUrl = properties.getString("targetUrl");
+            final JSONObject campaignStatus = properties.getJSONObject("campaignStatus");
+            final String status = campaignStatus.getString("key");
+
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            final LocalDateTime startDate = properties.has("begin") ? LocalDateTime.parse(properties.getString("begin"), dateTimeFormatter) : null;
+            final LocalDateTime endDate = properties.has("end") ? LocalDateTime.parse(properties.getString("end"), dateTimeFormatter) : null;
+
+            campaignService.updateCampaign(erc, name, description, targetUrl, status, startDate, endDate);
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
