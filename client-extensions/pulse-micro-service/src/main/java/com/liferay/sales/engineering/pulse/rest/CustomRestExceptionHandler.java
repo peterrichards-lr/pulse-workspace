@@ -25,7 +25,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(
-            ConstraintViolationException ex, WebRequest request) {
+            final ConstraintViolationException ex, final WebRequest request) {
         final List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " " +
@@ -41,7 +41,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DuplicateCampaignNameException.class})
     public ResponseEntity<Object> handleDuplicateCampaignNameException(
-            DuplicateCampaignNameException ex, WebRequest request) {
+            final DuplicateCampaignNameException ex, final WebRequest request) {
         final String error =
                 ex.getMessage();
 
@@ -54,7 +54,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-            MethodArgumentTypeMismatchException ex, WebRequest request) {
+            final MethodArgumentTypeMismatchException ex, final WebRequest request) {
         final String error =
                 ex.getName() + " should be of type " + ex.getRequiredType().getName();
 

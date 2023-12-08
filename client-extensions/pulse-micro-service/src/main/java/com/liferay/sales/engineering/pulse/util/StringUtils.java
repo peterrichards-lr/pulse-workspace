@@ -4,7 +4,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StringUtils {
-    public static String convertToTitleCaseIteratingChars(String text) {
+    public static String convertToFirstLetterLowerCase(final String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        final char c[] = text.toCharArray();
+        c[0] = Character.toLowerCase(c[0]);
+        return new String(c);
+    }
+
+    public static String convertToTitleCaseIteratingChars(final String text) {
         if (text == null || text.isEmpty()) {
             return text;
         }

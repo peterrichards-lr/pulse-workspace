@@ -66,17 +66,24 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
     @Override
     public List<UrlToken> getUrlTokens() throws URISyntaxException {
         final URI endpoint = this.restEndpoint.toURI();
-        final Mono<UrlTokensResponse> urlTokensResponseMono = this.webClient.get().uri(endpoint)
-                .attributes(getClientRegistrationId())
-                .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+        try {
+            final Mono<UrlTokensResponse> urlTokensResponseMono = this.webClient.get().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
 
-        final UrlTokensResponse urlTokensResponse = urlTokensResponseMono.block();
-        if (urlTokensResponse == null) {
-            return Collections.emptyList();
+            final UrlTokensResponse urlTokensResponse = urlTokensResponseMono.block();
+            if (urlTokensResponse == null) {
+                return Collections.emptyList();
+            }
+            return urlTokensResponse.getItems();
+        } catch (LiferayErrorResponseException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                throw new NotFoundException(endpoint);
+            }
+            throw ex;
         }
-        return urlTokensResponse.getItems();
     }
 }

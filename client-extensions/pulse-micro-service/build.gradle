@@ -23,6 +23,11 @@ apply plugin: "com.liferay.source.formatter"
 apply plugin: "java-library"
 apply plugin: "org.springframework.boot"
 
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
 dependencies {
     implementation group: "com.google.guava", name: "guava", version: "32.1.1-jre"
     implementation group: "com.liferay", name: "com.liferay.client.extension.util.spring.boot", version: "latest.release"
@@ -34,6 +39,7 @@ dependencies {
     implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-client", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-web", version: "2.7.17"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-webflux", version: "2.7.17"
+    implementation group: "org.springframework.boot", name: "spring-boot-starter-actuator", version: "2.7.17"
     implementation group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "2.3.2"
     implementation group: "org.springframework.boot", name: "spring-boot-starter-validation", version: "2.7.17"
     runtimeOnly group: "com.h2database", name: "h2", version: "2.2.224"

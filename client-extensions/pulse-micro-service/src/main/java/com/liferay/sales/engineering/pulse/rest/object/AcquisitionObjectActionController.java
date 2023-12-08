@@ -1,10 +1,9 @@
 package com.liferay.sales.engineering.pulse.rest.object;
 
-import com.liferay.sales.engineering.pulse.rest.BaseRestController;
-import com.liferay.sales.engineering.pulse.service.AcquisitionService;
+import com.liferay.sales.engineering.pulse.rest.object.helper.AcquisitionObjectActionHelper;
+import com.liferay.sales.engineering.pulse.rest.object.model.ObjectAction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,37 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/object/acquisitions")
-public class AcquisitionObjectActionController extends BaseRestController {
+public class AcquisitionObjectActionController extends BaseObjectActionController {
+    private static final String OBJECT_ENTRY_PROPERTY_NAME = "objectEntryDTOAcquisition";
     private static final Log _log = LogFactory.getLog(
             AcquisitionObjectActionController.class);
+    private final AcquisitionObjectActionHelper acquisitionObjectActionHelper;
 
-    private final AcquisitionService acquisitionService;
-
-    public AcquisitionObjectActionController(final AcquisitionService acquisitionService) {
-        this.acquisitionService = acquisitionService;
+    public AcquisitionObjectActionController(final AcquisitionObjectActionHelper acquisitionObjectActionHelper) {
+        this.acquisitionObjectActionHelper = acquisitionObjectActionHelper;
     }
 
     @PostMapping("/delete")
     public ResponseEntity<String> delete(
-            @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
-        log(jwt, _log, json);
+            @AuthenticationPrincipal final Jwt jwt, @RequestBody final String json) {
+        final ObjectAction objectAction = super.parseRequest(jwt, json, OBJECT_ENTRY_PROPERTY_NAME, _log);
 
-        final JSONObject jsonObject = new JSONObject(json);
-
-        final JSONObject objectEntry = jsonObject.getJSONObject("objectEntryDTOUrlToken");
-
-        final String trigger = jsonObject.getString("objectActionTriggerKey");
-        _log.info("objectActionTriggerKey: " + trigger);
-
-        if (trigger.contains("Delete")) {
-            final String erc = objectEntry.getString("externalReferenceCode");
-            final JSONObject properties = objectEntry.getJSONObject("properties");
-
-            if (_log.isInfoEnabled()) {
-                _log.info("Properties: " + properties.toString(4));
-            }
-
-            acquisitionService.removeAcquisition(erc);
+        if (objectAction.isDelete()) {
+            acquisitionObjectActionHelper.removeAcquisition(objectAction);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -54,29 +39,11 @@ public class AcquisitionObjectActionController extends BaseRestController {
 
     @PostMapping("/update")
     public ResponseEntity<String> update(
-            @AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
-        log(jwt, _log, json);
+            @AuthenticationPrincipal final Jwt jwt, @RequestBody final String json) {
+        final ObjectAction objectAction = super.parseRequest(jwt, json, OBJECT_ENTRY_PROPERTY_NAME, _log);
 
-        final JSONObject jsonObject = new JSONObject(json);
-
-        final JSONObject objectEntry = jsonObject.getJSONObject("objectEntryDTOAcquisition");
-
-        final String trigger = jsonObject.getString("objectActionTriggerKey");
-        _log.info("objectActionTriggerKey: " + trigger);
-
-        if (trigger.contains("Update")) {
-            final String erc = objectEntry.getString("externalReferenceCode");
-            final JSONObject properties = objectEntry.getJSONObject("properties");
-
-            if (_log.isInfoEnabled()) {
-                _log.info("Properties: " + properties.toString(4));
-            }
-
-            final String utmSource = properties.getString("source");
-            final String utmMedium = properties.getString("medium");
-            final String utmContent = properties.getString("content");
-            final String utmTerm = properties.getString("term");
-            acquisitionService.updateAcquisition(erc, utmSource, utmMedium, utmContent, utmTerm);
+        if (objectAction.isUpdate()) {
+            acquisitionObjectActionHelper.updateAcquisition(objectAction);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

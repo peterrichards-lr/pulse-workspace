@@ -47,7 +47,8 @@ public class CampaignApiController extends BaseRestController {
 
     @PostMapping
     public ResponseEntity<UrlToken> create(
-            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CampaignDto campaignDto) {
+            @AuthenticationPrincipal final Jwt jwt,
+            @Valid @RequestBody final CampaignDto campaignDto) {
 
         try {
             final ObjectMapper mapper = new ObjectMapper();
@@ -81,10 +82,10 @@ public class CampaignApiController extends BaseRestController {
 
     @GetMapping
     Page<Campaign> getCampaigns(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "name") String sortBy) {
+            @AuthenticationPrincipal final Jwt jwt,
+            @RequestParam(defaultValue = "0") final int page,
+            @RequestParam(defaultValue = "20") final int pageSize,
+            @RequestParam(defaultValue = "name") final String sortBy) {
 
         log(jwt, _log);
 

@@ -1,13 +1,13 @@
 assemble:
   - from: build/static
     into: static
-pulse-user-interface:
+pulse-create-campaign:
   cssURLs:
     - css/main.*.css
-  friendlyURLMapping: pulse-user-interface
+  friendlyURLMapping: pulse-create-campaign
   htmlElementName: pulse-create-campaign
   instanceable: false
-  name: Pulse UI
+  name: Pulse Create Campaign
   portletCategoryName: category.client-extensions
   type: customElement
   urls:

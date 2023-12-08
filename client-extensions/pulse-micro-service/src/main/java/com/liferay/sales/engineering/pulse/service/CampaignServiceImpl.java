@@ -91,6 +91,11 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
+    public void removeAll() {
+        campaignRepository.deleteAll();
+    }
+
+    @Override
     @Transactional
     public void removeCampaign(final String erc) {
         if (campaignRepository.existsByExternalReferenceCode(erc)) {
@@ -115,7 +120,7 @@ public class CampaignServiceImpl implements CampaignService {
         Status campaignStatus = statusRepository.findByNameIgnoreCase(status);
         campaign.setStatus(campaignStatus);
 
-        _log.debug(String.format("campaign : %s", campaign));
+        _log.trace(String.format("campaign : %s", campaign));
 
         campaignRepository.save(campaign);
         return campaign;

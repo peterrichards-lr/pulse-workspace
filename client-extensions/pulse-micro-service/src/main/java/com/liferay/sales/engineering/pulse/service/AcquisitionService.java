@@ -15,6 +15,8 @@ public interface AcquisitionService {
 
     void removeAcquisition(final String erc);
 
+    void removeAll();
+
     Acquisition retrieveAcquisition(final String erc);
 
     Acquisition updateAcquisition(final String erc, final String utmSource, final String utmMedium, final String utmContent, final String utmTerm);

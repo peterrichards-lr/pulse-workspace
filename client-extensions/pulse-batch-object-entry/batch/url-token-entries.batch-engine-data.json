@@ -18,6 +18,12 @@
       "token": "GGkHqgbt",
       "urlTokenAcquisitionRelERC": "f4a63d75-a5ef-4278-92c5-ba6ca00d11e7",
       "urlTokenCampaignRelERC": "f4a63d75-a5ef-3532-92c5-ba6ca00d11e7"
+    },
+    {
+      "externalReferenceCode": "ce8809e2-161f-4014-aa0c-c5cebf500453",
+      "r_urlTokenCampaignRel_c_campaignERC": "ab5d64e8-3890-4bbc-a083-324ff0b23bec",
+      "token": "D1L819UT",
+      "urlTokenCampaignRelERC": "ab5d64e8-3890-4bbc-a083-324ff0b23bec"
     }
   ]
 }

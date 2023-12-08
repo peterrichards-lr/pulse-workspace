@@ -3,14 +3,6 @@ import {createRoot} from 'react-dom/client'
 import './common/styles/index.scss'
 import CreateCampaignForm from "./components/campaign-form/CreateCampaignForm"
 
-const App = (props) => {
-    return (
-        <CreateCampaignForm
-            {...props}
-        />
-    )
-}
-
 class WebComponent extends HTMLElement {
     static get observedAttributes() {
         return ['campaignstatuslisttypeerc', 'defaultcampaignstatus'];
@@ -31,7 +23,7 @@ class WebComponent extends HTMLElement {
 
     render() {
         createRoot(this).render(
-            <App
+            <CreateCampaignForm
                 campaignStatusListTypeErc={this.getAttribute('campaignstatuslisttypeerc')}
                 defaultCampaignStatus={this.getAttribute('defaultcampaignstatus')}
             />

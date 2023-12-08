@@ -23,7 +23,7 @@
     "react-scripts": "5.0.1",
     "sass": "^1.66.1"
   },
-  "name": "pulse-user-interface",
+  "name": "pulse-refresh-cache",
   "private": true,
   "scripts": {
     "build": "react-scripts build",

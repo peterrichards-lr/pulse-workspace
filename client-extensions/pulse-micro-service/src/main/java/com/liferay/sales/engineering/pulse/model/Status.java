@@ -16,15 +16,16 @@ public class Status {
     public Status() {
     }
 
-    public Status(String name) {
+    public Status(final String name) {
         this.name = name;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof Status status)) return false;
-        return Objects.equal(getId(), status.getId()) && Objects.equal(getName(), status.getName());
+        if (!(o instanceof Status)) return false;
+        final Status status = (Status) o;
+        return Objects.equal(id, status.id) && Objects.equal(name, status.name);
     }
 
     public Long getId() {

@@ -30,10 +30,10 @@ public class UrlTokenApiController extends BaseRestController {
 
     @GetMapping
     Page<UrlToken> getUrlTokens(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "token") String sortBy) {
+            @AuthenticationPrincipal final Jwt jwt,
+            @RequestParam(defaultValue = "0") final int page,
+            @RequestParam(defaultValue = "20") final int pageSize,
+            @RequestParam(defaultValue = "token") final String sortBy) {
 
         log(jwt, _log);
 

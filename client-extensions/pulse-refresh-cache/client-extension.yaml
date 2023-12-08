@@ -1,0 +1,15 @@
+assemble:
+  - from: build/static
+    into: static
+pulse-refresh-cache:
+  cssURLs:
+    - css/main.*.css
+  friendlyURLMapping: pulse-refresh-cache
+  htmlElementName: pulse-refresh-cache
+  instanceable: false
+  name: Pulse Refresh Cache
+  portletCategoryName: category.client-extensions
+  type: customElement
+  urls:
+    - js/main.*.js
+  useESM: true

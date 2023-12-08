@@ -52,26 +52,40 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
 
     public List<Acquisition> getAcquisitions() throws URISyntaxException {
         final URI endpoint = restEndpoint.toURI();
-        final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
-                .attributes(getClientRegistrationId())
-                .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+        try {
+            final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
 
-        return Objects.requireNonNull(campaignResponse.block()).getItems();
+            return Objects.requireNonNull(campaignResponse.block()).getItems();
+        } catch (LiferayErrorResponseException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                throw new NotFoundException(endpoint);
+            }
+            throw ex;
+        }
     }
 
     @Override
     public Acquisition getByErc(final String erc) throws URISyntaxException {
         final URI endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
-        final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
-                .attributes(getClientRegistrationId())
-                .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
-        return acquisition.block();
+        try {
+            final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
+            return acquisition.block();
+        } catch (LiferayErrorResponseException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                throw new NotFoundException(endpoint);
+            }
+            throw ex;
+        }
     }
 
     @Override

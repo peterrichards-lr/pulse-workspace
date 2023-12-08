@@ -81,25 +81,40 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
     @Override
     public Campaign getByErc(final String erc) throws URISyntaxException {
         final URI endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
-        final Mono<Campaign> campaign = this.webClient.get().uri(endpoint)
-                .attributes(getClientRegistrationId())
-                .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
-        return campaign.block();
+        try {
+            final Mono<Campaign> campaign = this.webClient.get().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
+            return campaign.block();
+        } catch (LiferayErrorResponseException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                throw new NotFoundException(endpoint);
+
+            }
+            throw ex;
+        }
     }
 
     public List<Campaign> getCampaigns() throws URISyntaxException {
         final URI endpoint = restEndpoint.toURI();
-        final Mono<CampaignsResponse> campaignResponse = webClient.get().uri(endpoint)
-                .attributes(getClientRegistrationId())
-                .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+        try {
+            final Mono<CampaignsResponse> campaignResponse = webClient.get().uri(endpoint)
+                    .attributes(getClientRegistrationId())
+                    .retrieve()
+                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
 
-        return Objects.requireNonNull(campaignResponse.block()).getItems();
+            return Objects.requireNonNull(campaignResponse.block()).getItems();
+        } catch (LiferayErrorResponseException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                throw new NotFoundException(endpoint);
+            }
+            throw ex;
+        }
     }
 
     @Override

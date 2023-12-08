@@ -40,6 +40,10 @@ public abstract class BaseLiferayService {
             errorResponse.setStatus(clientResponse.statusCode());
             errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
             return Mono.error(new LiferayErrorResponseException(errorResponse));
+        } else if (clientResponse.statusCode() == HttpStatus.NOT_FOUND) {
+            LiferayErrorResponse errorResponse = new LiferayErrorResponse();
+            errorResponse.setStatus(HttpStatus.NOT_FOUND);
+            return Mono.error(new LiferayErrorResponseException(errorResponse));
         }
 
         return clientResponse.bodyToMono(LiferayErrorResponse.class)

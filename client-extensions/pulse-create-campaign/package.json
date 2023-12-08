@@ -1,0 +1,44 @@
+{
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ]
+  },
+  "dependencies": {
+    "@clayui/button": "^3.107.0",
+    "@clayui/date-picker": "^3.107.1",
+    "@clayui/form": "^3.107.0",
+    "@clayui/panel": "^3.107.0",
+    "core-js": "^3.34.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
+    "react-scripts": "5.0.1",
+    "sass": "^1.66.1"
+  },
+  "name": "pulse-create-campaign",
+  "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test --passWithNoTests --watchAll=false"
+  },
+  "version": "0.1.0",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
+}

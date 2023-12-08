@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import java.util.Map;
 
 public abstract class BaseRestController {
-    protected void log(Jwt jwt, Log log) {
+    protected void log(final Jwt jwt, final Log log) {
         if (log.isInfoEnabled()) {
             log.info("JWT Claims: " + jwt.getClaims());
             log.info("JWT ID: " + jwt.getId());
@@ -15,7 +15,7 @@ public abstract class BaseRestController {
         }
     }
 
-    protected void log(Jwt jwt, Log log, Map<String, String> parameters) {
+    protected void log(final Jwt jwt, final Log log, final Map<String, String> parameters) {
         if (log.isInfoEnabled()) {
             log.info("JWT Claims: " + jwt.getClaims());
             log.info("JWT ID: " + jwt.getId());
@@ -24,7 +24,7 @@ public abstract class BaseRestController {
         }
     }
 
-    protected void log(Jwt jwt, Log log, String json) {
+    protected void log(final Jwt jwt, final Log log, final String json) {
         if (log.isInfoEnabled()) {
             try {
                 JSONObject jsonObject = new JSONObject(json);

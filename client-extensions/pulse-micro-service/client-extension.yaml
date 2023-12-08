@@ -52,3 +52,8 @@ pulse-micro-service-object-action-update-acquisition:
   oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
   resourcePath: /object/acquisitions/update
   type: objectAction
+pulse-micro-service-object-action-refresh-entry:
+  name: Pulse Microservice Refresh Entry Object Action
+  oAuth2ApplicationExternalReferenceCode: pulse-micro-service-oauth-application-user-agent
+  resourcePath: /object/refresh-entry
+  type: objectAction

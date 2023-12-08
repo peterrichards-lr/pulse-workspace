@@ -8,7 +8,7 @@ public class LiferayErrorResponseException extends RuntimeException {
     private final LiferayErrorResponse errorResponse;
 
     public LiferayErrorResponseException(LiferayErrorResponse errorResponse) {
-        super(errorResponse.getTitle());
+        super(errorResponse != null ? errorResponse.getTitle() : null);
         this.errorResponse = errorResponse;
     }
 
@@ -22,11 +22,11 @@ public class LiferayErrorResponseException extends RuntimeException {
 
 
     public HttpStatus getStatus() {
-        return errorResponse.getStatus();
+        return errorResponse != null ? errorResponse.getStatus() : null;
     }
 
     public String getTitle() {
-        return errorResponse.getTitle();
+        return errorResponse != null ? errorResponse.getTitle() : null;
     }
 
     @Override

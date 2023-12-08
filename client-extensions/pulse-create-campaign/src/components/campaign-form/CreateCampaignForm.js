@@ -45,7 +45,7 @@ const CreateCampaignForm = ({
 
     const onSubmit = (data) => {
         console.log(data);
-        console.log(USE_LIFERAY_OAUTH2_CLIENT_FOR_POST);
+        console.log(USE_LIFERAY_OAUTH2_CLIENT_FOR_POST)
 
         const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(USER_AGENT_ERC)
         if (oAuth2Client) {

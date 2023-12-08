@@ -20,6 +20,8 @@ public interface CampaignService {
 
     Page<Campaign> findAll(Pageable paging);
 
+    void removeAll();
+
     void removeCampaign(final String erc);
 
     Campaign retrieveCampaign(final String erc);

@@ -73,6 +73,11 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     }
 
     @Override
+    public void removeAll() {
+        acquisitionRepository.deleteAll();
+    }
+
+    @Override
     public Acquisition retrieveAcquisition(final String erc) {
         return acquisitionRepository.findByExternalReferenceCode(erc);
     }
@@ -85,7 +90,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         acquisition.setContent(utmContent);
         acquisition.setTerm(utmTerm);
 
-        _log.debug(String.format("acquisition : %s", acquisition));
+        _log.trace(String.format("acquisition : %s", acquisition));
 
         acquisitionRepository.save(acquisition);
         return acquisition;

@@ -19,6 +19,18 @@
         "key": "active",
         "name": "Active"
       }
+    },
+    {
+      "externalReferenceCode": "ab5d64e8-3890-4bbc-a083-324ff0b23bec",
+      "name": "Summer promo",
+      "targetUrl": "/redirect",
+      "campaignStatus": {
+        "key": "active",
+        "name": "Active"
+      },
+      "description": "2023 summer promotion",
+      "end": "2023-12-08T00:00:00.000Z",
+      "begin": "2023-12-12T00:00:00.000Z"
     }
   ]
 }

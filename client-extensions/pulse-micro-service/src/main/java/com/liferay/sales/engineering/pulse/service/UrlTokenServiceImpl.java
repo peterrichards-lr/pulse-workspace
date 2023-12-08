@@ -80,6 +80,11 @@ public class UrlTokenServiceImpl implements UrlTokenService {
     }
 
     @Override
+    public void removeAll() {
+        urlTokenRepository.deleteAll();
+    }
+
+    @Override
     @Transactional
     public void removeUrlToken(final String erc) {
         if (urlTokenRepository.existsByExternalReferenceCode(erc)) {
@@ -109,7 +114,7 @@ public class UrlTokenServiceImpl implements UrlTokenService {
         urlToken.setCampaign(campaign);
         urlToken.setAcquisition(acquisition);
 
-        _log.debug(String.format("urlToken : %s", urlToken));
+        _log.trace(String.format("urlToken : %s", urlToken));
 
         urlTokenRepository.save(urlToken);
         return urlToken;

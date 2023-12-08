@@ -29,10 +29,10 @@ public class AcquisitionApiController extends BaseRestController {
 
     @GetMapping
     Page<Acquisition> getUrlTokens(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "externalReferenceCode") String sortBy) {
+            @AuthenticationPrincipal final Jwt jwt,
+            @RequestParam(defaultValue = "0") final int page,
+            @RequestParam(defaultValue = "20") final int pageSize,
+            @RequestParam(defaultValue = "externalReferenceCode") final String sortBy) {
 
         log(jwt, _log);
 

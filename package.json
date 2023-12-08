@@ -3,7 +3,8 @@
     "workspaces": {
         "packages": [
             "client-extensions/pulse-reporting",
-            "client-extensions/pulse-user-interface"
+            "client-extensions/pulse-create-campaign",
+            "client-extensions/pulse-refresh-cache"
         ]
     }
 }
