@@ -12,7 +12,12 @@ export const Liferay = window.Liferay || {
             return {};
         },
         FromUserAgentApplication: (userAgentApplicationId) => {
-            return {};
+            return {
+                _getOrRequestToken: async () => ({
+                    access_token: ''
+                }),
+                homePageURL: ''
+            };
         },
         fetch: (url, options = {}) => {
         },

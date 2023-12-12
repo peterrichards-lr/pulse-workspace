@@ -20,35 +20,32 @@ const CampaignStatusSelector = ({
     const [options, setOptions] = useState([])
 
     useEffect(() => {
-        const fetchData = async () => {
-            const campaignStatuses = buildGraphQlQuery(
-                'listTypeDefinitionByExternalReferenceCode',
-                'listTypeEntries { name, key }',
-                {
-                    externalReferenceCode: `"${campaignStatusListTypeErc}"`
-                }
-            )
+        const campaignStatuses = buildGraphQlQuery(
+            'listTypeDefinitionByExternalReferenceCode',
+            'listTypeEntries { name, key }',
+            {
+                externalReferenceCode: `"${campaignStatusListTypeErc}"`
+            }
+        )
 
-            await baseFetch(GRAPHQL_PATH, {
-                method: 'POST',
-                body: campaignStatuses
-            }).then(
-                (campaignStatusesResponse) => {
-                    const {listTypeEntries} = parseGraphQlQueryResponse(
-                        'listTypeDefinitionByExternalReferenceCode',
-                        campaignStatusesResponse
-                    )
-                    if (listTypeEntries === undefined || !(listTypeEntries instanceof Array)) {
-                        console.warn('listTypeEntries is not an array')
-                        return
-                    }
-                    console.debug(`Found ${listTypeEntries.length} option(s)`)
-                    const filteredListTypeEntries = listTypeEntries.filter((status) => status.key !== 'complete' && status.key !== 'expired')
-                    setOptions(filteredListTypeEntries)
+        baseFetch(GRAPHQL_PATH, {
+            method: 'POST',
+            body: campaignStatuses
+        }).then(
+            (campaignStatusesResponse) => {
+                const {listTypeEntries} = parseGraphQlQueryResponse(
+                    'listTypeDefinitionByExternalReferenceCode',
+                    campaignStatusesResponse
+                )
+                if (listTypeEntries === undefined || !(listTypeEntries instanceof Array)) {
+                    console.warn('listTypeEntries is not an array')
+                    return
                 }
-            ).catch((reason) => console.error(reason))
-        }
-        fetchData().then(r => console.log('r', r))
+                console.debug(`Found ${listTypeEntries.length} option(s)`)
+                const filteredListTypeEntries = listTypeEntries.filter((status) => status.key !== 'complete' && status.key !== 'expired')
+                setOptions(filteredListTypeEntries)
+            }
+        ).catch((reason) => console.error(reason))
     }, [campaignStatusListTypeErc]);
 
     useEffect(() => {
@@ -58,7 +55,7 @@ const CampaignStatusSelector = ({
                 return
             }
             const value = options.at(0)?.key
-            console.log(`${Liferay.Language.get('campaign-status')} default`, value)
+            console.debug(`${Liferay.Language.get('campaign-status')} default`, value)
             setValue(controlName, value)
         }
     }, [options, defaultValue, setValue])

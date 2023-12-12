@@ -1,6 +1,6 @@
 {
   "kind": "Deployment",
-  "id": "pulse",
+  "id": "pulse-microservice",
   "deploy": true,
   "memory": 512,
   "cpu": 1,

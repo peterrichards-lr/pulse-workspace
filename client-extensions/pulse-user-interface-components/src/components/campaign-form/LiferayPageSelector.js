@@ -19,35 +19,32 @@ const LiferayPageSelector = ({
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const liferayPages = buildGraphQlQuery(
-                'sitePages',
-                'items { title, friendlyUrlPath }',
-                {
-                    siteKey: `"${Liferay.ThemeDisplay.getSiteGroupId()}"`
-                }
-            );
+        const liferayPages = buildGraphQlQuery(
+            'sitePages',
+            'items { title, friendlyUrlPath }',
+            {
+                siteKey: `"${Liferay.ThemeDisplay.getSiteGroupId()}"`
+            }
+        );
 
-            await baseFetch(GRAPHQL_PATH, {
-                method: 'POST',
-                body: liferayPages
-            }).then(
-                (liferayPagesResponse) => {
-                    const {items} = parseGraphQlQueryResponse(
-                        'sitePages',
-                        liferayPagesResponse
-                    );
-                    if (items === undefined || !(items instanceof Array)) {
-                        console.warn('items is not an array');
-                        return;
-                    }
-                    console.debug(`Found ${items.length} option(s)`);
-                    setOptions(items);
+        baseFetch(GRAPHQL_PATH, {
+            method: 'POST',
+            body: liferayPages
+        }).then(
+            (liferayPagesResponse) => {
+                const {items} = parseGraphQlQueryResponse(
+                    'sitePages',
+                    liferayPagesResponse
+                );
+                if (items === undefined || !(items instanceof Array)) {
+                    console.warn('items is not an array');
+                    return;
                 }
-            ).catch((reason) => console.error(reason));
-        }
-        fetchData().then(r => console.log('r', r))
-    }, []);
+                console.debug(`Found ${items.length} option(s)`);
+                setOptions(items);
+            }
+        ).catch((reason) => console.error(reason))
+    }, [])
 
     useEffect(() => {
         if (options.length > 0) {
@@ -56,7 +53,7 @@ const LiferayPageSelector = ({
                 return
             }
             const value = options.at(0)?.friendlyUrlPath
-            console.log(`${Liferay.Language.get('target-url')} default`, value)
+            console.debug(`${Liferay.Language.get('target-url')} default`, value)
             setValue(controlName, value)
         }
     }, [options, defaultValue, setValue])

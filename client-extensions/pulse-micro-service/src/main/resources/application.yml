@@ -52,8 +52,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
 management:
-  endpoint:
-
   endpoints:
     web:
       exposure:

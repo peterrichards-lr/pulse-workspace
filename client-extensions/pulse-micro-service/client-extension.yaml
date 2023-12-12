@@ -5,10 +5,10 @@ pulse-micro-service-oauth-application-user-agent:
   .serviceScheme: http
   name: Pulse Microservice OAuth Application User Agent
   scopes:
-    - C_Acquisition.everything
-    - C_Campaign.everything
-    - C_CampaignInteraction.everything
-    - C_UrlToken.everything
+    - C_Acquisition.everything.read
+    - C_Campaign.everything.read
+    - C_CampaignInteraction.everything.read
+    - C_UrlToken.everything.read
     - Liferay.Headless.Admin.List.Type.everything.read
     - Liferay.Headless.Delivery.everything.read
   type: oAuthApplicationUserAgent
@@ -17,10 +17,10 @@ pulse-micro-service-oauth-application-headless-server:
   .serviceScheme: http
   name: Pulse Microservice OAuth Application Headless Server
   scopes:
-    - C_Acquisition.everything.read
-    - C_Campaign.everything.read
+    - C_Acquisition.everything
+    - C_Campaign.everything
     - C_CampaignInteraction.everything.write
-    - C_UrlToken.everything.read
+    - C_UrlToken.everything
   type: oAuthApplicationHeadlessServer
 pulse-micro-service-object-action-delete-url-token:
   name: Pulse Microservice Delete URL Token Object Action

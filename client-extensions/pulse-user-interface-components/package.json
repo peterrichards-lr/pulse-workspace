@@ -12,18 +12,19 @@
     ]
   },
   "dependencies": {
-    "@clayui/button": "^3.107.0",
-    "@clayui/date-picker": "^3.107.1",
-    "@clayui/form": "^3.107.0",
-    "@clayui/panel": "^3.107.0",
-    "core-js": "^3.34.0",
+    "@clayui/alert": "^3.106.1",
+    "@clayui/button": "^3.106.1",
+    "@clayui/css": "^3.106.1",
+    "@clayui/date-picker": "^3.106.1",
+    "@clayui/form": "^3.106.1",
+    "@clayui/panel": "^3.106.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-scripts": "5.0.1",
     "sass": "^1.66.1"
   },
-  "name": "pulse-refresh-cache",
+  "name": "pulse-user-interface-components",
   "private": true,
   "scripts": {
     "build": "react-scripts build",
@@ -39,6 +40,10 @@
     ]
   },
   "devDependencies": {
+    "typescript": ">=2.8.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

@@ -48,8 +48,14 @@ const UserJourney = () => {
                     return;
                 }
                 Promise.all(urlTokens.map((urlToken) => {
-                    return [
-                        liferayFetch(new URL(`${CAMPAIGN_API_PATH}/${urlToken.r_urlTokenCampaignRel_c_campaignId}`, LIFERAY_HOST)), liferayFetch(new URL(`${ACQUISITION_API_PATH}/${urlToken.r_urlTokenAcquisitionRel_c_acquisitionId}`, LIFERAY_HOST))]
+                    let promises = [];
+                    if (urlToken.r_urlTokenCampaignRel_c_campaignId > 0) {
+                        promises.push(liferayFetch(new URL(`${CAMPAIGN_API_PATH}/${urlToken.r_urlTokenCampaignRel_c_campaignId}`, LIFERAY_HOST)))
+                    }
+                    if (urlToken.r_urlTokenAcquisitionRel_c_acquisitionId > 0) {
+                        promises.push(liferayFetch(new URL(`${ACQUISITION_API_PATH}/${urlToken.r_urlTokenAcquisitionRel_c_acquisitionId}`, LIFERAY_HOST)))
+                    }
+                    return promises
                 })).then(async (allPromises) => {
                     const campaigns = [];
                     for (let i = 0; i < allPromises.length; i++) {
@@ -59,8 +65,8 @@ const UserJourney = () => {
                         campaigns.push({
                             id: campaign.id,
                             name: campaign.name,
-                            uTMSource: acquisition.source,
-                            uTMMedium: acquisition.medium
+                            uTMSource: acquisition?.source,
+                            uTMMedium: acquisition?.medium
                         })
                     }
                     return campaigns;
@@ -71,7 +77,7 @@ const UserJourney = () => {
                     }
                     Promise.all(
                         campaigns.map((campaign) => {
-                            console.log('Processing campaign', campaign)
+                            console.debug('Processing campaign', campaign)
                             const filter = `r_campaignInteractionRel_c_campaignId eq '${campaign.id}'`;
                             return liferayFetch(new URL(`${CAMPAIGN_INTERACTION_API_PATH}?${queryString}&filter=${filter}`, LIFERAY_HOST))
                                 .then(paginationResponseHandler)
@@ -107,7 +113,7 @@ const UserJourney = () => {
                                 .catch((reason) => console.error(reason));
                         }))
                         .then((campaignData) => {
-                            console.log('campaignData', campaignData);
+                            console.debug('campaignData', campaignData);
                             const flattened = campaignData.flat(1);
                             flattened.forEach((row, i) => (row.key = i));
                             console.debug('flattened', flattened);

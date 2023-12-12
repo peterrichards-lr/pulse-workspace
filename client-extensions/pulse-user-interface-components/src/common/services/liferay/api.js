@@ -2,7 +2,7 @@ import {Liferay} from './liferay';
 
 const HEADER_CONTENT_TYPE_JSON = 'application/json';
 
-const baseFetch = async (url, options = {}) => {
+const baseFetch = (url, options = {}) => {
     return fetch(url, {
         headers: {
             'Content-Type': 'application/json',

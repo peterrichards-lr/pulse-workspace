@@ -21,7 +21,7 @@ class WebComponent extends HTMLElement {
 
     connectedCallback() {
         this.root.render(
-            <App />
+            <App/>
         );
     }
 }
