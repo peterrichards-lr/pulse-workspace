@@ -10,15 +10,17 @@ import java.time.LocalDateTime;
 public interface CampaignService {
     Campaign addCampaign(final String erc, final String name, final String targetUrl, final String status);
 
-    Campaign addCampaign(String erc, String name, String description, String targetUrl, String status, LocalDateTime startDate, LocalDateTime endDate);
+    Campaign addCampaign(final String erc, final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate);
 
     Campaign createCampaign(final String name, final String targetUrl, final String status) throws URISyntaxException;
 
-    Campaign createCampaign(String name, String description, String targetUrl, String status, LocalDateTime startDate, LocalDateTime endDate) throws URISyntaxException;
+    Campaign createCampaign(final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) throws URISyntaxException;
 
-    boolean existsByName(String name);
+    boolean existsByName(final String name);
 
-    Page<Campaign> findAll(Pageable paging);
+    Page<Campaign> findAll(final Pageable paging);
+
+    void manageCampaigns();
 
     void removeAll();
 

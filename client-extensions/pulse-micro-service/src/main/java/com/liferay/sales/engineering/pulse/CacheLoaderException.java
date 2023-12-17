@@ -1,6 +1,6 @@
 package com.liferay.sales.engineering.pulse;
 
-public class CacheLoaderException extends RuntimeException {
+public class CacheLoaderException extends PulseException {
     public CacheLoaderException(String message) {
         super(message);
     }

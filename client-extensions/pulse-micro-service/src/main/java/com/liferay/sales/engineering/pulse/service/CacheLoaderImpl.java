@@ -1,7 +1,12 @@
 package com.liferay.sales.engineering.pulse.service;
 
 import com.liferay.sales.engineering.pulse.CacheLoaderException;
-import com.liferay.sales.engineering.pulse.service.liferay.*;
+import com.liferay.sales.engineering.pulse.NotFoundException;
+import com.liferay.sales.engineering.pulse.PulseException;
+import com.liferay.sales.engineering.pulse.service.liferay.LiferayAcquisitionService;
+import com.liferay.sales.engineering.pulse.service.liferay.LiferayCampaignService;
+import com.liferay.sales.engineering.pulse.service.liferay.LiferayErrorResponseException;
+import com.liferay.sales.engineering.pulse.service.liferay.LiferayUrlTokenService;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Campaign;
 import com.liferay.sales.engineering.pulse.service.liferay.model.UrlToken;
@@ -13,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -47,7 +51,7 @@ public class CacheLoaderImpl implements CacheLoader {
         this.urlTokenService = urlTokenService;
     }
 
-    private com.liferay.sales.engineering.pulse.model.UrlToken addPulseUrlToken(final String erc, final String token, final com.liferay.sales.engineering.pulse.model.Campaign campaign, com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
+    private com.liferay.sales.engineering.pulse.model.UrlToken addPulseUrlToken(final String erc, final String token, final com.liferay.sales.engineering.pulse.model.Campaign campaign, final com.liferay.sales.engineering.pulse.model.Acquisition acquisition) {
         return urlTokenService.addUrlToken(erc, token, campaign, acquisition);
     }
 
@@ -56,6 +60,8 @@ public class CacheLoaderImpl implements CacheLoader {
     }
 
     private com.liferay.sales.engineering.pulse.model.Campaign createPulseCampaign(final Campaign campaign) {
+        if (campaign.getBegin() != null || campaign.getEnd() != null || campaign.getDescription() != null)
+            return campaignService.addCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getDescription(), campaign.getTargetUrl(), campaign.getCampaignStatus().getKey(), campaign.getBegin(), campaign.getEnd());
         return campaignService.addCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getTargetUrl(), campaign.getCampaignStatus().getKey());
     }
 
@@ -132,7 +138,7 @@ public class CacheLoaderImpl implements CacheLoader {
             if (StringUtils.isBlank(erc))
                 return null;
             return liferayAcquisitionService.getByErc(erc);
-        } catch (URISyntaxException e) {
+        } catch (PulseException e) {
             throw new CacheLoaderException("Unable to retrieve acquisition data", e);
         }
     }
@@ -140,7 +146,7 @@ public class CacheLoaderImpl implements CacheLoader {
     private Campaign retrieveCampaign(String erc) {
         try {
             return liferayCampaignService.getByErc(erc);
-        } catch (URISyntaxException e) {
+        } catch (PulseException e) {
             throw new CacheLoaderException("Unable to retrieve campaign data", e);
         }
     }
@@ -148,7 +154,7 @@ public class CacheLoaderImpl implements CacheLoader {
     private List<UrlToken> retrieveUrlTokens() {
         try {
             return liferayUrlTokenService.getUrlTokens();
-        } catch (URISyntaxException e) {
+        } catch (PulseException e) {
             throw new CacheLoaderException("Unable to retrieve url token data", e);
         }
     }

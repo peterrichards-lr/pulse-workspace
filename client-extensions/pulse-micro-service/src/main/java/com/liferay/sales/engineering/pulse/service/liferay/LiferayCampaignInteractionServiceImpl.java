@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
+import com.liferay.sales.engineering.pulse.PulseException;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Interaction;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
@@ -41,13 +42,18 @@ public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService im
     }
 
     @Override
-    public Interaction createInteraction(final String event, final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) throws URISyntaxException {
+    public Interaction createInteraction(final String event, final UrlToken urlToken, final LocalDateTime interactionTime, final String userAgent, final String ipAddress) {
         final Interaction interaction = new Interaction();
         interaction.setCampaignErc(urlToken.getCampaign().getExternalReferenceCode());
         interaction.setEvent(event);
         interaction.setEventProperties(buildEventProperties(urlToken, interactionTime, userAgent, ipAddress));
         _log.info(String.format("interaction : %s", StringUtils.toJson(interaction)));
-        final URI endpoint = restEndpoint.toURI();
+        final URI endpoint;
+        try {
+            endpoint = restEndpoint.toURI();
+        } catch (URISyntaxException e) {
+            throw new PulseException("Unable to create interaction", e);
+        }
         final Mono<Interaction> interactionMono = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(interaction))

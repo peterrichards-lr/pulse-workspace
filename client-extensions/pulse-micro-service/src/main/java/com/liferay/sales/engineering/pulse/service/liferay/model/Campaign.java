@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.service.liferay.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 
@@ -7,9 +8,11 @@ import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Campaign extends BaseObject {
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime begin;
     private CampaignStatus campaignStatus;
     private String description;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime end;
     private String name;
     private String targetUrl;

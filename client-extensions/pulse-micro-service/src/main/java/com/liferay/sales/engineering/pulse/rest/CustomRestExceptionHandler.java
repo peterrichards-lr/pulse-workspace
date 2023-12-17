@@ -1,6 +1,6 @@
 package com.liferay.sales.engineering.pulse.rest;
 
-import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
+import com.liferay.sales.engineering.pulse.DuplicateCampaignException;
 import com.liferay.sales.engineering.pulse.rest.api.model.ApiError;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,9 +39,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-    @ExceptionHandler({DuplicateCampaignNameException.class})
+    @ExceptionHandler({DuplicateCampaignException.class})
     public ResponseEntity<Object> handleDuplicateCampaignNameException(
-            final DuplicateCampaignNameException ex, final WebRequest request) {
+            final DuplicateCampaignException ex, final WebRequest request) {
         final String error =
                 ex.getMessage();
 

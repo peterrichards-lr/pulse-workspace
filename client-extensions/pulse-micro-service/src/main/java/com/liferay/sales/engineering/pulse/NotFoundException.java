@@ -1,10 +1,10 @@
-package com.liferay.sales.engineering.pulse.service.liferay;
+package com.liferay.sales.engineering.pulse;
 
 import com.google.common.base.Objects;
 
 import java.net.URI;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends PulseException {
     private final URI endpoint;
 
     public NotFoundException(final URI endpoint) {

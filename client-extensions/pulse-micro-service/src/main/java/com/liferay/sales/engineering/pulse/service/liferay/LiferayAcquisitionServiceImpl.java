@@ -1,5 +1,6 @@
 package com.liferay.sales.engineering.pulse.service.liferay;
 
+import com.liferay.sales.engineering.pulse.PulseException;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition;
 import com.liferay.sales.engineering.pulse.service.liferay.model.AcquisitionsResponse;
 import org.apache.commons.logging.Log;
@@ -32,13 +33,18 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
     }
 
     @Override
-    public Acquisition createAcquisition(final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) throws URISyntaxException {
+    public Acquisition createAcquisition(final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) {
         final JSONObject acquisitionJson = new JSONObject();
         acquisitionJson.put("content", utmContent);
         acquisitionJson.put("medium", utmMedium);
         acquisitionJson.put("source", utmSource);
         acquisitionJson.put("term", utmTerm);
-        final URI endpoint = this.restEndpoint.toURI();
+        final URI endpoint;
+        try {
+            endpoint = this.restEndpoint.toURI();
+        } catch (URISyntaxException e) {
+            throw new PulseException("Unable to create acquisition", e);
+        }
         final Mono<Acquisition> acquisition = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(acquisitionJson))
@@ -50,42 +56,40 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
         return acquisition.block();
     }
 
-    public List<Acquisition> getAcquisitions() throws URISyntaxException {
-        final URI endpoint = restEndpoint.toURI();
+    public List<Acquisition> getAcquisitions() {
+        final URI endpoint;
         try {
-            final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
-                    .attributes(getClientRegistrationId())
-                    .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                    .bodyToMono(new ParameterizedTypeReference<>() {
-                    });
-
-            return Objects.requireNonNull(campaignResponse.block()).getItems();
-        } catch (LiferayErrorResponseException ex) {
-            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
-                throw new NotFoundException(endpoint);
-            }
-            throw ex;
+            endpoint = restEndpoint.toURI();
+        } catch (URISyntaxException e) {
+            throw new PulseException("Unable to get acquisitions", e);
         }
+        final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
+                .attributes(getClientRegistrationId())
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+
+        return Objects.requireNonNull(campaignResponse.block()).getItems();
     }
 
     @Override
-    public Acquisition getByErc(final String erc) throws URISyntaxException {
-        final URI endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
+    public Acquisition getByErc(final String erc) {
+        final URI endpoint;
         try {
-            final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
-                    .attributes(getClientRegistrationId())
-                    .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
-                    .bodyToMono(new ParameterizedTypeReference<>() {
-                    });
-            return acquisition.block();
-        } catch (LiferayErrorResponseException ex) {
-            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
-                throw new NotFoundException(endpoint);
-            }
-            throw ex;
+            endpoint = new URI(this.restEndpoint.toString() + "by-external-reference-code/" + erc);
+        } catch (URISyntaxException e) {
+            throw new PulseException("Unable to get acquisition - " + erc, e);
         }
+
+        final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
+                .attributes(getClientRegistrationId())
+                .retrieve()
+                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+        return acquisition.block();
+
     }
 
     @Override

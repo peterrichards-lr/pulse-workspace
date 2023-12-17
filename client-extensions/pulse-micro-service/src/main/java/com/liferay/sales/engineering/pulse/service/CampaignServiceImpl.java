@@ -1,6 +1,7 @@
 package com.liferay.sales.engineering.pulse.service;
 
-import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
+import com.liferay.sales.engineering.pulse.DuplicateCampaignException;
+import com.liferay.sales.engineering.pulse.PulseException;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.Status;
 import com.liferay.sales.engineering.pulse.persistence.CampaignRepository;
@@ -69,7 +70,7 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public Campaign createCampaign(final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) throws URISyntaxException {
         if (existsByName(name)) {
-            throw new DuplicateCampaignNameException(name);
+            throw new DuplicateCampaignException(name);
         }
         final com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign = liferayCampaignService.createCampaign(name, description, targetUrl, status, startDate, endDate);
         return addCampaign(campaign);
@@ -88,6 +89,33 @@ public class CampaignServiceImpl implements CampaignService {
     private Status getStatus(String value) {
         final String name = StringUtils.convertToTitleCaseIteratingChars(value);
         return statusRepository.findByName(name);
+    }
+
+    @Override
+    public void manageCampaigns() {
+        final Status expiredStatus = statusRepository.findByName("Expired");
+        campaignRepository.findExpiredCampaigns().forEach((campaign -> {
+            _log.debug("Expiring " + campaign.getName());
+            campaign.setStatus(expiredStatus);
+            campaignRepository.save(campaign);
+            try {
+                liferayCampaignService.updateCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getDescription(), campaign.getTargetUrl(), campaign.getStatus().getName().toLowerCase(), campaign.getBegin(), campaign.getEnd());
+            } catch (PulseException e) {
+                throw new PulseException("Unable to expire campaign : " + campaign.getName(), e);
+            }
+        }));
+
+        final Status activeStatus = statusRepository.findByName("Active");
+        campaignRepository.findPendingCampaigns().forEach(campaign -> {
+            _log.debug("Activating " + campaign.getName());
+            campaign.setStatus(activeStatus);
+            campaignRepository.save(campaign);
+            try {
+                liferayCampaignService.updateCampaign(campaign.getExternalReferenceCode(), campaign.getName(), campaign.getDescription(), campaign.getTargetUrl(), campaign.getStatus().getName().toLowerCase(), campaign.getBegin(), campaign.getEnd());
+            } catch (PulseException e) {
+                throw new PulseException("Unable to activate campaign : " + campaign.getName(), e);
+            }
+        });
     }
 
     @Override
@@ -113,7 +141,7 @@ public class CampaignServiceImpl implements CampaignService {
     public Campaign updateCampaign(String erc, String name, String description, String targetUrl, String status, LocalDateTime startDate, LocalDateTime endDate) {
         Campaign campaign = campaignRepository.findByExternalReferenceCode(erc);
         campaign.setName(name);
-        campaign.setName(description);
+        campaign.setDescription(description);
         campaign.setTargetUrl(targetUrl);
         campaign.setBegin(startDate);
         campaign.setEnd(endDate);

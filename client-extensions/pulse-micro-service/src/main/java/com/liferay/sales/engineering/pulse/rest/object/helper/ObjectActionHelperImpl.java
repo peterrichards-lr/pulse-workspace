@@ -2,7 +2,6 @@ package com.liferay.sales.engineering.pulse.rest.object.helper;
 
 import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
-import com.liferay.sales.engineering.pulse.rest.object.AcquisitionObjectActionController;
 import com.liferay.sales.engineering.pulse.rest.object.model.ObjectAction;
 import com.liferay.sales.engineering.pulse.service.AcquisitionService;
 import com.liferay.sales.engineering.pulse.service.CampaignService;

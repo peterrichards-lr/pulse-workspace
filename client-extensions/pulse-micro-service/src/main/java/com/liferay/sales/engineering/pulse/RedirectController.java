@@ -28,7 +28,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -188,7 +187,7 @@ public class RedirectController {
                 return -1L;
 
             return interaction.getId();
-        } catch (URISyntaxException e) {
+        } catch (PulseException e) {
             _log.error("Unable to record campaign interaction", e);
             return -1L;
         }

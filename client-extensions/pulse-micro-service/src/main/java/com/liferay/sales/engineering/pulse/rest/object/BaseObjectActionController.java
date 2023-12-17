@@ -3,7 +3,6 @@ package com.liferay.sales.engineering.pulse.rest.object;
 
 import com.liferay.sales.engineering.pulse.rest.BaseRestController;
 import com.liferay.sales.engineering.pulse.rest.object.model.ObjectAction;
-import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.json.JSONObject;
 import org.springframework.security.oauth2.jwt.Jwt;

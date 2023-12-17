@@ -3,7 +3,7 @@ package com.liferay.sales.engineering.pulse.rest.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.liferay.sales.engineering.pulse.DuplicateCampaignNameException;
+import com.liferay.sales.engineering.pulse.DuplicateCampaignException;
 import com.liferay.sales.engineering.pulse.model.Acquisition;
 import com.liferay.sales.engineering.pulse.model.Campaign;
 import com.liferay.sales.engineering.pulse.model.UrlToken;
@@ -60,7 +60,7 @@ public class CampaignApiController extends BaseRestController {
         }
 
         if (campaignService.existsByName(campaignDto.getName())) {
-            throw new DuplicateCampaignNameException(campaignDto.getName());
+            throw new DuplicateCampaignException(campaignDto.getName());
         }
 
         try {

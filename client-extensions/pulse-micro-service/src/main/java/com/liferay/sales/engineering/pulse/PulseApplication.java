@@ -4,8 +4,11 @@ import com.liferay.client.extension.util.spring.boot.ClientExtensionUtilSpringBo
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 
 import java.util.concurrent.Executor;
@@ -16,6 +19,7 @@ import static org.springframework.boot.SpringApplication.run;
 @SpringBootApplication
 @EnableWebFluxSecurity
 @EnableAsync
+@EnableScheduling
 public class PulseApplication {
     public static void main(String[] args) {
         run(PulseApplication.class, args);
@@ -30,5 +34,15 @@ public class PulseApplication {
         executor.setThreadNamePrefix("PulseAsyncThread-");
         executor.initialize();
         return executor;
+    }
+
+    @Bean
+    public TaskScheduler getTaskScheduler() {
+        ThreadPoolTaskScheduler threadPoolTaskScheduler
+                = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(1);
+        threadPoolTaskScheduler.setThreadNamePrefix(
+                "PulseTaskScheduler");
+        return threadPoolTaskScheduler;
     }
 }
