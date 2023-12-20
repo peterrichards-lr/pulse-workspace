@@ -6,17 +6,18 @@ import UtmDetails from "./UtmDetails"
 import BasicDetails from "./BasicDetails"
 import Lifecycle from "./Lifecycle"
 import {useForm} from "react-hook-form"
-import {postFetch} from "../../common/services/pulse/api";
-import {useMemo} from "react";
+import {postFetch} from "../../common/services/pulse/api"
+import {useMemo} from "react"
+import {useTranslation} from "react-i18next"
 
 const PULSE_CAMPAIGN_API_PATH = '/api/campaigns'
-
 const spriteMap = Liferay.Icons.spritemap
 
 const CreateCampaignForm = ({
                                 campaignStatusListTypeErc,
                                 defaultCampaignStatus
                             }) => {
+    const {t} = useTranslation()
     campaignStatusListTypeErc = campaignStatusListTypeErc ? campaignStatusListTypeErc : '89201798-3fc2-6d45-d924-316395794c25'
     defaultCampaignStatus = defaultCampaignStatus ? defaultCampaignStatus : 'draft'
     console.debug('campaignStatusListTypeErc', campaignStatusListTypeErc)
@@ -40,8 +41,8 @@ const CreateCampaignForm = ({
         postFetch(PULSE_CAMPAIGN_API_PATH, data)
             .then((response) => {
                 let toastConfig = {
-                    message: 'The campaign was created successfully',
-                    title: 'Success',
+                    message: t('createCampaignSuccessMessage'),
+                    title:  t('createCampaignSuccessTitle'),
                     type: 'success',
                     toastProps: {
                         autoClose: 1000,
@@ -52,14 +53,14 @@ const CreateCampaignForm = ({
                 console.debug(response)
                 Liferay.Util.openToast(toastConfig)
             }).catch((response) => {
-            console.debug(response);
+            console.debug(response)
             let toastConfig
             if (response.status === 400) {
                 response.json().then((reason => {
                     console.debug(reason)
                     const toastConfig = {
                         message: reason.message,
-                        title: 'Warning',
+                        title: t('createCampaignBadRequestTitle'),
                         type: 'warning',
                         toastProps: {
                             autoClose: 1000,
@@ -73,8 +74,8 @@ const CreateCampaignForm = ({
                 return
             } else if (response.status === 401) {
                 toastConfig = {
-                    message: 'The bearer token has expired',
-                    title: 'Error',
+                    message: t('unauthorizedMessage'),
+                    title: t('unauthorizedTitle'),
                     type: 'danger',
                     toastProps: {
                         autoClose: 1000,
@@ -84,8 +85,8 @@ const CreateCampaignForm = ({
                 }
             } else {
                 toastConfig = {
-                    message: 'An error occurred when creating the campaign',
-                    title: 'Error',
+                    message: t('createCampaignErrorMessage'),
+                    title: t('createCampaignErrorTitle'),
                     type: 'danger',
                     toastProps: {
                         autoClose: 1000,
@@ -102,13 +103,13 @@ const CreateCampaignForm = ({
     return (
         <div className="campaign-information">
             <ClayForm onSubmit={handleSubmit(onSubmit)}>
-                <Sheet title={Liferay.Language.get('campaign-information')} footer={
+                <Sheet title={t('createCampaignHeading')} footer={
                     <ClayForm.Group className="btn-group-item">
                         <ClayButton displayType="primary" type="submit">
-                            {Liferay.Language.get('create')}
+                            {t('createCampaignSubmit')}
                         </ClayButton>
                         <ClayButton displayType="secondary" type="button" onClick={() => reset(resetState)}>
-                            {Liferay.Language.get('reset')}
+                            {t('createCampaignReset')}
                         </ClayButton>
                     </ClayForm.Group>
                 }>

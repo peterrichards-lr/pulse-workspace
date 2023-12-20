@@ -1,7 +1,8 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import './common/styles/index.scss'
-import App from "./components/App";
+import App from "./components/App"
+import "./common/i18n"
 
 class WebComponent extends HTMLElement {
     static get observedAttributes() {
@@ -33,8 +34,8 @@ class WebComponent extends HTMLElement {
 
     connectedCallback() {
         if (!this.rendered) {
-            this.render();
-            this.rendered = true;
+            this.render()
+            this.rendered = true
         }
     }
 }

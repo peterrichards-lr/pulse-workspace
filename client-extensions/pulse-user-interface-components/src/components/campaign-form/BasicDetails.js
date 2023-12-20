@@ -4,6 +4,7 @@ import {Liferay} from "../../common/services/liferay/liferay"
 import RequiredMask from "../common/RequiredMark"
 import LiferayPageSelector from "./LiferayPageSelector"
 import CampaignStatusSelector from "./CampaignStatusSelector"
+import {useTranslation} from "react-i18next"
 
 const BasicDetails = ({
                           register,
@@ -14,16 +15,16 @@ const BasicDetails = ({
                           errors,
                           spriteMap
                       }) => {
+    const {t} = useTranslation()
+
     return (
         <ClayPanel
-            displayTitle={Liferay.Language.get(
-                'basic-details'
-            )}
+            displayTitle={t('basicDetailsPanelTitle')}
             displayType="unstyled"
         >
             <ClayPanel.Body>
                 <ClayForm.Group className={`${errors.name ? "has-error" : ""}`}>
-                    <label htmlFor="name">{Liferay.Language.get('name')}
+                    <label htmlFor="name">{t('name')}
                         <RequiredMask/>
                     </label>
                     <ClayInput
@@ -39,7 +40,7 @@ const BasicDetails = ({
                     </ClayForm.FeedbackItem>}
                 </ClayForm.Group>
                 <ClayForm.Group>
-                    <label htmlFor="description">{Liferay.Language.get('description')}</label>
+                    <label htmlFor="description">{t('description')}</label>
                     <ClayInput
                         component="textarea"
                         type="text"
@@ -64,7 +65,6 @@ const BasicDetails = ({
             </ClayPanel.Body>
         </ClayPanel>
     )
-
 }
 
 export default BasicDetails

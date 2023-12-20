@@ -2,8 +2,8 @@ import ClayForm, {ClaySelect} from '@clayui/form'
 import {buildGraphQlQuery, parseGraphQlQueryResponse} from "../../common/utility"
 import {useEffect, useState} from "react"
 import baseFetch from "../../common/services/liferay/api"
-import {Liferay} from "../../common/services/liferay/liferay"
 import ClaySelectController from "../react-hook-form/ClaySelectController"
+import {useTranslation} from "react-i18next"
 
 const GRAPHQL_PATH = '/o/graphql'
 
@@ -15,7 +15,7 @@ const CampaignStatusSelector = ({
                                     errors,
                                     spriteMap
                                 }) => {
-
+    const {t} = useTranslation()
     const controlName = "campaignStatus"
     const [options, setOptions] = useState([])
 
@@ -55,7 +55,7 @@ const CampaignStatusSelector = ({
                 return
             }
             const value = options.at(0)?.key
-            console.debug(`${Liferay.Language.get('campaign-status')} default`, value)
+            console.debug(`${t('campaignStatus')} default`, value)
             setValue(controlName, value)
         }
     }, [options, defaultValue, setValue])
@@ -64,7 +64,7 @@ const CampaignStatusSelector = ({
         <ClayForm.Group className={`${errors[controlName] ? "has-error" : ""}`}>
             <ClaySelectController
                 name={controlName}
-                label={Liferay.Language.get('campaign-status')}
+                label={t('campaignStatus')}
                 control={control}
                 required={true}
             >
@@ -84,7 +84,7 @@ const CampaignStatusSelector = ({
                 {`The ${controlName} is invalid.`}
             </ClayForm.FeedbackItem>}
         </ClayForm.Group>
-    );
-};
+    )
+}
 
 export default CampaignStatusSelector

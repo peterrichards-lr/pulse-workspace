@@ -1,12 +1,12 @@
-import ClayForm, {ClaySelect} from '@clayui/form';
-import {buildGraphQlQuery, parseGraphQlQueryResponse} from "../../common/utility";
-import {useEffect, useState} from "react";
-import baseFetch from "../../common/services/liferay/api";
+import ClayForm, {ClaySelect} from '@clayui/form'
+import {buildGraphQlQuery, parseGraphQlQueryResponse} from "../../common/utility"
+import {useEffect, useState} from "react"
+import baseFetch from "../../common/services/liferay/api"
+import {Liferay} from "../../common/services/liferay/liferay"
+import ClaySelectController from "../react-hook-form/ClaySelectController"
+import {useTranslation} from "react-i18next"
 
-import {Liferay} from "../../common/services/liferay/liferay";
-import ClaySelectController from "../react-hook-form/ClaySelectController";
-
-const GRAPHQL_PATH = '/o/graphql';
+const GRAPHQL_PATH = '/o/graphql'
 
 const LiferayPageSelector = ({
                                  setValue,
@@ -15,6 +15,7 @@ const LiferayPageSelector = ({
                                  errors,
                                  spriteMap
                              }) => {
+    const {t} = useTranslation()
     const controlName = "targetUrl"
     const [options, setOptions] = useState([]);
 
@@ -25,7 +26,7 @@ const LiferayPageSelector = ({
             {
                 siteKey: `"${Liferay.ThemeDisplay.getSiteGroupId()}"`
             }
-        );
+        )
 
         baseFetch(GRAPHQL_PATH, {
             method: 'POST',
@@ -37,10 +38,10 @@ const LiferayPageSelector = ({
                     liferayPagesResponse
                 );
                 if (items === undefined || !(items instanceof Array)) {
-                    console.warn('items is not an array');
+                    console.warn(t('notAnArray', {object: "items"}));
                     return;
                 }
-                console.debug(`Found ${items.length} option(s)`);
+                console.debug(t('foundNOptions', {n: items.length}));
                 setOptions(items);
             }
         ).catch((reason) => console.error(reason))
@@ -53,7 +54,7 @@ const LiferayPageSelector = ({
                 return
             }
             const value = options.at(0)?.friendlyUrlPath
-            console.debug(`${Liferay.Language.get('target-url')} default`, value)
+            console.debug(t('default', {object: value}))
             setValue(controlName, value)
         }
     }, [options, defaultValue, setValue])
@@ -62,14 +63,14 @@ const LiferayPageSelector = ({
         <ClayForm.Group className={`${errors[controlName] ? "has-error" : ""}`}>
             <ClaySelectController
                 name={controlName}
-                label={Liferay.Language.get('target-url')}
+                label={t('targetUrl')}
                 control={control}
                 required={true}
             >
                 {options.map(item => (
                     <ClaySelect.Option
                         key={item.friendlyUrlPath}
-                        label={`${item.title} [ ${item.friendlyUrlPath} ]`}
+                        label={t('targetUrlOptionLabel', {k: item.friendlyUrlPath, v: item.title})}
                         value={item.friendlyUrlPath}
                     />
                 ))}
@@ -79,10 +80,10 @@ const LiferayPageSelector = ({
                     spritemap={spriteMap}
                     symbol="exclamation-full"
                 />
-                {`The ${controlName} is invalid.`}
+                {t('controlNameInvalid', {controlName: controlName})}
             </ClayForm.FeedbackItem>}
         </ClayForm.Group>
-    );
-};
+    )
+}
 
 export default LiferayPageSelector

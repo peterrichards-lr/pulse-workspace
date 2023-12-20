@@ -1,6 +1,6 @@
 import {Controller} from "react-hook-form"
 import ClayForm, {ClaySelect} from '@clayui/form'
-import RequiredMark from "../common/RequiredMark";
+import RequiredMark from "../common/RequiredMark"
 
 const ClaySelectController = ({
                                   name,

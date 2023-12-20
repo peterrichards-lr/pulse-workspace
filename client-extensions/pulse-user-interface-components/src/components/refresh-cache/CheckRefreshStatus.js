@@ -1,17 +1,19 @@
 import ClayForm, {ClayInput} from '@clayui/form'
-import ClayButton from "@clayui/button";
-import ClayAlert from '@clayui/alert';
-import {Liferay} from "../../common/services/liferay/liferay";
-import {useMemo, useState} from "react";
-import {useForm} from "react-hook-form";
-import RequiredMask from "../common/RequiredMark";
-import Sheet from "../common/Sheet";
-import {getFetch} from "../../common/services/pulse/api";
+import ClayButton from "@clayui/button"
+import ClayAlert from '@clayui/alert'
+import {Liferay} from "../../common/services/liferay/liferay"
+import {useMemo, useState} from "react"
+import {useForm} from "react-hook-form"
+import RequiredMask from "../common/RequiredMark"
+import Sheet from "../common/Sheet"
+import {getFetch} from "../../common/services/pulse/api"
+import {useTranslation} from "react-i18next";
 
 const PULSE_REFRESH_CACHE_API_PATH = '/api/refresh-cache/{job-id}'
 const spriteMap = Liferay.Icons.spritemap
 
 const CheckRefreshStatus = () => {
+    const {t} = useTranslation()
     const {register, handleSubmit, reset, formState: {errors}} = useForm()
     const [jobStatus, setJobStatus] = useState("")
     const [alertType, setAlertType] = useState("")
@@ -37,8 +39,8 @@ const CheckRefreshStatus = () => {
                 let toastConfig
                 if (response.status === 401) {
                     toastConfig = {
-                        message: 'The bearer token has expired',
-                        title: 'Error',
+                        message: t('unauthorizedMessage'),
+                        title: t('unauthorizedTitle'),
                         type: 'danger',
                         toastProps: {
                             autoClose: 1000,
@@ -47,13 +49,13 @@ const CheckRefreshStatus = () => {
                         }
                     }
                 } else if (response.status === 404) {
-                    setJobStatus(`${data.jobId} was not found`)
+                    setJobStatus(t('xNotFound', { x: data.jobId}))
                     setAlertType("warning")
                     return;
                 } else {
                     toastConfig = {
-                        message: 'An error occurred when checking the job status',
-                        title: 'Error',
+                        message: t('checkRefreshStatusErrorMessage'),
+                        title: t('checkRefreshStatusErrorTitle'),
                         type: 'danger',
                         toastProps: {
                             autoClose: 1000,
@@ -68,25 +70,25 @@ const CheckRefreshStatus = () => {
     }
 
     const conditionalAlert = (jobStatus &&
-        <ClayAlert displayType={alertType} spritemap={spriteMap} title={Liferay.Language.get(alertType)}>
+        <ClayAlert displayType={alertType} spritemap={spriteMap} title={t(alertType)}>
             {jobStatus}
         </ClayAlert>
     )
 
     return (
         <ClayForm onSubmit={handleSubmit(onSubmit)}>
-            <Sheet title={Liferay.Language.get('refresh-job-status')} footer={
+            <Sheet title={t('checkRefreshStatusHeading')} footer={
                 <ClayForm.Group className="btn-group-item">
                     <ClayButton displayType="primary" type="submit">
-                        {Liferay.Language.get('check-status')}
+                        {t('checkRefreshStatusSubmit')}
                     </ClayButton>
                     <ClayButton displayType="secondary" type="button" onClick={() => reset(resetState)}>
-                        {Liferay.Language.get('reset')}
+                        {t('checkRefreshStatusReset')}
                     </ClayButton>
                 </ClayForm.Group>
             }>
                 <ClayForm.Group>
-                    <label htmlFor="jobId">{Liferay.Language.get('job-id')}
+                    <label htmlFor="jobId">{t('checkRefreshStatusJobId')}
                         <RequiredMask/>
                     </label>
                     <ClayInput
@@ -98,7 +100,7 @@ const CheckRefreshStatus = () => {
                             spritemap={spriteMap}
                             symbol="exclamation-full"
                         />
-                        {"The job id is required."}
+                        {t('xIsRequired', { x: t('checkRefreshStatusJobId')})}
                     </ClayForm.FeedbackItem>}
                 </ClayForm.Group>
                 {conditionalAlert}

@@ -18,7 +18,7 @@ const Sheet = ({
                 {footer}
             </div>
         </div>
-    );
+    )
 }
 
 export default Sheet;

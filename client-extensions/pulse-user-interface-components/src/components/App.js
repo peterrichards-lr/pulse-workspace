@@ -1,6 +1,6 @@
 import CreateCampaignForm from "./campaign-form/CreateCampaignForm"
 import RefreshCache from "./refresh-cache/RefreshCache"
-import CheckRefreshStatus from "./refresh-cache/CheckRefreshStatus";
+import CheckRefreshStatus from "./refresh-cache/CheckRefreshStatus"
 
 const App = ({route, ...props}) => {
     if (route === 'create-campaign') {
