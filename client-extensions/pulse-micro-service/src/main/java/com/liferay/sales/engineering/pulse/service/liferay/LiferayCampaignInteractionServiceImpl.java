@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
+@Lazy
 @Service
 public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService implements LiferayCampaignInteractionService {
     private static final Log _log = LogFactory.getLog(
@@ -47,7 +49,7 @@ public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService im
         interaction.setCampaignErc(urlToken.getCampaign().getExternalReferenceCode());
         interaction.setEvent(event);
         interaction.setEventProperties(buildEventProperties(urlToken, interactionTime, userAgent, ipAddress));
-        _log.info(String.format("interaction : %s", StringUtils.toJson(interaction)));
+        _log.debug(String.format("interaction : %s", StringUtils.toJson(interaction)));
         final URI endpoint;
         try {
             endpoint = restEndpoint.toURI();

@@ -1,0 +1,7 @@
+assemble:
+    - from: assets
+      into: static
+pusle-favicon:
+    name: Pulse Favicon
+    type: themeFavicon
+    url: favicon.ico

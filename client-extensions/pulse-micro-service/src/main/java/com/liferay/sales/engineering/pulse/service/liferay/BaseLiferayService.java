@@ -35,17 +35,24 @@ public abstract class BaseLiferayService {
     }
 
     protected static Mono<LiferayErrorResponseException> handleLiferayError(final ClientResponse clientResponse) {
-        if (clientResponse.statusCode() == HttpStatus.FORBIDDEN) {
+        if (clientResponse.statusCode() == HttpStatus.UNAUTHORIZED) {
+            _log.warn("Unauthorized - " + clientResponse.headers());
+            final LiferayErrorResponse errorResponse = new LiferayErrorResponse();
+            errorResponse.setStatus(clientResponse.statusCode());
+            errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
+        } else if (clientResponse.statusCode() == HttpStatus.FORBIDDEN) {
+            _log.warn("Forbidden - " + clientResponse.headers());
             final LiferayErrorResponse errorResponse = new LiferayErrorResponse();
             errorResponse.setStatus(clientResponse.statusCode());
             errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
             return Mono.error(new LiferayErrorResponseException(errorResponse));
         } else if (clientResponse.statusCode() == HttpStatus.NOT_FOUND) {
+            _log.info("Not Found - " + clientResponse.headers());
             LiferayErrorResponse errorResponse = new LiferayErrorResponse();
             errorResponse.setStatus(HttpStatus.NOT_FOUND);
             return Mono.error(new LiferayErrorResponseException(errorResponse));
         }
-
+        _log.warn("Unexpected error - status code : " + clientResponse.statusCode());
         return clientResponse.bodyToMono(LiferayErrorResponse.class)
                 .flatMap(error -> Mono.error(new LiferayErrorResponseException(error)));
     }

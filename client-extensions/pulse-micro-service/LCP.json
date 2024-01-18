@@ -1,42 +1,64 @@
 {
-  "kind": "Deployment",
-  "id": "pulse-microservice",
-  "deploy": true,
-  "memory": 512,
-  "cpu": 1,
-  "loadBalancer": {
-    "targetPort": 80
-  },
-  "ports": [
-    {
-      "port": 80,
-      "external": false
+    "kind": "Deployment",
+    "id": "pulsemicroservice",
+    "deploy": true,
+    "memory": 512,
+    "cpu": 1,
+    "loadBalancer": {
+        "targetPort": 58080
+    },
+    "ports": [
+        {
+            "port": 58080,
+            "external": false
+        }
+    ],
+    "readinessProbe": {
+        "httpGet": {
+            "path": "/ready",
+            "port": 58080
+        },
+        "initialDelaySeconds": 120,
+        "periodSeconds": 10,
+        "timeoutSeconds": 4,
+        "failureThreshold": 3,
+        "successThreshold": 1
+    },
+    "livenessProbe": {
+        "httpGet": {
+            "path": "/ready",
+            "port": 58080
+        },
+        "initialDelaySeconds": 100,
+        "periodSeconds": 10,
+        "timeoutSeconds": 4,
+        "failureThreshold": 3,
+        "successThreshold": 1
+    },
+    "env": {
+        "LIFERAY_ROUTES_CLIENT_EXTENSION": "/etc/liferay/lxc/ext-init-metadata",
+        "LIFERAY_ROUTES_DXP": "/etc/liferay/lxc/dxp-metadata",
+        "PULSE_COOKIE_DOMAIN": "",
+        "PULSE_CLOSE_CONTEXT": "true",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_AUTHORIZATION_URI": "/o/oauth2/authorize",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_AUDIENCE": "",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_CLIENT_ID": "",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_CLIENT_SECRET": "",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_SCOPES": "C_Acquisition.everything,C_Campaign.everything,C_CampaignInteraction.everything.write,C_UrlToken.everything",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_INTROSPECTION_URI": "/o/oauth2/introspection",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_JWKS_URI": "/o/oauth2/jwks",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_TOKEN_URI": "/o/oauth2/token",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_CLIENT_ID": "",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_AUTHORIZATION_URI": "/o/oauth2/authorize",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_INTROSPECTION_URI": "/o/oauth2/introspection",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_JWKS_URI": "/o/oauth2/jwks",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_TOKEN_URI": "/o/oauth2/token",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_AUDIENCE": "",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_SCOPES": "C_Acquisition.everything.read,C_Campaign.everything.read,C_CampaignInteraction.everything.read,C_UrlToken.everything.read,Liferay.Headless.Admin.List.Type.everything.read,Liferay.Headless.Delivery.everything.read",
+        "PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_REDIRECT_URIS": "/o/oauth2/redirect",
+        "COM_LIFERAY_LXC_DXP_DOMAINS": "",
+        "COM_LIFERAY_LXC_DXP_MAIN_DOMAIN": ",
+        "COM_LIFERAY_LXC_DXP_MAINDOMAIN": "",
+        "COM_LIFERAY_LXC_DXP_SERVER_PROTOCOL": "https"
     }
-  ],
-  "readinessProbe": {
-    "httpGet": {
-      "path": "/ready",
-      "port": 80
-    },
-    "initialDelaySeconds": 120,
-    "periodSeconds": 10,
-    "timeoutSeconds": 4,
-    "failureThreshold": 3,
-    "successThreshold": 1
-  },
-  "livenessProbe": {
-    "httpGet": {
-      "path": "/ready",
-      "port": 80
-    },
-    "initialDelaySeconds": 100,
-    "periodSeconds": 10,
-    "timeoutSeconds": 4,
-    "failureThreshold": 3,
-    "successThreshold": 1
-  },
-  "env": {
-    "LIFERAY_ROUTES_CLIENT_EXTENSION": "/etc/liferay/lxc/ext-init-metadata",
-    "LIFERAY_ROUTES_DXP": "/etc/liferay/lxc/dxp-metadata"
-  }
 }

@@ -7,6 +7,7 @@ import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+@Lazy
 @Service
 public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements LiferayUrlTokenService {
     private static final Log _log = LogFactory.getLog(
@@ -39,7 +41,7 @@ public class LiferayUrlTokenServiceImpl extends BaseLiferayService implements Li
         urlToken.setCampaignErc(campaignErc);
         if (StringUtils.isNotBlank(acquisitionErc))
             urlToken.setAcquisitionErc(acquisitionErc);
-        _log.info(String.format("urlToken : %s", StringUtils.toJson(urlToken)));
+        _log.debug(String.format("urlToken : %s", StringUtils.toJson(urlToken)));
         final URI endpoint;
         try {
             endpoint = this.restEndpoint.toURI();

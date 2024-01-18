@@ -1,0 +1,7 @@
+assemble:
+    - from: assets
+      into: static
+pulse-global-js:
+    name: Pulse Global JS
+    type: globalJS
+    url: pulse.js

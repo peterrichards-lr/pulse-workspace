@@ -73,6 +73,7 @@ public class CampaignServiceImpl implements CampaignService {
             throw new DuplicateCampaignException(name);
         }
         final com.liferay.sales.engineering.pulse.service.liferay.model.Campaign campaign = liferayCampaignService.createCampaign(name, description, targetUrl, status, startDate, endDate);
+        _log.debug("Liferay campaign : " + campaign);
         return addCampaign(campaign);
     }
 

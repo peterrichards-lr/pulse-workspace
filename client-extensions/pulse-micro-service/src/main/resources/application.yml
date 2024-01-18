@@ -28,11 +28,21 @@ pulse:
   # two different subdomains, which share the same common domain. In this case, this value should be the
   # common domain
   cookie_domain: ${PULSE_COOKIE_DOMAIN:localhost}
+  # The path of the cookie. It should start with a forward slash (/)
+  cookie_path: ${PULSE_COOKIE_PATH:/}
+  # The name of the cookie which will pass the campaign identifier (ERC)
+  cookie_campaign_name: ${PULSE_COOKIE_NAME_CAMPAIGN:__pcId}
+  # The name of the cookie which will pass the url token
+  cookie_url_token_name: ${PULSE_COOKIE_NAME_CAMPAIGN:__pcUt}
+  # The name of the cookie which will pass the campaign interaction identifier (ERC)
+  cookie_campaign_interaction_name: ${PULSE_COOKIE_NAME_CAMPAIGN:__intId}
   # When this is set to true, Pulse will redirect to its own test endpoint. The content of the request will
   # be output to the logs
   test_redirect: ${PULSE_TEST_REDIRECT:false}
   cache_refresh_delay_ms: 10000
   cron_schedule: '0 0/15 * * * *'
+  # When this is set to true, Pulse terminate if it is unable to load the campaign data from the Liferay Objects.
+  startup_exception_close_context: ${PULSE_CLOSE_CONTEXT:true}
 server:
   port: 58080
 spring:

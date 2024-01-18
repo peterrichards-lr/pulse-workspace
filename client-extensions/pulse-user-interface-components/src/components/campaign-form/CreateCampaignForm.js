@@ -1,5 +1,6 @@
 import ClayForm from '@clayui/form'
 import ClayButton from '@clayui/button'
+import ClayAlert from '@clayui/alert';
 import Sheet from "../common/Sheet"
 import {Liferay} from "../../common/services/liferay/liferay"
 import UtmDetails from "./UtmDetails"
@@ -7,9 +8,10 @@ import BasicDetails from "./BasicDetails"
 import Lifecycle from "./Lifecycle"
 import {useForm} from "react-hook-form"
 import {postFetch} from "../../common/services/pulse/api"
-import {useMemo} from "react"
+import {useMemo, useState} from "react"
 import {useTranslation} from "react-i18next"
 
+const PULSE_REDIRECT_URL_PREFIX = process.env.REACT_APP_PULSE_REDIRECT_URL_PREFIX
 const PULSE_CAMPAIGN_API_PATH = '/api/campaigns'
 const spriteMap = Liferay.Icons.spritemap
 
@@ -23,6 +25,7 @@ const CreateCampaignForm = ({
     console.debug('campaignStatusListTypeErc', campaignStatusListTypeErc)
     console.debug('defaultCampaignStatus', defaultCampaignStatus)
 
+    const [pulseUrl, setPulseUrl] = useState();
     const {register, handleSubmit, control, setValue, reset, formState: {errors}} = useForm()
     const resetState = useMemo(() => ({
         name: null,
@@ -51,6 +54,7 @@ const CreateCampaignForm = ({
                     }
                 }
                 console.debug(response)
+                setPulseUrl(PULSE_REDIRECT_URL_PREFIX + response.token);
                 Liferay.Util.openToast(toastConfig)
             }).catch((response) => {
             console.debug(response)
@@ -132,6 +136,12 @@ const CreateCampaignForm = ({
                         spriteMap={spriteMap}
                         errors={errors}
                     />
+                    {pulseUrl &&
+                        <ClayAlert displayType="success" spritemap={spriteMap}
+                                   title={t('pulseUrl')}>
+                            <a href={pulseUrl} target="_blank">{pulseUrl}</a>
+                        </ClayAlert>
+                    }
                 </Sheet>
             </ClayForm>
         </div>

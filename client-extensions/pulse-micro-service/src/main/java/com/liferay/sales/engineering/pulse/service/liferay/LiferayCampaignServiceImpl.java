@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Lazy
 @Service
 public class LiferayCampaignServiceImpl extends BaseLiferayService implements LiferayCampaignService {
     private static final Log _log = LogFactory.getLog(
@@ -45,8 +47,8 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
 
     @Override
     public Campaign createCampaign(final String name, final String description, final String targetUrl, final String status, final LocalDateTime startDate, final LocalDateTime endDate) {
-
         final Campaign campaign = getCampaign(name, description, targetUrl, status, startDate, endDate);
+        _log.debug(String.format("campaign : %s", StringUtils.toJson(campaign)));
         final URI endpoint;
         try {
             endpoint = this.restEndpoint.toURI();

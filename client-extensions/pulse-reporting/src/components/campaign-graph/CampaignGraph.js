@@ -32,7 +32,8 @@ const CampaignGraph = ({data}) => {
         const events = [...new Set(data.map((d) => d.event))];
         const campaignEventCounts = data.reduce((acc, it) => {
             const key = `${it.campaign}:${it.event}`;
-            acc[key] = acc[key] === undefined ? 1 : acc[key] + it.count;
+            acc[key] = acc[key] === undefined ? it.count : acc[key] + it.count;
+            console.debug(`acc[${key}]`, acc[key]);
             return acc;
         }, {});
         console.debug('events', events);

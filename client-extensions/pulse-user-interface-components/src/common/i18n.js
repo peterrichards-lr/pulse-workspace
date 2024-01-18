@@ -51,7 +51,8 @@ const resources = {
             refreshCacheSubmit: "Refresh",
             refreshCacheRequestSubmitted: "Request submitted",
             basicDetailsPanelTitle: "Basic Details",
-            lifecyclePanelTitle: "Lifecycle"
+            lifecyclePanelTitle: "Lifecycle",
+            pulseUrl: "Pulse URL"
         },
     }
 }

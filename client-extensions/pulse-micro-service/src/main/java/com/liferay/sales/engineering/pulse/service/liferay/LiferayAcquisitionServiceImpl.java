@@ -3,10 +3,12 @@ package com.liferay.sales.engineering.pulse.service.liferay;
 import com.liferay.sales.engineering.pulse.PulseException;
 import com.liferay.sales.engineering.pulse.service.liferay.model.Acquisition;
 import com.liferay.sales.engineering.pulse.service.liferay.model.AcquisitionsResponse;
+import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
+@Lazy
 @Service
 public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements LiferayAcquisitionService {
     private static final Log _log = LogFactory.getLog(
@@ -34,26 +37,27 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
 
     @Override
     public Acquisition createAcquisition(final String utmSource, final String utmMedium, final String utmContent, final String utmTerm) {
-        final JSONObject acquisitionJson = new JSONObject();
-        acquisitionJson.put("content", utmContent);
-        acquisitionJson.put("medium", utmMedium);
-        acquisitionJson.put("source", utmSource);
-        acquisitionJson.put("term", utmTerm);
+        final Acquisition acquisition = new Acquisition();
+        acquisition.setSource(utmSource);
+        acquisition.setMedium(utmMedium);
+        acquisition.setContent(utmContent);
+        acquisition.setTerm(utmTerm);
+        _log.debug(String.format("acquisition : %s", StringUtils.toJson(acquisition)));
         final URI endpoint;
         try {
             endpoint = this.restEndpoint.toURI();
         } catch (URISyntaxException e) {
             throw new PulseException("Unable to create acquisition", e);
         }
-        final Mono<Acquisition> acquisition = this.webClient.post().uri(endpoint)
+        final Mono<Acquisition> acquisitionMono = this.webClient.post().uri(endpoint)
                 .attributes(getClientRegistrationId())
-                .body(BodyInserters.fromValue(acquisitionJson))
+                .body(BodyInserters.fromValue(acquisition))
                 .retrieve()
                 .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
-        return acquisition.block();
+        return acquisitionMono.block();
     }
 
     public List<Acquisition> getAcquisitions() {

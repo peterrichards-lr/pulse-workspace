@@ -42,7 +42,11 @@ public class RedirectController {
     private static final Log _log = LogFactory.getLog(
             RedirectController.class);
     private final URL baseUrl;
+    private final String campaignCookieName;
+    private final String urlTokenCookieName;
+    private final String campaignInteractionCookieName;
     private final String cookieDomain;
+    private final String cookiePath;
     private final EnvUtils envUtil;
     private final LiferayCampaignInteractionService liferayCampaignInteractionService;
     private final boolean testRedirect;
@@ -53,6 +57,10 @@ public class RedirectController {
             @Value("${com.liferay.lxc.dxp.server.protocol}") final String lxcServerProtocol,
             @Value("${com.liferay.lxc.dxp.main.domain}") final String lxcMainDomain,
             @Value("${pulse.cookie_domain}") final String cookieDomain,
+            @Value("${pulse.cookie_path}") final String cookiePath,
+            @Value("${pulse.cookie_campaign_name}") final String campaignCookieName,
+            @Value("${pulse.cookie_url_token_name}") final String urlTokenCookieName,
+            @Value("${pulse.cookie_campaign_interaction_name}") final String campaignInteractionCookieName,
             @Value("${pulse.test_redirect}") final boolean testRedirect,
             final EnvUtils envUtil,
             final UrlTokenRepository tokenRepository,
@@ -65,6 +73,10 @@ public class RedirectController {
         _log.info(String.format("%s : %s", "baseUrl.getPort()", baseUrl.getPort()));
         _log.debug(String.format("%s : %s", "baseUrl", this.baseUrl));
         this.cookieDomain = cookieDomain;
+        this.cookiePath = cookiePath;
+        this.campaignCookieName = campaignCookieName;
+        this.urlTokenCookieName = urlTokenCookieName;
+        this.campaignInteractionCookieName = campaignInteractionCookieName;
         this.testRedirect = testRedirect;
         this.envUtil = envUtil;
         this.tokenRepository = tokenRepository;
@@ -79,13 +91,21 @@ public class RedirectController {
             final Cookie cookie = new Cookie(key, value);
             cookie.setHttpOnly(false);
             cookie.setSecure(true);
+            if (!StringUtils.isBlank(cookiePath)) {
+                cookie.setPath(cookiePath);
+            } else {
+                cookie.setPath("/");
+            }
             if (!StringUtils.isBlank(cookieDomain)) {
                 cookie.setDomain(cookieDomain);
             } else if (hostDomainName != null && hostDomainName.isUnderRegistrySuffix() &&
                     StringUtils.isNotBlank(Objects.requireNonNull(hostDomainName.publicSuffix()).toString())) {
                 cookie.setDomain(hostDomainName.publicSuffix().toString());
             }
-            _log.info(String.format("Cookie domain : %s", cookie.getDomain()));
+            _log.debug(String.format("Cookie name : %s", cookie.getName()));
+            _log.debug(String.format("Cookie value : %s", cookie.getValue()));
+            _log.debug(String.format("Cookie domain : %s", cookie.getDomain()));
+            _log.debug(String.format("Cookie path : %s", cookie.getPath()));
             return cookie;
         }).forEach(httpServletResponse::addCookie);
     }
@@ -149,16 +169,25 @@ public class RedirectController {
     private void configureRedirection(final Campaign campaign,
                                       final Acquisition acquisition,
                                       final String urlToken,
-                                      final Long interactionId,
+                                      final Interaction interaction,
                                       final InternetDomainName hostDomainName,
                                       final HttpServletResponse httpServletResponse) throws MalformedURLException, UnknownHostException {
         final String redirectionUrl = buildUrl(campaign, acquisition).toString();
         httpServletResponse.setHeader("Location", redirectionUrl);
 
         final Map<String, String> cookies = new HashMap<>() {{
-            put("__pcId", String.valueOf(campaign.getId()));
-            put("__pcUt", urlToken);
-            put("__intId", String.valueOf(interactionId));
+            if (StringUtils.isNotBlank(campaignCookieName))
+                put(campaignCookieName, campaign.getExternalReferenceCode());
+            else
+                _log.warn("Unable to pass campaign identifier as a cookie");
+            if (StringUtils.isNotBlank(urlTokenCookieName) && urlToken != null)
+                put(urlTokenCookieName, urlToken);
+            else
+                _log.warn("Unable to pass url token as a cookie");
+            if (StringUtils.isNotBlank(campaignInteractionCookieName) && interaction != null)
+                put(campaignInteractionCookieName, interaction.getExternalReferenceCode());
+            else
+                _log.warn("Unable to pass campaign interaction identifier as a cookie");
         }};
 
         addCookies(cookies, hostDomainName, httpServletResponse);
@@ -176,20 +205,16 @@ public class RedirectController {
         return status.equals("Draft");
     }
 
-    private Long recordInteraction(final UrlToken urlToken,
+    private Interaction recordInteraction(final UrlToken urlToken,
                                    final LocalDateTime interactionTime,
                                    final HttpServletRequest httpServletRequest) {
         final String userAgent = httpServletRequest.getHeader("User-Agent");
         final String ipAddress = HttpRequestResponseUtils.getClientIpAddressIfServletRequestExist();
         try {
-            final Interaction interaction = liferayCampaignInteractionService.createInteraction("Pulse redirect", urlToken, interactionTime, userAgent, ipAddress);
-            if (interaction == null)
-                return -1L;
-
-            return interaction.getId();
+            return liferayCampaignInteractionService.createInteraction("Pulse redirect", urlToken, interactionTime, userAgent, ipAddress);
         } catch (PulseException e) {
             _log.error("Unable to record campaign interaction", e);
-            return -1L;
+            return null;
         }
     }
 
@@ -245,10 +270,10 @@ public class RedirectController {
             return;
         }
 
-        final Long interactionId = recordInteraction(token, interactionTime, httpServletRequest);
+        final Interaction interaction = recordInteraction(token, interactionTime, httpServletRequest);
         final Acquisition acquisition = token.getAcquisition();
 
-        configureRedirection(campaign, acquisition, urlToken, interactionId, hostDomainName, httpServletResponse);
+        configureRedirection(campaign, acquisition, urlToken, interaction, hostDomainName, httpServletResponse);
         _log.info(String.format("Redirecting to %s", httpServletResponse.getHeader("Location")));
     }
 }
