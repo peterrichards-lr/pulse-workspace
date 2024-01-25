@@ -17,16 +17,6 @@ In order to honour the dependencies and avoid exceptions during deployment, you 
 
 When the microservice is started it will attempt to refresh the cache from the Liferay Object definitions so this needs to be started once Liferay DXP is started.
 
-### Setup, Reset and Deploy Scripts
-
-There are three scripts in the root folder setupBundle.sh, resetBundle.sh and deployClientExtensions.sh. All three of these scripts are written for the Z shell (zsh), so may need slight amendments if they are run within another shell.
-
-The setupBundle.sh is used to enable the release feature flags for a vanilla update. It also attempts to provide a developer license to the bundle.  
-
-The restBundle.sh is useful for resetting the bundle to a vanilla installation. It simply deletes all client extensions, the state folder and the Hypersonic database and local elastic search data.
-
-The deployClientExtensions.sh deploys a clean build of all of the client extensions within this workspace based on dependency. It also introduces delays to ensure the previous client extensions are applied before moving forward.
-
 ## User Interface Components
 
 ### Reporting

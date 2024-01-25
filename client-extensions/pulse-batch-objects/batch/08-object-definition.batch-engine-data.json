@@ -1,0 +1,1295 @@
+{
+  "actions": {
+    "createBatch": {
+      "href": "/o/headless-batch-engine/v1.0/import-task/com.liferay.object.admin.rest.dto.v1_0.ObjectDefinition",
+      "method": "POST"
+    }
+  },
+  "configuration": {
+    "className": "com.liferay.object.admin.rest.dto.v1_0.ObjectDefinition",
+    "companyId": 0,
+    "parameters": {
+      "containsHeaders": "true",
+      "createStrategy": "UPSERT",
+      "importStrategy": "ON_ERROR_FAIL",
+      "taskItemDelegateName": "DEFAULT",
+      "updateStrategy": "UPDATE"
+    },
+    "userId": 0,
+    "version": "v1.0"
+  },
+  "items": [
+    {
+      "enableComments": false,
+      "objectRelationships": [
+        {
+          "objectDefinitionSystem2": false,
+          "parameterObjectFieldName": "",
+          "parameterObjectFieldId": 0,
+          "label": {
+            "en_US": "Passes"
+          },
+          "reverse": false,
+          "type": "oneToMany",
+          "objectDefinitionModifiable2": true,
+          "system": false,
+          "name": "urlTokenAcquisitionRel",
+          "deletionType": "prevent",
+          "objectDefinitionExternalReferenceCode1": "073012fb-634c-324d-c3fd-c45216613123",
+          "objectDefinitionExternalReferenceCode2": "8bfeea24-5761-11d7-5394-f05bac9561f9",
+          "objectDefinitionName2": "UrlToken"
+        }
+      ],
+      "objectFolderExternalReferenceCode": "60ae861c-1940-94b3-480e-56c77d8e47e1",
+      "enableCategorization": true,
+      "accountEntryRestrictedObjectFieldName": "",
+      "objectActions": [
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-acquisition",
+          "errorMessage": {
+            "en_US": "Unable to remove the acquisition from Pulse"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Remove from Pulse"
+          },
+          "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab361f",
+          "system": false,
+          "objectActionTriggerKey": "onAfterDelete",
+          "name": "removeFromPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-acquisition",
+          "errorMessage": {
+            "en_US": "Unable to update the acquisition in Pulse"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Update in Pulse"
+          },
+          "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab33f0",
+          "system": false,
+          "objectActionTriggerKey": "onAfterUpdate",
+          "name": "updateInPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-refresh-entry",
+          "errorMessage": {
+            "en_US": "Unable to refresh the Pulse entry"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Refresh Pulse Entry"
+          },
+          "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab32f1",
+          "system": false,
+          "objectActionTriggerKey": "standalone",
+          "name": "refreshPulseEntry",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        }
+      ],
+      "enableLocalization": false,
+      "accountEntryRestricted": false,
+      "externalReferenceCode": "073012fb-634c-324d-c3fd-c45216613123",
+      "objectFields": [
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Author"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "59c35837-bb3c-cb62-4c82-6b70bc937f6a",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "creator",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Create Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "87cf8d50-d766-aa7a-e2c8-24ff38563c5c",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "createDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "External Reference Code"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "40d36cf3-214e-8496-f663-896ea21a6459",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "externalReferenceCode",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Long",
+          "label": {
+            "en_US": "ID"
+          },
+          "type": "Long",
+          "required": false,
+          "externalReferenceCode": "08256518-48cc-c7ac-0772-1ce1c964eb9c",
+          "indexedAsKeyword": true,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "id",
+          "state": false,
+          "businessType": "LongInteger",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Modified Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "b40c79df-f5a4-c8e1-ed84-f26d489c39fe",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "modifiedDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Status"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "3fc8a423-59bf-c08d-b422-83f367362a65",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "status",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Content"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "9630944a-b546-e6b1-49c2-a99cf6b0b8fb",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "content",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Medium"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "0fb68f2c-696f-54ab-fb1d-931321e2bf57",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "medium",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Source"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "0fc68f2c-696f-54ab-fb1d-931321e2bf57",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "source",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Term"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "d7d905a0-8383-7fad-3165-f276bbe24f66",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "term",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        }
+      ],
+      "restContextPath": "/o/c/acquisitions",
+      "scope": "company",
+      "portlet": true,
+      "modifiable": true,
+      "parameterRequired": false,
+      "enableObjectEntryHistory": false,
+      "titleObjectFieldName": "id",
+      "objectValidationRules": [],
+      "active": true,
+      "defaultLanguageId": "en_US",
+      "label": {
+        "en_US": "Acquisition"
+      },
+      "panelCategoryKey": "applications_menu.applications.custom.apps",
+      "pluralLabel": {
+        "en_US": "Acquisitions"
+      },
+      "objectLayouts": [],
+      "system": false,
+      "objectViews": [],
+      "enableObjectEntryDraft": false,
+      "name": "Acquisition",
+      "actions": {
+        "permissions": {},
+        "get": {},
+        "update": {},
+        "delete": {}
+      },
+      "status": {
+        "label_i18n": "Approved",
+        "code": 0,
+        "label": "approved"
+      }
+    },
+    {
+      "enableComments": false,
+      "objectRelationships": [],
+      "objectFolderExternalReferenceCode": "60ae861c-1940-94b3-480e-56c77d8e47e1",
+      "enableCategorization": true,
+      "accountEntryRestrictedObjectFieldName": "",
+      "objectActions": [
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-url-token",
+          "errorMessage": {
+            "en_US": "Unable to remove the URL token from Pulse"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Remove from Pulse"
+          },
+          "externalReferenceCode": "16e31a68-20f5-fa4f-9df3-8e3c688686d5",
+          "system": true,
+          "objectActionTriggerKey": "onAfterDelete",
+          "name": "removeFromPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-url-token",
+          "errorMessage": {
+            "en_US": "Unable to update the URL token from Pulse"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Update in Pulse"
+          },
+          "externalReferenceCode": "16e31a68-20f5-fa4f-9df3-8e3c688686a4",
+          "system": false,
+          "objectActionTriggerKey": "onAfterUpdate",
+          "name": "updateInPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-refresh-entry",
+          "errorMessage": {
+            "en_US": "Unable to refresh the Pulse entry"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Refresh Pulse Entry"
+          },
+          "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab32f2",
+          "system": false,
+          "objectActionTriggerKey": "standalone",
+          "name": "refreshPulseEntry",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        }
+      ],
+      "enableLocalization": false,
+      "accountEntryRestricted": false,
+      "externalReferenceCode": "8bfeea24-5761-11d7-5394-f05bac9561f9",
+      "objectFields": [
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Author"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "6d751cda-13b9-7c4b-954e-31948dcedf94",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "creator",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Create Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "297912d5-d47f-46e4-4542-878b2dff423d",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "createDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "External Reference Code"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "8151b083-6df2-bcd1-0d97-49ed8e96143f",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "externalReferenceCode",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Long",
+          "label": {
+            "en_US": "ID"
+          },
+          "type": "Long",
+          "required": false,
+          "externalReferenceCode": "1d1b9f68-353b-59e9-8bb1-25fe08fc46a3",
+          "indexedAsKeyword": true,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "id",
+          "state": false,
+          "businessType": "LongInteger",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Modified Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "688cd85d-bda5-6bd1-191f-065755931e46",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "modifiedDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Status"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "10ce2ca4-d7cf-b7d2-8e3c-480d191d04d7",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "status",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "uniqueValues",
+              "value": true
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Token"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "43f4611a-edb1-e9f1-7649-330b2de6cb0c",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "token",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        }
+      ],
+      "restContextPath": "/o/c/urltokens",
+      "scope": "company",
+      "portlet": true,
+      "modifiable": true,
+      "parameterRequired": false,
+      "enableObjectEntryHistory": false,
+      "titleObjectFieldName": "token",
+      "objectValidationRules": [],
+      "active": true,
+      "defaultLanguageId": "en_US",
+      "label": {
+        "en_US": "Url Token"
+      },
+      "panelCategoryKey": "applications_menu.applications.custom.apps",
+      "pluralLabel": {
+        "en_US": "Url Tokens"
+      },
+      "objectLayouts": [],
+      "system": false,
+      "objectViews": [],
+      "enableObjectEntryDraft": false,
+      "name": "UrlToken",
+      "actions": {
+        "permissions": {},
+        "get": {},
+        "update": {},
+        "delete": {}
+      },
+      "status": {
+        "label_i18n": "Approved",
+        "code": 0,
+        "label": "approved"
+      }
+    },
+    {
+      "enableComments": false,
+      "objectRelationships": [],
+      "objectFolderExternalReferenceCode": "60ae861c-1940-94b3-480e-56c77d8e47e1",
+      "enableCategorization": true,
+      "accountEntryRestrictedObjectFieldName": "",
+      "objectActions": [],
+      "enableLocalization": false,
+      "accountEntryRestricted": false,
+      "externalReferenceCode": "24e69ba4-093a-d55c-8ca6-ba8f7c3095e0",
+      "objectFields": [
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Author"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "3ac409ca-1c2d-21f5-2064-25f905cb1496",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "creator",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Create Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "6c274139-ae4e-8889-0ca7-2aec802c622d",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "createDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "External Reference Code"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "996ec06a-a5be-5833-ebdb-4479e6c8df8c",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "externalReferenceCode",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Long",
+          "label": {
+            "en_US": "ID"
+          },
+          "type": "Long",
+          "required": false,
+          "externalReferenceCode": "0f4455b1-7260-1ac3-c486-0911b5ded05e",
+          "indexedAsKeyword": true,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "id",
+          "state": false,
+          "businessType": "LongInteger",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Modified Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "176200b2-30cb-1f7b-62b5-92b3b3c0348a",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "modifiedDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Status"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "f6631b2f-38d7-75ea-eed9-3084c09bb78e",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "status",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Event"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "3573472a-3799-74e1-bf46-eb80a1f47f15",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "event",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "showCounter",
+              "value": false
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "Clob",
+          "label": {
+            "en_US": "Event Properties"
+          },
+          "type": "Clob",
+          "required": false,
+          "externalReferenceCode": "5d75120f-945d-b073-284a-92bc5d151a35",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "eventProperties",
+          "state": false,
+          "businessType": "LongText",
+          "readOnlyConditionExpression": ""
+        }
+      ],
+      "restContextPath": "/o/c/campaigninteractions",
+      "scope": "company",
+      "portlet": false,
+      "modifiable": true,
+      "parameterRequired": false,
+      "enableObjectEntryHistory": false,
+      "titleObjectFieldName": "id",
+      "objectValidationRules": [],
+      "active": true,
+      "defaultLanguageId": "en_US",
+      "label": {
+        "en_US": "Campaign Interaction"
+      },
+      "panelCategoryKey": "applications_menu.applications.custom.apps",
+      "pluralLabel": {
+        "en_US": "Campaign Interactions"
+      },
+      "objectLayouts": [],
+      "system": false,
+      "objectViews": [],
+      "enableObjectEntryDraft": false,
+      "name": "CampaignInteraction",
+      "actions": {
+        "permissions": {},
+        "get": {},
+        "update": {},
+        "delete": {}
+      },
+      "status": {
+        "label_i18n": "Approved",
+        "code": 0,
+        "label": "approved"
+      }
+    },
+    {
+      "enableComments": false,
+      "objectRelationships": [
+        {
+          "objectDefinitionSystem2": false,
+          "parameterObjectFieldName": "",
+          "parameterObjectFieldId": 0,
+          "label": {
+            "en_US": "Campaign"
+          },
+          "reverse": false,
+          "type": "oneToMany",
+          "objectDefinitionModifiable2": true,
+          "system": false,
+          "name": "campaignInteractionRel",
+          "deletionType": "cascade",
+          "objectDefinitionExternalReferenceCode1": "2e60d417-2441-e05e-3913-b319cfa9b101",
+          "objectDefinitionExternalReferenceCode2": "24e69ba4-093a-d55c-8ca6-ba8f7c3095e0",
+          "objectDefinitionName2": "CampaignInteraction"
+        },
+        {
+          "objectDefinitionSystem2": false,
+          "parameterObjectFieldName": "",
+          "parameterObjectFieldId": 0,
+          "label": {
+            "en_US": "Navigates To"
+          },
+          "reverse": false,
+          "type": "oneToMany",
+          "objectDefinitionModifiable2": true,
+          "system": false,
+          "name": "urlTokenCampaignRel",
+          "deletionType": "prevent",
+          "objectDefinitionExternalReferenceCode1": "2e60d417-2441-e05e-3913-b319cfa9b101",
+          "objectDefinitionExternalReferenceCode2": "8bfeea24-5761-11d7-5394-f05bac9561f9",
+          "objectDefinitionName2": "UrlToken"
+        }
+      ],
+      "objectFolderExternalReferenceCode": "60ae861c-1940-94b3-480e-56c77d8e47e1",
+      "enableCategorization": true,
+      "accountEntryRestrictedObjectFieldName": "",
+      "objectActions": [
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-delete-campaign",
+          "errorMessage": {
+            "en_US": "Unable to remove the campaign from Pulse"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Remove from Pulse"
+          },
+          "externalReferenceCode": "13c74813-1b7e-a06c-a395-fa9599ca9d62",
+          "system": false,
+          "objectActionTriggerKey": "onAfterDelete",
+          "name": "removeFromPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-update-campaign",
+          "errorMessage": {
+            "en_US": "Unable to refresh the Pulse entry"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Update in Pulse"
+          },
+          "externalReferenceCode": "13c74813-1b7e-a06c-a395-fa9599ca23f2",
+          "system": false,
+          "objectActionTriggerKey": "onAfterUpdate",
+          "name": "updateInPulse",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        },
+        {
+          "conditionExpression": "",
+          "objectActionExecutorKey": "function#pulse-micro-service-object-action-refresh-entry",
+          "errorMessage": {
+            "en_US": "Unable to refresh the Pulse entry"
+          },
+          "active": true,
+          "description": "",
+          "label": {
+            "en_US": "Refresh Pulse Entry"
+          },
+          "externalReferenceCode": "7d3961d7-3202-7eba-d159-e55501ab32f4",
+          "system": false,
+          "objectActionTriggerKey": "standalone",
+          "name": "refreshPulseEntry",
+          "parameters": {},
+          "status": {
+            "label_i18n": "Never Ran",
+            "code": 0,
+            "label": "never-ran"
+          }
+        }
+      ],
+      "enableLocalization": false,
+      "accountEntryRestricted": false,
+      "externalReferenceCode": "2e60d417-2441-e05e-3913-b319cfa9b101",
+      "objectFields": [
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Author"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "ee4e445d-5678-15e1-2fec-ea9f9553def3",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "creator",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Create Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "62722598-d5cf-dc26-34bc-6ff9950edda8",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "createDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "External Reference Code"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "c2a1faa0-0d20-8a9c-fe15-115f718de050",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "externalReferenceCode",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Long",
+          "label": {
+            "en_US": "ID"
+          },
+          "type": "Long",
+          "required": false,
+          "externalReferenceCode": "df83d9a4-b428-29b2-201d-dd4effe8a63a",
+          "indexedAsKeyword": true,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "id",
+          "state": false,
+          "businessType": "LongInteger",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "Date",
+          "label": {
+            "en_US": "Modified Date"
+          },
+          "type": "Date",
+          "required": false,
+          "externalReferenceCode": "13bdf034-f6c0-4c57-2ea2-4bd8d6e0141d",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "modifiedDate",
+          "state": false,
+          "businessType": "Date",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": false,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "true",
+          "DBType": "String",
+          "label": {
+            "en_US": "Status"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "02148bb5-885f-db35-2969-774516bae249",
+          "indexedAsKeyword": false,
+          "system": true,
+          "indexedLanguageId": "",
+          "name": "status",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "timeStorage",
+              "value": "convertToUTC"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "DateTime",
+          "label": {
+            "en_US": "Begin"
+          },
+          "type": "DateTime",
+          "required": false,
+          "externalReferenceCode": "51837185-2eb2-8e3a-c5c9-3d6390b70acd",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "",
+          "name": "begin",
+          "state": false,
+          "businessType": "DateTime",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "timeStorage",
+              "value": "convertToUTC"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "DateTime",
+          "label": {
+            "en_US": "End"
+          },
+          "type": "DateTime",
+          "required": false,
+          "externalReferenceCode": "4ceac5b5-12af-826e-5b0c-58000341bb2b",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "",
+          "name": "end",
+          "state": false,
+          "businessType": "DateTime",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "uniqueValues",
+              "value": true
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Name"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "f4d69e7c-c2e6-8e15-5872-777131302983",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "name",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Description"
+          },
+          "type": "String",
+          "required": false,
+          "externalReferenceCode": "fa7dd7a5-933e-d7dc-566a-755a05918672",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "description",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "indexed": true,
+          "localized": false,
+          "objectFieldSettings": [],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Target Url"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "327dfac2-5424-1d65-87d7-e280b6cf1428",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "targetUrl",
+          "state": false,
+          "businessType": "Text",
+          "readOnlyConditionExpression": ""
+        },
+        {
+          "listTypeDefinitionExternalReferenceCode": "89201798-3fc2-6d45-d924-316395794c25",
+          "indexed": true,
+          "defaultValue": "draft",
+          "localized": false,
+          "objectFieldSettings": [
+            {
+              "name": "stateFlow",
+              "value": {
+                "objectStates": [
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "active"
+                      },
+                      {
+                        "key": "inactive"
+                      }
+                    ],
+                    "key": "draft"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "complete"
+                      },
+                      {
+                        "key": "inactive"
+                      },
+                      {
+                        "key": "expired"
+                      }
+                    ],
+                    "key": "active"
+                  },
+                  {
+                    "objectStateTransitions": [],
+                    "key": "complete"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "active"
+                      },
+                      {
+                        "key": "complete"
+                      },
+                      {
+                        "key": "expired"
+                      }
+                    ],
+                    "key": "inactive"
+                  },
+                  {
+                    "objectStateTransitions": [
+                      {
+                        "key": "complete"
+                      }
+                    ],
+                    "key": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "defaultValueType",
+              "value": "inputAsValue"
+            },
+            {
+              "name": "defaultValue",
+              "value": "draft"
+            }
+          ],
+          "readOnly": "false",
+          "DBType": "String",
+          "label": {
+            "en_US": "Campaign Status"
+          },
+          "type": "String",
+          "required": true,
+          "externalReferenceCode": "cca01965-1de1-107f-d484-bea50de71a25",
+          "indexedAsKeyword": false,
+          "system": false,
+          "indexedLanguageId": "en_US",
+          "name": "campaignStatus",
+          "state": true,
+          "businessType": "Picklist",
+          "readOnlyConditionExpression": ""
+        }
+      ],
+      "restContextPath": "/o/c/campaigns",
+      "scope": "company",
+      "portlet": true,
+      "modifiable": true,
+      "parameterRequired": false,
+      "enableObjectEntryHistory": false,
+      "titleObjectFieldName": "name",
+      "objectValidationRules": [],
+      "active": true,
+      "defaultLanguageId": "en_US",
+      "label": {
+        "en_US": "Campaign"
+      },
+      "panelCategoryKey": "applications_menu.applications.custom.apps",
+      "pluralLabel": {
+        "en_US": "Campaigns"
+      },
+      "objectLayouts": [],
+      "system": false,
+      "objectViews": [],
+      "enableObjectEntryDraft": false,
+      "name": "Campaign",
+      "actions": {
+        "permissions": {},
+        "get": {},
+        "update": {},
+        "delete": {}
+      },
+      "status": {
+        "label_i18n": "Approved",
+        "code": 0,
+        "label": "approved"
+      }
+    }
+  ]
+}

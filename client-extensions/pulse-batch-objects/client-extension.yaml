@@ -1,14 +1,14 @@
 assemble:
   - from: batch
     into: batch
-pulse-batch-object-entry:
-  name: Pulse Batch Object Entry
-  oAuthApplicationHeadlessServer: pulse-batch-object-entry-oauth-application-headless-server
+pulse-batch-objects:
+  name: Pulse Batch Objects
+  oAuthApplicationHeadlessServer: pulse-batch-objects-oauth-application-headless-server
   type: batch
-pulse-batch-object-entry-oauth-application-headless-server:
+pulse-batch-objects-oauth-application-headless-server:
   .serviceAddress: localhost:8080
   .serviceScheme: http
-  name: Pulse Batch Object Entry OAuth Application Headless Server
+  name: Pulse Batch Objects OAuth Application Headless Server
   scopes:
     - Liferay.Headless.Batch.Engine.everything
     - Liferay.Object.Admin.REST.everything

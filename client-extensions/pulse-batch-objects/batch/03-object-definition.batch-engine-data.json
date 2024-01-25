@@ -324,7 +324,7 @@
       "enableObjectEntryHistory": false,
       "titleObjectFieldName": "id",
       "objectValidationRules": [],
-      "active": true,
+      "active": false,
       "defaultLanguageId": "en_US",
       "label": {
         "en_US": "Acquisition"
@@ -582,7 +582,7 @@
       "enableObjectEntryHistory": false,
       "titleObjectFieldName": "token",
       "objectValidationRules": [],
-      "active": true,
+      "active": false,
       "defaultLanguageId": "en_US",
       "label": {
         "en_US": "Url Token"
@@ -793,7 +793,7 @@
       "enableObjectEntryHistory": false,
       "titleObjectFieldName": "id",
       "objectValidationRules": [],
-      "active": true,
+      "active": false,
       "defaultLanguageId": "en_US",
       "label": {
         "en_US": "Campaign Interaction"
@@ -1265,7 +1265,7 @@
       "enableObjectEntryHistory": false,
       "titleObjectFieldName": "name",
       "objectValidationRules": [],
-      "active": true,
+      "active": false,
       "defaultLanguageId": "en_US",
       "label": {
         "en_US": "Campaign"
