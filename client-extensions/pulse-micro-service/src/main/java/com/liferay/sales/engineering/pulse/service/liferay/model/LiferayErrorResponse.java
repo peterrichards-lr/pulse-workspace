@@ -2,10 +2,12 @@ package com.liferay.sales.engineering.pulse.service.liferay.model;
 
 import com.google.common.base.Objects;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatusCode;
 
 public class LiferayErrorResponse {
 
-    private HttpStatus status;
+    private HttpStatusCode status;
     private String title;
 
     @Override
@@ -16,16 +18,16 @@ public class LiferayErrorResponse {
         return Objects.equal(getStatus(), that.getStatus()) && Objects.equal(getTitle(), that.getTitle());
     }
 
-    public HttpStatus getStatus() {
+    public HttpStatusCode getStatus() {
         return status;
     }
 
-    public void setStatus(final HttpStatus status) {
+    public void setStatus(final HttpStatusCode status) {
         this.status = status;
     }
 
     public void setStatus(final String status) {
-        this.status = HttpStatus.valueOf(status);
+        this.status = HttpStatusCode.valueOf(Integer.parseInt(status));
     }
 
     public String getTitle() {

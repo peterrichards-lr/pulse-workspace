@@ -5,8 +5,8 @@ import com.google.common.base.Objects;
 import com.liferay.sales.engineering.pulse.util.StringUtils;
 import org.checkerframework.common.aliasing.qual.Unique;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 

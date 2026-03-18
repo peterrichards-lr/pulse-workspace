@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -60,7 +61,7 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
                     .attributes(getClientRegistrationId())
                     .body(BodyInserters.fromValue(campaign))
                     .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                     .bodyToMono(new ParameterizedTypeReference<>() {
                     });
 
@@ -86,7 +87,7 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
             final Mono<Campaign> campaign = this.webClient.get().uri(endpoint)
                     .attributes(getClientRegistrationId())
                     .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                     .bodyToMono(new ParameterizedTypeReference<>() {
                     });
             return campaign.block();
@@ -127,7 +128,7 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
             final Mono<CampaignsResponse> campaignResponse = webClient.get().uri(endpoint)
                     .attributes(getClientRegistrationId())
                     .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                     .bodyToMono(new ParameterizedTypeReference<>() {
                     });
 
@@ -160,7 +161,7 @@ public class LiferayCampaignServiceImpl extends BaseLiferayService implements Li
                     .attributes(getClientRegistrationId())
                     .body(BodyInserters.fromValue(campaign))
                     .retrieve()
-                    .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                    .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                     .bodyToMono(new ParameterizedTypeReference<>() {
                     });
 

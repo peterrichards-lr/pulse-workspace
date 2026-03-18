@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -60,7 +61,7 @@ public class LiferayCampaignInteractionServiceImpl extends BaseLiferayService im
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(interaction))
                 .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 

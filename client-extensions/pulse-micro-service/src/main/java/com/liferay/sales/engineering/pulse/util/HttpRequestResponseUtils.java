@@ -3,7 +3,7 @@ package com.liferay.sales.engineering.pulse.util;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public final class HttpRequestResponseUtils {
     private static final String[] IP_HEADER_CANDIDATES = {

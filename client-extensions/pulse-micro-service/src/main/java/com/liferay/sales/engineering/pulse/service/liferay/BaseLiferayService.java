@@ -5,6 +5,8 @@ import com.liferay.sales.engineering.pulse.util.UrlUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,21 +37,22 @@ public abstract class BaseLiferayService {
     }
 
     protected static Mono<LiferayErrorResponseException> handleLiferayError(final ClientResponse clientResponse) {
-        if (clientResponse.statusCode() == HttpStatus.UNAUTHORIZED) {
+        if (clientResponse.statusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
             _log.warn("Unauthorized - " + clientResponse.headers());
             final LiferayErrorResponse errorResponse = new LiferayErrorResponse();
             errorResponse.setStatus(clientResponse.statusCode());
-            errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
-        } else if (clientResponse.statusCode() == HttpStatus.FORBIDDEN) {
+            errorResponse.setTitle("Unauthorized");
+        } else if (clientResponse.statusCode().isSameCodeAs(HttpStatus.FORBIDDEN)) {
             _log.warn("Forbidden - " + clientResponse.headers());
             final LiferayErrorResponse errorResponse = new LiferayErrorResponse();
             errorResponse.setStatus(clientResponse.statusCode());
-            errorResponse.setTitle(clientResponse.statusCode().getReasonPhrase());
+            errorResponse.setTitle("Forbidden");
             return Mono.error(new LiferayErrorResponseException(errorResponse));
-        } else if (clientResponse.statusCode() == HttpStatus.NOT_FOUND) {
+        } else if (clientResponse.statusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
             _log.info("Not Found - " + clientResponse.headers());
             LiferayErrorResponse errorResponse = new LiferayErrorResponse();
             errorResponse.setStatus(HttpStatus.NOT_FOUND);
+            errorResponse.setTitle("Not Found");
             return Mono.error(new LiferayErrorResponseException(errorResponse));
         }
         _log.warn("Unexpected error - status code : " + clientResponse.statusCode());

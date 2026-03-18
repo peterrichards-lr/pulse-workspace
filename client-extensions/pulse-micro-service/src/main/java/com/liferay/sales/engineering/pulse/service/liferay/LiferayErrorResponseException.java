@@ -2,7 +2,7 @@ package com.liferay.sales.engineering.pulse.service.liferay;
 
 import com.google.common.base.Objects;
 import com.liferay.sales.engineering.pulse.service.liferay.model.LiferayErrorResponse;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 public class LiferayErrorResponseException extends RuntimeException {
     private final LiferayErrorResponse errorResponse;
@@ -21,7 +21,7 @@ public class LiferayErrorResponseException extends RuntimeException {
     }
 
 
-    public HttpStatus getStatus() {
+    public HttpStatusCode getStatus() {
         return errorResponse != null ? errorResponse.getStatus() : null;
     }
 

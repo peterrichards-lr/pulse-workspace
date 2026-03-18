@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -53,7 +54,7 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
                 .attributes(getClientRegistrationId())
                 .body(BodyInserters.fromValue(acquisition))
                 .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
@@ -70,7 +71,7 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
         final Mono<AcquisitionsResponse> campaignResponse = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
 
@@ -89,7 +90,7 @@ public class LiferayAcquisitionServiceImpl extends BaseLiferayService implements
         final Mono<Acquisition> acquisition = this.webClient.get().uri(endpoint)
                 .attributes(getClientRegistrationId())
                 .retrieve()
-                .onStatus(HttpStatus::isError, BaseLiferayService::handleLiferayError)
+                .onStatus(HttpStatusCode::isError, BaseLiferayService::handleLiferayError)
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });
         return acquisition.block();
