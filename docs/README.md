@@ -6,15 +6,15 @@ Pulse as a Microservice Client Extension
 
 ### Liferay Configuration / Dependencies
 
-There is a dependency on **U108** in order to ensure the Batch Client Extension definitions are run in the correct order. However, at the time of writing this, the BOM for this update was unavailable, so the way around this is to set the following in the *gradle.properties*. Setting the liferay.workspace.product to *U102* allows the CI / CD process to build correctly because it can download the BOM. However, when the DXP image is built it will use the *U108* base image.
+The workspace is configured to use the latest Liferay product version.
 
-liferay.workspace.docker.image.liferay=liferay/dxp:7.4.13-u108
+liferay.workspace.product=2025.q4.12
 
-liferay.workspace.product=dxp-7.4-u102
+The Pulse microservice has been upgraded to **Spring Boot 3.4.2** and **Java 21**. It requires a minimum of JDK 17 to run, but is specifically optimized for JDK 21.
 
-At the time of writing this, the Jenkins image used JDK 1.8 and the Spring Boot version used by the Pulse microservice requries JDK 11. However, the image does inclde JDK 11 so it is necessary to explitialy tell Gradle to use this version, by uncommenting the following line in the *gradle.properties*. If you are using this repo locally, then you will need to comment it out again to avoid build errors.
+If your CI/CD environment (e.g., Jenkins) uses an older JDK by default, you may need to explicitly point Gradle to the correct Java home in *gradle.properties*.
 
-#org.gradle.java.home=/opt/java/openjdk11
+#org.gradle.java.home=/opt/java/openjdk21
 
 ### Domains and Cookies
 Pulse shares information with Liferay DXP via cookies and therefore, there needs to be a common parent domain. In the case of LXC SM, this could either be lfr.cloud but it could also be a custom domain. In the case of a custom domain, both the Liferay web server and the Pulse microservice need a subdomains with a common parent domains. For example, the DXP could be assigned www.example.com, in which case, Pulse would need something like p.example.com.
@@ -57,7 +57,7 @@ The table below explains the values needed for each of these environment variabl
 | PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_INTROSPECTION_URI | /o/oauth2/introspection | This value should always be the same |
 | PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_JWKS_URI | /o/oauth2/jwks | This value should always be the same |
 | PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_TOKEN_URI | /o/oauth2/token | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_AUTHORIZATION_URI| /o/oauth2/authorize | This value should always be the same |
+| PULSEMICROSERAUTHAPPLICATIONUSERAGENT_OAUTH2_AUTHORIZATION_URI| /o/oauth2/authorize | This value should always be the same |
 | PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_INTROSPECTION_URI | /o/oauth2/introspectione | This value should always be the same |
 | PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_JWKS_URI | /o/oauth2/jwks | This value should always be the same |
 | PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_REDIRECT_URIS | /o/oauth2/redirect | This value should always be the same |
@@ -77,6 +77,8 @@ All of the client extensions, need to be built and deployed via the CI / CD proc
 The Reporting give a user journey view of campaign interactions. This may include the initial Pulse touch-point / redirect and any further custom events which are recorded.
 
 This custom web component, uses the User Agent defined within the microservice client extension to retrieve the required data from Liferay DXP.
+
+Frontend dependencies have been hardened against security vulnerabilities (jsPDF v4.2.1, SheetJS v0.20.3).
 
 ![Pulse Reporting](images/pulse-reporting.png)
 
