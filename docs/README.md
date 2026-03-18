@@ -35,37 +35,6 @@ The value of COM_LIFERAY_LXC_DXP_SERVER_PROTOCOL should reflect the scheme being
 
 There are two environment variables which are needex for LXC deployment. However, problems can be experienced if they are not included here too. The value of LIFERAY_ROUTES_CLIENT_EXTENSION should be */etc/liferay/lxc/ext-init-metadata* and the value of LIFERAY_ROUTES_DXP should be */etc/liferay/lxc/dxp-metadata*.
 
-### OAuth2 Environment Variables
-
-The name of the keys are dependent on the name of the external reference code (ERC) of the OAuth2 configuration. In the case of Pulse there are two, one for the User Agent and one for the Headless Server. In the client-extension.yaml, these are pulse-micro-service-oauth-application-user-agent and pulse-micro-service-oauth-application-headless-server, respectively.
-
-However, to make them valid key names, there is a little transformation needed, i.e. transform the ERC to upper case and remove the hyphens. Therefore, the key prefixes become PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT and PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER, respectively.
-
-The table below explains the values needed for each of these environment variables.
-
-**It is recommended that all of the following are set in the the LCP.json except the CLIENT_IDs and CLIENT_SECRET values, which should always be supplied via the console.**
-
-**This table is large due to the key names, so you will need to scroll**
-
-| Environment Variable Name / Key | Environment Variable Value | Notes |
-| ------------------------------- | -------------------------- | ----- |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_AUTHORIZATION_URI | /o/oauth2/authorize | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_AUDIENCE | https://www.example.com | Using the example.com, example this will be the url to access the Liferay DXP |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_CLIENT_ID | id-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx | This value can be found in Liferay DXP, in the OAuth 2 Administration entry |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_CLIENT_SECRET | secret-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx | This value can be found in Liferay DXP, in the OAuth 2 Administration entry |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_HEADLESS_SERVER_SCOPES | C_Acquisition.everything,C_Campaign.everything,C_CampaignInteraction.everything,C_UrlToken.everything | This value should be the same but can be confirmed in the OAuth 2 entry in Liferay DXP |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_INTROSPECTION_URI | /o/oauth2/introspection | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_JWKS_URI | /o/oauth2/jwks | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONHEADLESSSERVER_OAUTH2_TOKEN_URI | /o/oauth2/token | This value should always be the same |
-| PULSEMICROSERAUTHAPPLICATIONUSERAGENT_OAUTH2_AUTHORIZATION_URI| /o/oauth2/authorize | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_INTROSPECTION_URI | /o/oauth2/introspectione | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_JWKS_URI | /o/oauth2/jwks | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_REDIRECT_URIS | /o/oauth2/redirect | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_TOKEN_URI | /o/oauth2/token | This value should always be the same |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_AUDIENCE | https://www.example.com | Using the example.com, example this will be the url to access the Liferay DXP |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_CLIENT_ID | id-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx | This value can be found in Liferay DXP, in the OAuth 2 Administration entry |
-| PULSEMICROSERVICEOAUTHAPPLICATIONUSERAGENT_OAUTH2_USER_AGENT_SCOPES | C_Acquisition.everything,C_Campaign.everything,C_CampaignInteraction.everything,C_UrlToken.everything,Liferay.Headless.Admin.List.Type.everything.read,Liferay.Headless.Delivery.everything.read  | This value should be the same but can be confirmed in the OAuth 2 entry in Liferay DXP |
-
 ### Client Extensions Deployment
 
 All of the client extensions, need to be built and deployed via the CI / CD process in LXC SM, including the Pulse microservice. However, in the case of the microservice, only the configuration needed by Liferay DXP is used. In order to deploy the microservice to the environment, it is necessary to use the lcp command, more details can be found in the [Liferay documentation](https://learn.liferay.com/w/courses/cloud-administrator/deploying-code-to-lxc/deploying-and-managing-a-microservice-client-extension-project).
